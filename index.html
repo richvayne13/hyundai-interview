@@ -1,0 +1,1590 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현대자동차 배터리 전극 생산운영 면접 워크스페이스 & 에디터 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --hyundai-blue: #002c5f;
+      --hyundai-light-blue: #0072ce;
+      --accent-cyan: #00e5ff;
+      --accent-teal: #00b4d8;
+      --bg-dark: #070d19;
+      --card-bg: #0f1c31;
+      --card-border: #1c2e4c;
+      --card-hover: #162744;
+      --text-main: #f0f4fc;
+      --text-sub: #94a3b8;
+      --star-s: #f59e0b;
+      --star-t: #3b82f6;
+      --star-a: #10b981;
+      --star-r: #8b5cf6;
+      --danger: #ef4444;
+      --success: #10b981;
+      --editable-focus: rgba(0, 229, 255, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Nav Bar */
+    .top-nav {
+      background: #0a1526;
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #002c5f, #0072ce);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .nav-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-status {
+      font-size: 12px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .nav-status.saving {
+      color: var(--star-s);
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0072ce 0%, #00529b 100%);
+      color: white;
+      border-color: #00a0e9;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0084f0 0%, #0060b5 100%);
+      box-shadow: 0 0 12px rgba(0, 114, 206, 0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+    .btn-success:hover { opacity: 0.9; }
+
+    .btn-outline {
+      background: #112035;
+      color: var(--text-sub);
+      border-color: #243b5e;
+    }
+    .btn-outline:hover {
+      color: white;
+      border-color: var(--accent-cyan);
+      background: #172a45;
+    }
+
+    .btn-danger-outline {
+      background: #181c2b;
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger-outline:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+    }
+
+    /* Main Split Container */
+    .split-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left: Workspace Dashboard (65%) */
+    .dashboard-pane {
+      flex: 0 0 65%;
+      overflow-y: auto;
+      padding: 24px 28px;
+      border-right: 1px solid var(--card-border);
+      transition: flex 0.3s ease;
+    }
+
+    /* Right: Context Reference Viewer (35%) */
+    .reference-pane {
+      flex: 0 0 35%;
+      overflow-y: auto;
+      background: #091322;
+      display: flex;
+      flex-direction: column;
+      transition: flex 0.3s ease;
+    }
+
+    .pane-header {
+      padding: 16px 20px;
+      background: #0d1a2d;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .pane-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Reference Tab Navigation */
+    .doc-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 12px 20px 0;
+      background: #0b1626;
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+
+    .doc-tab {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      background: #112035;
+      border: 1px solid var(--card-border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .doc-tab:hover {
+      color: white;
+      background: #162a47;
+    }
+
+    .doc-tab.active {
+      background: #0f1c31;
+      color: var(--accent-cyan);
+      border-color: var(--card-border);
+      border-top: 2px solid var(--accent-cyan);
+    }
+
+    /* Reference Search & Tools */
+    .ref-toolbar {
+      padding: 12px 20px;
+      background: #0d1a2d;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .ref-search-input {
+      flex: 1;
+      background: #060c17;
+      border: 1px solid #1e3352;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+    .ref-search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+    }
+
+    .ref-content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .doc-chunk-card {
+      background: #0f1c31;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      padding: 16px;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .doc-chunk-card:hover {
+      border-color: #2b4772;
+    }
+
+    .chunk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #192a45;
+      padding-bottom: 6px;
+    }
+
+    .chunk-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-teal);
+      background: rgba(0, 180, 216, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .chunk-copy-btn {
+      background: #142742;
+      color: #90cdf4;
+      border: 1px solid #23426e;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .chunk-copy-btn:hover {
+      background: var(--hyundai-light-blue);
+      color: white;
+      border-color: var(--accent-cyan);
+    }
+
+    .chunk-text {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .highlight {
+      background-color: rgba(245, 158, 11, 0.4);
+      color: #fff;
+      padding: 0 2px;
+      border-radius: 2px;
+      font-weight: bold;
+    }
+
+    /* Left Dashboard Elements */
+    .dash-hero {
+      background: linear-gradient(135deg, #0d1e38 0%, #002c5f 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px 28px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dash-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .dash-hero-desc {
+      font-size: 13.5px;
+      color: #94a3b8;
+      max-width: 680px;
+    }
+
+    .dash-hero-badge {
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* In-place Editable Fields */
+    [contenteditable="true"] {
+      outline: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+      padding: 2px 4px;
+      margin: -2px -4px;
+    }
+    [contenteditable="true"]:hover {
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 0 1px #2a4365;
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(0, 229, 255, 0.08);
+      box-shadow: 0 0 0 2px var(--accent-cyan);
+    }
+
+    /* Project Section Card */
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-card-header {
+      background: #112038;
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .proj-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .proj-code-badge {
+      background: #002c5f;
+      color: var(--accent-cyan);
+      border: 1px solid #005691;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .proj-title-editable {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      flex: 1;
+    }
+
+    .proj-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Tech Stack Tag Editor */
+    .proj-tags-bar {
+      padding: 10px 22px;
+      background: #0a1526;
+      border-bottom: 1px solid #162842;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tech-tag-chip {
+      background: #15243c;
+      color: #94a3b8;
+      border: 1px solid #243b5e;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tech-tag-del {
+      cursor: pointer;
+      color: #ef4444;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .btn-add-tag {
+      background: transparent;
+      color: var(--accent-teal);
+      border: 1px dashed #243b5e;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .btn-add-tag:hover {
+      border-color: var(--accent-teal);
+    }
+
+    /* Questions Inside Project */
+    .project-questions-list {
+      padding: 20px 22px;
+    }
+
+    .q-item-card {
+      background: #0a1424;
+      border: 1px solid #1a2d4a;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .q-item-header {
+      background: #0e1b2e;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      gap: 12px;
+    }
+
+    .q-item-header:hover {
+      background: #13243d;
+    }
+
+    .q-type-select {
+      background: #182a44;
+      color: #60a5fa;
+      border: 1px solid #2b456e;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .q-text-editable {
+      font-size: 15px;
+      font-weight: 600;
+      color: #f1f5f9;
+      flex: 1;
+    }
+
+    .q-toggle-arrow {
+      color: var(--text-sub);
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .q-item-card.open .q-toggle-arrow {
+      transform: rotate(180deg);
+      color: var(--accent-cyan);
+    }
+
+    .q-item-body {
+      display: none;
+      padding: 20px;
+      background: #070e1a;
+      border-top: 1px solid #1a2d4a;
+    }
+
+    .q-item-card.open .q-item-body {
+      display: block;
+    }
+
+    /* Strategy block */
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: #0b1626;
+      border: 1px dashed #203656;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+    }
+
+    .strat-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .strat-intent-title { color: #f87171; }
+    .strat-defense-title { color: #38bdf8; }
+
+    .strat-content-editable {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* STAR Step Fields */
+    .star-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .star-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .let-s { background: rgba(245, 158, 11, 0.2); color: var(--star-s); border: 1px solid var(--star-s); }
+    .let-t { background: rgba(59, 130, 246, 0.2); color: var(--star-t); border: 1px solid var(--star-t); }
+    .let-a { background: rgba(16, 185, 129, 0.2); color: var(--star-a); border: 1px solid var(--star-a); }
+    .let-r { background: rgba(139, 92, 246, 0.2); color: var(--star-r); border: 1px solid var(--star-r); }
+
+    .star-edit-box {
+      flex: 1;
+      background: #0f1c31;
+      border: 1px solid #1e3352;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+
+    /* Add Buttons */
+    .add-q-btn-wrap {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .btn-add-q {
+      background: #112035;
+      color: #38bdf8;
+      border: 1px dashed #24416a;
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-add-q:hover {
+      background: #172a47;
+      border-color: var(--accent-cyan);
+      color: white;
+    }
+
+    .add-project-banner {
+      background: #0b1526;
+      border: 2px dashed #223c63;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 40px;
+    }
+    .add-project-banner:hover {
+      background: #101e36;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+    }
+    .add-project-banner h3 {
+      color: var(--accent-cyan);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .add-project-banner p {
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    /* Blind mode for simulation */
+    .blind-mode .star-edit-box {
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.2s;
+    }
+    .blind-mode .star-edit-box:hover {
+      filter: blur(0);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #002c5f;
+      color: #00e5ff;
+      border: 1px solid #00a0e9;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #070d19; }
+    ::-webkit-scrollbar-thumb { background: #1c304f; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #2a4773; }
+      /* Lock Screen Security Overlay */
+    #lockScreenOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #0f2347 0%, #060c18 100%);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #lockScreenOverlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .lock-card {
+      background: #0d1a2d;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 20px;
+      padding: 36px 32px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 114, 206, 0.2);
+    }
+    .lock-icon-wrap {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 114, 206, 0.2);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+    .lock-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .lock-sub {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .lock-input {
+      width: 100%;
+      background: #070d19;
+      border: 1px solid #1e3352;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 15px;
+      color: #ffffff;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .lock-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+    }
+    .lock-input.shake {
+      animation: shakeAnim 0.4s ease;
+      border-color: #ef4444;
+    }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .lock-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
+      color: white;
+      border: 1px solid var(--accent-cyan);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lock-submit-btn:hover {
+      background: linear-gradient(135deg, #0088f5 0%, #0054a8 100%);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+    }
+    .lock-error-msg {
+      font-size: 12px;
+      color: #f87171;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+    .lock-hint {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+<!-- Security Lock Screen Overlay -->
+<div id="lockScreenOverlay">
+  <div class="lock-card">
+    <div class="lock-icon-wrap">?뵏</div>
+    <h2 class="lock-title">?꾨??먮룞李?硫댁젒 ?뚰겕?ㅽ럹?댁뒪</h2>
+    <p class="lock-sub">蹂댁븞 蹂댄샇 援ъ뿭?낅땲??<br>?묒냽 鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂.</p>
+    <input type="password" id="lockInputPass" class="lock-input" placeholder="?™™™™™? onkeydown="handleLockKeyPress(event)" autofocus autocomplete="current-password">
+    <button class="lock-submit-btn" onclick="submitAuthUnlock()">蹂댁븞 ?몄쬆 諛??묒냽?섍린</button>
+    <div class="lock-error-msg" id="lockErrorMsg"></div>
+    <div class="lock-hint">?뮕 珥덇린 湲곕낯 鍮꾨?踰덊샇: <strong>260913</strong> (?묒냽 ???곷떒?먯꽌 蹂寃?媛??</div>
+  </div>
+</div>
+
+<!-- Top Nav Bar -->
+<div class="top-nav">
+  <div class="nav-left">
+    <span class="logo-badge">HYUNDAI BATTERY WORKSPACE</span>
+    <div class="nav-title">
+      <span>배터리 전극 생산운영 면접 워크스페이스</span>
+      <span class="nav-status" id="saveStatus">● 자동 저장 활성</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-primary" onclick="addNewProject()">➕ 새 프로젝트 추가</button>
+    <button class="btn btn-success" onclick="exportToMarkdown()">📥 Markdown 내보내기</button>
+    <button class="btn btn-outline" onclick="exportToHTML()">🌐 HTML 백업 저장</button>
+    <button class="btn btn-outline" onclick="toggleBlindMode()" id="blindBtn">👁️ 모의면접 모드</button>
+    <button class="btn btn-danger-outline" onclick="resetToDefault()">🔄 기본 데이터 복원</button>
+  </div>
+</div>
+
+<!-- Main Split Layout -->
+<div class="split-container">
+
+  <!-- ================= LEFT: WORKSPACE DASHBOARD (65%) ================= -->
+  <div class="dashboard-pane" id="dashboardPane">
+    
+    <!-- Hero Header -->
+    <div class="dash-hero">
+      <div>
+        <div class="dash-hero-title">실시간 편집형 인터뷰 대시보드</div>
+        <div class="dash-hero-desc">
+          텍스트를 <strong>직접 클릭하여 워드처럼 즉시 수정</strong>할 수 있습니다. 
+          우측 패널의 <strong>내 자소서/경력 원문</strong>에서 핵심 문장을 <code>[📋 복사]</code>하여 붙여넣고, 
+          새로운 프로젝트와 꼬리질문을 마음껏 추가하여 나만의 면접 답변 노트를 완성하세요.
+        </div>
+      </div>
+      <span class="dash-hero-badge">인라인 편집 & 실시간 로컬 저장</span>
+    </div>
+
+    <!-- Projects Container -->
+    <div id="projectsContainer"></div>
+
+    <!-- Add New Project Banner -->
+    <div class="add-project-banner" onclick="addNewProject()">
+      <h3>➕ 새로운 프로젝트(경험 큰 틀) 추가하기</h3>
+      <p>새로운 배터리 전극/설비 개선 경험을 큰 틀로 등록하고 세부 꼬리질문과 STAR 답변을 구성하세요.</p>
+    </div>
+
+  </div>
+
+  <!-- ================= RIGHT: CONTEXT REFERENCE VIEWER (35%) ================= -->
+  <div class="reference-pane" id="referencePane">
+    
+    <div class="pane-header">
+      <div class="pane-title">
+        <span>📑 레퍼런스 Context 문서 뷰어</span>
+      </div>
+      <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="copyActiveDocAll()">
+        전체 원문 복사
+      </button>
+    </div>
+
+    <!-- Document Tabs -->
+    <div class="doc-tabs">
+      <div class="doc-tab active" id="tab-hyundai" onclick="switchDocTab('hyundai')">
+        <span>📄 현대자동차 자소서/경력</span>
+      </div>
+      <div class="doc-tab" id="tab-skhynix" onclick="switchDocTab('skhynix')">
+        <span>📄 하이닉스 자소서/경력</span>
+      </div>
+    </div>
+
+    <!-- Search in Ref -->
+    <div class="ref-toolbar">
+      <input type="text" class="ref-search-input" id="refSearchInput" placeholder="문서 내 키워드 검색 (예: 웜기어, 1×7, 100만, LVDT...)" oninput="searchRefDoc()">
+      <span style="font-size: 12px; color: #64748b;" id="searchCount"></span>
+    </div>
+
+    <!-- Reference Content List -->
+    <div class="ref-content-area" id="refContentArea"></div>
+
+  </div>
+
+</div>
+
+<!-- Toast Popup -->
+<div id="toast">클립보드에 복사되었습니다!</div>
+
+<script>
+// ================= DEFAULT INTERVIEW DATA =================
+const DEFAULT_PROJECTS = [
+  {
+    id: "P1",
+    code: "PROJECT 01",
+    title: "룰 기반 적응형 컴퓨터 비전 엔진 자체 개발 (100만 장 긴급 선별)",
+    tags: ["Grayscale Valley", "이원화 Th(55)", "1×7 수직 Bridge Kernel", "모폴로지 Closing", "PyQt5 GUI"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 이미지 처리 엔진을 자체 개발해서 100만 장을 선별했다고 하셨는데, 구체적으로 어떤 내용인가요?",
+        intent: "프로젝트 스케일, 본인의 정확한 R&R, 비전 개발 역량의 실재성 확인",
+        defense: "72시간 100만장, 0.5% Burr, 장당 5ms, 1×7 수직 Bridge Kernel, 미검률 0%",
+        s: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다.",
+        t: "공정 엔지니어로서 출하 지연을 0건으로 막고, 미검률 0%를 보장할 수 있는 고속 자동 선별 프로그램을 자체 개발해야 했습니다. 딥러닝 모델은 데이터 라벨링과 학습에만 수일이 걸리므로, 즉시 배포 가능하고 연산 부하가 극도로 적은 룰 기반 비전 엔진을 12시간 내 구축하는 것을 목표로 설정했습니다.",
+        a: "표준 샘플의 픽셀 프로파일을 분석하여 결함 부위에 급격한 국소 음영 낙차(Valley)가 존재함을 수학적으로 증명했습니다. 이를 바탕으로 배경 밝기 55를 기준으로 레시피를 동적 전환하는 '이원화 Valley 알고리즘'을 설계해 랏간 조명 편차를 제거했습니다. 또한 끊어진 미세 결함을 연결하기 위해 직접 1×7 수직 Bridge Kernel을 수학적으로 모델링하고 모폴로지 닫힘(Closing) 연산 및 8-연결성 라벨링을 적용하여 20px 이상의 치명 결함을 100% 검출하도록 구현했습니다.",
+        r: "장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. 현대자동차 배터리 라인에서도 신규 규격 생산 시 발생하는 돌발 결함에 대해 데이터와 수학적 알고리즘으로 즉각적인 솔루션을 제시하는 생산운영 엔지니어가 되겠습니다."
+      },
+      {
+        type: "어려웠던 점",
+        question: "Q2. 이 경험에서 가장 힘들었던 기술적 난관은 무엇이었습니까?",
+        intent: "진짜 본인이 코딩하고 튜닝했는지, 실패 경험 및 트러블슈팅의 디테일 파악",
+        defense: "랏간 밝기 편차로 인한 과검/미검 동시 폭발, 상대적 음영 낙차 수식화, 수직 불연속성 복원",
+        s: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다.",
+        t: "출하 선별의 대전제는 '미검률 0%'이면서도 작업자가 2차 확인할 수 있는 수준의 '과검률 3% 이하'를 달성해야 했습니다. 단일 수식으로는 이 두 트레이드오프를 도저히 맞출 수 없었습니다.",
+        a: "첫째, 절대 밝기가 아닌 배경 대비 상대적 전압/음영 낙차를 계산하도록 알고리즘을 전면 수정했습니다. 배경 코팅 영역의 그레이스케일 히스토그램을 실시간 추정하여 평균 밝기 55를 기준으로 밝은 Lot과 어두운 Lot으로 동적 분기하는 '이원화 Valley 임계 로직'을 구축했습니다. 둘째, 실오라기 Burr가 직선이 아니라 지그재그로 파이며 끊어지는 물리적 형상 때문에 노이즈로 제거되는 문제를 해결하기 위해, 가로 노이즈는 무시하고 세로 방향 결함 신호만 연결해 주는 1×7 세로 비대칭 Bridge Kernel을 독자 고안하여 신호 연속성을 복원했습니다.",
+        r: "과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다."
+      },
+      {
+        type: "압박 꼬리질문",
+        question: "Q3. 왜 딥러닝(YOLO/CNN)을 쓰지 않고 룰 기반을 썼습니까? 구시대적 접근 아닌가요?",
+        intent: "최신 딥러닝 기술을 못 써서 룰 기반으로 도망친 것인지, 공학적 타당성에 근거한 선택인지 검증",
+        defense: "라벨링 리드타임 제약(72시간), 불균형 데이터(0.5%), Black-box vs Deterministic 검증 가능성",
+        s: "일반적인 비전 과제라면 CNN이나 YOLO 계열이 일반화 성능이 우수합니다. 하지만 현장 조건은 '남은 시간 72시간, 검사 대상 100만 장, 정상 대비 불량률 0.5%(불균형 데이터 극심)'였습니다.",
+        t: "딥러닝 적용 시 불량 이미지 수천 장 바운딩 박스 라벨링에 최소 30시간, 학습 및 하이퍼파라미터 튜닝에 20시간이 소요되며, Black-box 특성상 고객사 감사진에게 '미검 0%'를 수학적으로 증명할 수 없었습니다. 또한 GPU 인퍼런스 속도(20~50ms/장)로는 100만 장 처리에 14시간 이상이 소요됩니다.",
+        a: "반면, 불량의 물리적 본질(전극 경계면 국소 음영 낙차, 수직 방향 불연속성)을 파악한 룰 기반 알고리즘은 라벨링 없이 12시간 만에 수식 모델링 및 코딩을 완료했고, CPU 멀티프로세싱으로 장당 5ms(초당 200장)라는 속도로 1.4시간 만에 100만 장 처리가 가능했습니다. 무엇보다 결정론적(Deterministic) 로직이므로 엔지니어가 판정 기준을 100% 추적/증명할 수 있었습니다.",
+        r: "현대차 양산 라인에서도 유행하는 기술을 무조건 따르기보다, 양산 납기와 물리적 메커니즘에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다."
+      }
+    ]
+  },
+  {
+    id: "P2",
+    code: "PROJECT 02",
+    title: "전극 코팅 Shim 오프셋 미세조절장치 전동화 개발",
+    tags: ["50:1 웜기어", "소형 BLDC 모터", "Self-locking", "고분해능 LVDT 센서", "폐루프 제어"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 미세조절장치 전동화 개발 건은 구체적으로 무엇을 한 것인가요?",
+        intent: "기계/기구학적 지식 및 생산설비 개조 실무 역량, 공정능력(Cpk) 개선 메커니즘 확인",
+        defense: "웜기어 Self-locking, BLDC 모터, Backlash 최소화, LVDT 센서 ㎛ 피드백, Loss 18% 절감",
+        s: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다.",
+        t: "작업자 숙련도에 따라 타겟 폭에 도달하는 데 최소 3~5회의 코팅-정지-측정 반복이 발생하여 조건 조정 Loss가 극심했습니다. 저는 작업자의 손동작을 완벽히 대체하는 '전동화 디지털 미세조절 시스템'을 도입하여 Cpk 1.5 이상 달성 및 셋업 Loss 최소화를 목표로 설정했습니다.",
+        a: "첫째, 고감속비(50:1) 웜기어(Worm Gear)와 소형 BLDC 모터를 결합하여 회전운동을 정밀 직진운동으로 변환하는 초소형 구동 유닛을 설계했습니다. 웜기어 고유의 자체 락킹(Self-locking) 특성을 활용해 코팅 중 슬러리 토출 압력에 의해 위치가 밀리는 현상을 물리적으로 방지했습니다. 둘째, 기계적 백래시(Backlash)로 인한 위치 오차를 원천 통제하기 위해, 실제 이동 변위를 0.1㎛ 단위로 측정하는 고분해능 LVDT 센서를 직결 장착하여 실시간 위치 피드백 폐루프(Closed-loop) 제어를 구축했습니다.",
+        r: "타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. 현대자동차 전극 공정에서도 설비의 기계적 한계를 엔지니어링 센싱과 전동 제어로 극복하여 무인화 스마트 팩토리를 실현하겠습니다."
+      },
+      {
+        type: "압박 꼬리질문",
+        question: "Q2. 왜 비싼 서보모터나 리니어 모터를 쓰지 않고 '웜기어 + BLDC + LVDT' 조합을 썼습니까?",
+        intent: "설비 공간 제약, 코팅부 환경, 원가 및 엔지니어링 설계 타당성 평가",
+        defense: "공간 협소성(100×80mm), 슬롯다이 고압 토출 배압 지탱(Self-locking), 직접 변위 계측",
+        s: "슬롯다이 주변의 가혹한 물리적 환경과 제약조건을 철저히 고려한 설계였습니다.",
+        t: "협소한 공간에서 수십 kgf의 반력을 견디며 0.1㎛ 정밀도를 유지해야 했습니다.",
+        a: "1. 공간 협소성: 슬롯다이 배면은 배관과 히터선으로 인해 손바닥만 한 100×80mm 공간에 불과하여 대형 서보모터나 리니어 액추에이터는 장착이 불가능했습니다. 2. 고압 배압 지탱: 슬롯다이 내부는 수 bar 압력으로 슬러리가 토출되므로 Shim에 수십 kgf 반력이 작용합니다. 일반 볼스크류는 밀림 위험이 있으나, 웜기어는 감속비 40:1 이상에서 역구동이 불가능한 Self-locking 구조를 가집니다. 3. 직접 센싱(LVDT): 모터 내장 엔코더는 기어 백래시와 열변형을 감지하지 못하므로, 실제 Shim 종단 변위를 0.1㎛로 직접 측정하는 외부 LVDT 직결만이 오차를 제로화하는 유일한 해법이었습니다.",
+        r: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했습니다."
+      }
+    ]
+  },
+  {
+    id: "P3",
+    code: "PROJECT 03",
+    title: "웹게이지 국부 로딩 데이터 기반 미세라인 불량 감지 로직 개발",
+    tags: ["방사선 웹게이지", "1% Data Shift", "이동평균(MA)", "MD 스윙(N=3)", "TD 포인트(N=4)", "ROC Curve"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 비전 검사기에도 안 잡히는 미세라인을 웹게이지로 어떻게 잡았습니까?",
+        intent: "비전과 웹게이지의 물리적 계측 차이, 데이터 가설 설정 및 통계적 필터링 검증",
+        defense: "1% 미만 국부 로딩 저하 가설, 이동평균, MD 스윙 3회, TD 포인트 4개, Loss 50% 절감",
+        s: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다.",
+        t: "작업자 육안 검사를 배제하고, 기존 두께 측정기인 웹게이지의 원시 데이터를 활용하여 불량을 실시간 자동 감지하고 라인을 선제 정지시키는 로직을 구축하고자 했습니다.",
+        a: "'미세라인 부위는 슬러리 토출이 방해받아 단위면적당 로딩(g/㎡)이 국부적으로 1% 미만 떨어질 것이다'라는 가설을 세우고 100Lot 데이터를 분석해 미세 Data Shift를 규명했습니다. 일반 노이즈와 구분하기 위해: 1. 폭방향(TD) 스캔 프로파일에 이동평균(Moving Average)을 적용하고, 2. 진행방향(MD)으로 N=3회 연속 스윙 동안 동일 폭 위치에서 편차가 누적되는지 확인하며, 3. 폭방향(TD)으로 연속된 N=4개 포인트에서 스펙을 이탈할 때만 최종 알람이 울리도록 2차원 시계열 상관 로직을 구현했습니다.",
+        r: "미세라인 불량 Loss를 50% 절감하고 수율을 0.12% 개선했습니다. 현대차 전극 라인에서도 센서 융합 분석을 통해 보이지 않는 결함을 선제적으로 차단하겠습니다."
+      }
+    ]
+  },
+  {
+    id: "P4",
+    code: "PROJECT 04",
+    title: "AX 자동화: 고객향 인라인 데이터 이상치 자동 검출 및 대시보드 구축",
+    tags: ["Python RPA", "OpenCV Template Matching", "공정 헌팅 데이터 필터링", "Lot 병합 판정", "HTML Dashboard"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 파이썬 RPA 개발 경험은 무엇을 한 것인가요? 단순 매크로 아닌가요?",
+        intent: "단순 코딩 자랑인지, 생산운영 프로세스 혁신 및 공정 데이터에 대한 이해가 담겨 있는지 확인",
+        defense: "보안망 우회 RPA, 헌팅구간 룰베이스 필터링, 데이터 무결성 확보, 월 40시간 세이브",
+        s: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다.",
+        t: "단순 매크로를 넘어, 공정 엔지니어의 도메인 지식을 녹여 '데이터 무결성 검증 및 100% 무인 자동화 파이프라인'을 구축하여 월 40시간의 공수를 절감하는 것을 목표로 했습니다.",
+        a: "보안망을 우회하기 위해 이미지 매칭 기반의 Python RPA 스크립트로 무인 데이터 수집 파이프라인을 구축했습니다. 특히 가·감속 시 발생하는 '공정 헌팅 데이터 제거 룰'과 'Lot 병합 가능 여부 자동 검토 알고리즘'을 Pandas로 구현하고, 이상치 알람 및 트렌드가 한눈에 보이는 HTML 대시보드를 제작해 배포했습니다.",
+        r: "월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. 현대차 생산운영에서도 데이터 수집부터 이상 감시까지 전 과정을 자동화하여 스마트 팩토리 표준을 만들겠습니다."
+      }
+    ]
+  },
+  {
+    id: "P5",
+    code: "PROJECT 05",
+    title: "New-form factor F/up & 방사능 소스 웹게이지 교체 셋업",
+    tags: ["T사 Daily 대응", "영문 FACA / 8D Report", "원자력안전법 인허가", "7개 조직 Co-work", "Data 신뢰도 150%"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 방사능 소스 웹게이지 셋업 시 7개 조직 간 갈등은 무엇이었고 어떻게 해결했나요?",
+        intent: "대규모 프로젝트 리딩 능력, 부서 간 이해관계 충돌 조정 및 위기관리 능력 평가",
+        defense: "사전 기계/배선 시공(정기 PM), 3회 Dry-run 리허설로 본작업 3시간 단축, 셧다운 0건",
+        s: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다.",
+        t: "공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운 시간을 극단적으로 최소화하는 마스터 시공 플랜을 수립해야 했습니다.",
+        a: "사전 준비 공정과 방사선 본 작업을 완벽히 분리했습니다. 1. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했습니다. 2. 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 3. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다.",
+        r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. 현대차 대형 라인 셋업에서도 다부서 협업의 구심점이 되는 엔지니어가 되겠습니다."
+      }
+    ]
+  }
+];
+
+// ================= CONTEXT REFERENCE DOCUMENTS =================
+const CONTEXT_DOCS = {
+  hyundai: [
+    { tag: "경력 요약", text: "#경력\n■수율 개선\n생산능력 개선 및 설비 효율화 (21,46series 및 스트라이프, 원통형모델)\n-설비 효율화 및 Logic 변경 (웹게이지 미세 Line불량 감지 Logic 개발 등)\n-생산능력 개선 (전극 누적폭 Cpk 만족 : 전극 스트라이프코팅 Shim offset 변경을 위한 미세조절장치 전동화 개발)" },
+    { tag: "AX 및 자동화", text: "■AX 자동화 업무\nGit,Python을 활용한 자동화 업무 (고객향 Inline 검사데이터 이상여부 감지/수정 pgm 제작 등)" },
+    { tag: "고객 대응 & 생산운영", text: "■고객 대응\n-고객 기술 대응 : FACA 및 8D report 작성 및 고객 Daily meeting 대응 (Biz특성으로 인한 기술대응 영업 성격의 업무)\n-Audit 대응, 라인투어 대응\n\n■생산운영\n-전극 R2R 양산 라인 운영 및 모니터링 (간헐코팅/스트라이프코팅/2패턴코팅/절연코팅, 18/21/46 Series)\n-자주검사 운영 및 데이터 분석/관리\n-SOP 개발 및 작업자 교육\n-수율, 생산량 관리\n-설비 Issue 현장 대응, 품질 모니터링\n-오퍼레이터 관리/교육 (PLM)\n-원재료 관리 및 월 마감 업무 (ERP, Excel)" },
+    { tag: "품질사고 대책", text: "■불량 대응\n품질 사고 대책 관리 : 원인 분석/ Risk range 확인/ 개선방안 수립/ 유효성 검증 (QMS,MES, EioT, Spotfire)" },
+    { tag: "프로젝트 1: New-form factor F/up", text: "New-form factor 전극 비즈니스 F/up\n[이슈] 신규 전극 New form factor 전극 Biz F/up (개발~양산)\n[성과] 수율 안정화 \n[역할]\n1. 고객 기술 대응 : FACA 및 8D report 작성 및 고객 Daily meeting 대응\n2. 개발 중 Spec 선정부터 샘플 생산, 시운전 기획, 양산 안정화까지 공정 엔지니어로서 역할수행\n3. 설비/검사기 셋업 및 제어부 개선" },
+    { tag: "프로젝트 2: Pgm 개발 (Python)", text: "Pgm 개발을 통한 생산운영 (Python)\n[이슈] 단순반복 업무시간 과다\n[성과] 엔지니어의 단순반복 업무 완전 자동화(40시간/월) \n[역할]\n1. 고객향 송부 Inline Data 이상여부 검토/수정 및 모니터링 PGM 개발\n2. Lot병합가능여부 검토 PGM\n[기술] AI 활용기술" },
+    { tag: "프로젝트 3: 미세조정장치 전동화", text: "미세조정장치 전동화 개발\n[이슈] 조건조정Loss 과다 (코팅폭 누적 공차 spec만족)\n[성과] 해당 항목 Loss 18% 개선, 수율 0.2% 개선\n[역할] 작업자의 동작분석을 통한 Shim 오프셋 미세조정장치 전동화 개발\n[기술] 기계 결합 이해" },
+    { tag: "프로젝트 4: 미세라인 감지 로직", text: "미세라인 감지 로직 개발 (웹게이지)\n[이슈] Loss 과다(미세 라인)\n[성과] 해당 항목 50% 개선, 수율 0.12% 개선\n[역할] 검사기 Data 분석, 이동평균 적용, Recipe로 관리할 수 있도록 MD방향 scan 수와 TD방향 포인트를 변수화, 일반 산포의 Noise와 구분\n[기술] Python 활용" },
+    { tag: "프로젝트 5: 웹게이지 셋업", text: "Coater공정 웹게이지 셋업\n[이슈] 방사능 Source 반감기 초과로 검사기 신뢰도 Risk 발생 \n[성과] Data 신뢰도 150% 달성\n[역할]\n1. 7개 조직 Co-work (안전, 구매, 생산1/3팀, 4개의 외주협력업체 간) \n2. 공사 계획 수립 (기계,전기,제어)\n3. 방사선 관련 허가승인, 폐기" },
+    { tag: "프로젝트 6: 이미지 처리 엔진 개발", text: "이미지 처리 엔진 개발\n[이슈] 공정 불량 발생에 따른 출하 지연 (100만 이미지 육안 전수 선별 필요)\n[경험] 룰 기반 적응형 컴퓨터 비전 엔진 자체 개발을 통한 긴급 출하 대응 (100만 장 전수 자동 선별 프로그램 구현)\n[성과] 100만 장 전수 선별 완료 (장당 5ms 초고속 처리), 미검률 0% 달성 및 출하 지연 0건\n[역할] 이미지 처리 알고리즘 수학적 모델링 및 자동 선별 프로그램 단독 개발\n[기술] 이미지처리 관련 비전 지식" },
+    { tag: "자소서 1번: 차별화 직무 강점 (비전 엔진)", text: "1)본인만의 차별화된 직무 강점과 이를 통해 당사에 기여할 수 있는 점에 대해 기술해 주세요.(1000자)\n■[이미지 처리 엔진 개발 : 불량 선별 긴급출하 대응]\nAI를 활용하여 고객을 대응하고,NG선별 프로그램을 개발하고 유관부서와 협의를 통해 출하지연을 막은 경험이 있습니다. '실오라기 형태의 Burr' 이슈가 발생하여 출하가 지연됐는데, 출하량 감소를 막기 위해 불량 선별이 필요했습니다. 육안 확인이 필요한 사진은 100만장에 육박했고, 그 중 Burr는 0.5% 수치였습니다. 저는 사람이 음영차이로 구분할 수 있다면, AI를 활용해 픽셀, 그레이스케일로 구분할 수 있다고 생각했습니다. 현장 엔지니어의 도메인 지식과 컴퓨터 비전을 활용하여 '이미지 처리 엔진'을 자체 개발해 72시간 내에 100만 장을 오차 없이 선별하겠다는 과제를 설정했습니다.\n먼저 사람이 육안 선별한 표준 샘플의 그레이스케일을 심층 분석하여, 불량의 본질이 전극 경계면에는 '국소 음영 낙차'가 존재하고 골짜기처럼 Th값이 있음을 확인했습니다. \n1. 초기에는 단일 Th값을 적용했으나, Lot 간 조명 및 코팅 농도 편차로 인해 과검과 미검이 발생했습니다. 이를 위해 배경 코팅의 평균 스케일을 실시간 추정하여 55를 기준으로 레시피를 2개로 자동 전환하는 '이원화 Valley 알고리즘'을 구축했습니다. 절대 밝기가 아닌 상대적 음영 낙차를 계산함으로써 랏간 편차를 상쇄했습니다.\n2. Burr불량은 연속된 직선이 아니라 중간이 끊어지며 지그재그로 파이는 특성이 있어, 단순 컨투어 검출 시 단절된 미세 노이즈로 오인되는 문제가 발생했습니다. 저는 결함의 기하학적 연속성을 복원하기 위해 1×7 수직 Bridge Kernel를 직접 설계하고, 수직 모폴로지 닫힘연산을 적용했습니다. 이를 통해 단절된 미세 균열 신호를 하나의 연속된 결함 다각형으로 연결한 뒤, 8-연결성 성분분석을 거쳐 20px 이상의 치명 결함만 정확히 포착해 냈습니다.\n그 결과 장당 평균 5ms 속도로 완수하며 이슈를 클로징 했습니다. 이를 기반으로 문제의 물리적 본질을 Data와 수학적 알고리즘으로 모델링하겠습니다." },
+    { tag: "자소서 2번: 주요 프로젝트 및 성과 (Shim 전동화 & 웹게이지)", text: "2) 수행했던 주요 프로젝트의 내용 및 성과를 기재하고, 지원자분께서 맡았던 역할에 대하여 서술해 주세요. (1000자)\n생산운영 엔지니어의 필요역량은 '양산을 위한 설비/공법 개발 경험' 입니다. 새로운 제품을 생산하기 위해서는 새로운 설비/공법이 필요하기 때문에 이를 현장의 눈높이에 맞게끔 신규개발하므로써 작업자 숙련도에 따른 공정산포를 제거하여 자동화에 기여해야 합니다. 저는 아래의 장비개조 경험을 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 양산을 안정화시킬 수 있었습니다.\n\n■[신규 기술 개발로 수율 0.2% 개선]\n신규 New-form factor 전극 biz에서 신규격 제품 생산을 위해 장비를 세팅하는 신규 기술이 필요했고, 저는 Loss를 최소화하기 위해 신규 기술을 개발하는 업무를 담당했습니다. 고객이 제시한 타이트한 누적공차 spec과 공정능력을 만족시켜야 하는 공정 특성상, 수동 offset 조정으로 인한 미세한 편차가 초기 양산 수율을 떨어드리고 Loss를 유발하는 핵심 병목이었습니다. 공정 엔지니어로서 이러한 설비적 변동성을 통제하기 위해 미세조절장치의 전면적인 디지털화 기술 도입을 추진했습니다. 수동조작을 대체하기 위해 고감속비의 웜기어와 소형 모터를 결합했고 기계적인 백래시를 최소화하면서 직진 운동으로 변환하는 메커니즘을 설계했습니다. 특히, 설정값과 실제 이동값의 오차를 잡기 위해 ㎛ 단위의 미세 변위를 실시간으로 측정하는 고분해능 LVDT 센서를 부착, 실시간 위치 피드백을 통해 목표한 타겟값에 정확히 안착할 수 있는 정량적 제어 시스템을 구축했습니다.\n그 결과, 장비 개조를 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 재현성을 확보했습니다. 타겟 두께 및 폭 스펙에 도달하는 시간을 대폭 단축하여 Loss를 18% 개선하였고, 수율 0.2%를 개선했습니다.\n\n이 뿐만 아니라 비전 검사기에 잡히지않는 신규 로직을 개발하여 수율 0.12%, 해당 항목의 Loss를 50% 개선하였습니다.공정의 Ref 데이터를 분석하여 이동평균을 적용하고 Noise 제거를 위해 Logic을 설계한 경험을 기반으로 수율 향상에 기여하겠습니다." }
+  ],
+  skhynix: [
+    { tag: "경력 기본사항", text: "#경력\nLG에너지솔루션 / 46전극생산기술1팀 근무 (4년 8개월, 2022.01 ~ 2026.08 현재 재직중)\n근무지 : 충북 청주시 / 직무 : 생산기술 / 최종 직위 : 선임\n\n담당 업무 :\n■생산운영-양산 라인 운영 및 모니터링-BM대응 및 데이터 분석/관리-SOP 개발-수율, 생산량 실적 관리-설비 Issue 현장 대응, 품질 모니터링-오퍼레이터 관리/교육\n■수율 개선생산능력 개선 및 설비 효율화 (ERP,MES,DW,Excel)-설비 효율화 및 Logic 변경 (웹게이지 미세 Line불량 감지 Logic 개발 등)-생산능력 개선 (코팅 Shim offset 변경을 위한 모터구동식 미세조절장치 개발)\n■AX 자동화 업무Git,Python을 활용한 자동화 업무 (고객향 Inline 검사데이터 이상여부 감지/수정 pgm 제작 등)\n■고객 대응-고객 기술 대응 : FACA 및 8D report 작성 및 고객 Daily 미팅 대응 (T사와 반제품 Biz 진행중으로, Biz특성으로 인한 기술대응 영업 성격의 업무)-Audit 대응, 라인투어\n■불량 대응품질 사고 대책 관리 : 원인 분석, 개선방안 수립, 유효성 검증" },
+    { tag: "경험 1: 미세라인 & Shim 전동화", text: "경험1. LG에너지솔루션 (8개월, 2026-01 ~ 2026-08)\n역할 및 직위 : 선임 엔지니어\n[이슈] 미세 Line Loss 과다 발생[경험] 미세 라인 로직 개발[성과] 해당 항목 Loss 50% 개선, 수율 0.12% 개선[역할] 검사기 Data 분석, 이동평균 적용, Recipe로 관리할 수 있도록 MD방향 scan 수와 TD방향 포인트를 변수화, 일반 산포의 Noise와 구분\n[이슈] 조건조정 Loss 과다 (누적공차 spec 만족)[경험] 장비 개조를 통한 수율 개선 (작업자의 동작분석을 통한 Shim 오프셋 미세조정장치 개발)[성과] Loss 18% 개선, 수율 0.2% 개선[역할] 미세조정장치 설계 및 개발(단독개발)[기술] 수동 조작을 대체하기 위해 고감속비의 웜기어와 소형 BLDC 모터를 결합하여 기계적인 Backlash를 최소화하는 동시에 직진 운동으로 변환하는 메커니즘을 설계, 고분해능 LVDT 센서 연동하였음" },
+    { tag: "경험 2: 비전 선별 & 인라인 이상치 검출", text: "경험 2. LG에너지솔루션 (1년 7개월, 2025-01 ~ 2026-07)\n역할 및 직위 : 선임 엔지니어\n[이슈] 공정 불량 발생에 따른 출하 지연 (100만 이미지를 육안 전수 선별 필요)[경험] 룰 기반 적응형 컴퓨터 비전 엔진 자체 개발을 통한 긴급 출하 대응 (100만 장 전수 자동 선별 프로그램 구현)[성과] 100만 장 전수 선별 완료 (장당 5ms 초고속 처리), 미검률 0% 달성 및 출하 지연 0건[역할] 이미지 처리 알고리즘 수학적 모델링 및 자동 선별 프로그램 단독 개발[기술] 이미지처리 관련 비전 지식\n[이슈] 인라인 데이터 수동 검토로 인한 공정 엔지니어 리소스 부족 및 휴먼 에러 리스크[경험] 인라인 공정 품질 Data 이상치 자동 검출 모니터링 시스템 구축[성과] 검증 공수 100% 절감 및 데이터 무결성 확보[역할] AI 기반 품질 검증 로직 구축 / 이상치 수정 및 Lot별 Graph Trend 모니터링할 수 있는 Dashboard 제작[기술] 프롬프트 엔지니어링" },
+    { tag: "경험 3: New-form factor Biz F/up", text: "경험 3. LG에너지솔루션 (2년 5개월, 2024-03 ~ 2026-07)\n역할 및 직위 : 선임 엔지니어\n활동 내용 :\n① New-form factor 반제품 Biz Build F/up (개발~양산)개발 중 Spec 선정부터, 샘플 생산, 양산 안정화까지 공정 엔지니어로서 역할수행\n② 고객 기술 대응이슈 발생에 대한 영문 FACA 레포트 작성 및 기술 설명\n③ 설비/검사기 셋업설비, 인라인검사기 셋업 및 안정화\n④ 설비 시운전 / TEST 생산 DOE 계획" },
+    { tag: "자소서 1: 직무 역량 (미세라인 로직 & Shim 전동화)", text: "1)지원 분야 및 직무 역량과 관련된 프로젝트/공모전/논문/연구/학습/활동/경험 등을 작성해 주세요. *(2000자)\n■[신규 검사기 로직설계로 고질성 불량Loss 50% 개선]\n불량 부위 코팅 두께가 미세하게 다를 것이라는 가설을 세우고 웹게이지 100Lot 데이터 분석 결과 1% 미만 국부 Data Shift 확인.\n1. MD 로직: 노이즈와 실제 불량 구분을 위해 MD 방향 N번 스윙 변동 시 1차 기준\n2. TD 로직: TD 방향 연속 N개 포인트에서 스펙 이탈 시 최종 알람\n\n■[신규 기술 개발로 수율 0.2% 개선]\n수동 offset 조정 편차 병목 해소 위해 미세조절장치 전면 디지털화 추진. 고감속비 웜기어와 소형 BLDC 모터 결합, 기계적 Backlash 최소화 및 직진 운동 변환, ㎛ 단위 고분해능 LVDT 센서 부착 폐루프 피드백 제어 시스템 구축. Loss 18% 개선, 수율 0.2% 개선." },
+    { tag: "자소서 2: AI 활용 프로젝트 (비전 엔진 & RPA 대시보드)", text: "2) AI를 활용한 프로젝트/공모전/논문/연구/문제 해결 경험 등을 작성해 주세요. *(2000자)\n■[이미지 처리 엔진 개발 : 불량 선별 긴급출하 대응]\n72시간 내 100만장 선별 과제. 불량 본질인 '국소 음영 낙차(Valley)' 규명.\n1. 랏별 밝기 편차: 배경 평균 스케일 55 기준 '이원화 Valley 알고리즘' 구축\n2. 미세 불연속 크랙 극복: 1×7 수직 Bridge Kernel 설계 및 모폴로지 닫힘연산, 8-연결성 성분분석(20px 이상 치명 결함 선별)\n3. 테이프 마스킹 알고리즘 및 PyQt5 GUI 개발. 장당 5ms 완수.\n\n■[팀의 AI 대신맨: RPA 자동화]\n매 Lot 검사기 Data 송부 수작업(일 2시간) 100% 자동화. PRD 작성, Python RPA(PyAutoGUI 좌표/화면 인식), 룰베이스 헌팅개소 필터링, Lot 병합 검토, HTML 일일 대시보드 배포. 공수 100% 절감." }
+  ]
+};
+
+// ================= APP STATE =================
+let projectsData = [];
+let activeDocKey = 'hyundai';
+let saveTimeout = null;
+
+// ================= INITIALIZATION =================
+window.addEventListener('DOMContentLoaded', () => {
+  loadProjectsData();
+  renderProjects();
+  renderReferenceDoc();
+});
+
+function loadProjectsData() {
+  const saved = localStorage.getItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026');
+  if (saved) {
+    try {
+      projectsData = JSON.parse(saved);
+    } catch (e) {
+      console.error("Failed to parse saved data, fallback to default", e);
+      projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    }
+  } else {
+    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+  }
+}
+
+function saveProjectsData() {
+  setSaveStatus("저장 중...", true);
+  localStorage.setItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026', JSON.stringify(projectsData));
+  setTimeout(() => {
+    setSaveStatus("● 자동 저장 완료", false);
+  }, 300);
+}
+
+function triggerAutoSave() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  setSaveStatus("수정 중...", true);
+  saveTimeout = setTimeout(() => {
+    saveProjectsData();
+  }, 600);
+}
+
+function setSaveStatus(text, isSaving) {
+  const el = document.getElementById('saveStatus');
+  el.textContent = text;
+  if (isSaving) {
+    el.classList.add('saving');
+  } else {
+    el.classList.remove('saving');
+  }
+}
+
+function resetToDefault() {
+  if (confirm("정말 기본 데이터로 초기화하시겠습니까? (직접 수정한 모든 내용이 기본값으로 덮어씌워집니다)")) {
+    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    saveProjectsData();
+    renderProjects();
+    showToast("기본 데이터로 복원되었습니다.");
+  }
+}
+
+// ================= RENDER PROJECTS =================
+function renderProjects() {
+  const container = document.getElementById('projectsContainer');
+  container.innerHTML = '';
+
+  projectsData.forEach((proj, pIndex) => {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.id = `proj-card-${proj.id}`;
+
+    // Tags HTML
+    const tagsHtml = proj.tags.map((tag, tIndex) => `
+      <span class="tech-tag-chip">
+        <span contenteditable="true" onblur="updateTag(${pIndex}, ${tIndex}, this.textContent)">${escapeHtml(tag)}</span>
+        <span class="tech-tag-del" onclick="deleteTag(${pIndex}, ${tIndex})">×</span>
+      </span>
+    `).join('');
+
+    // Questions HTML
+    const questionsHtml = proj.questions.map((q, qIndex) => `
+      <div class="q-item-card open" id="q-card-${pIndex}-${qIndex}">
+        <div class="q-item-header" onclick="toggleQCard(this)">
+          <select class="q-type-select" onclick="event.stopPropagation()" onchange="updateQField(${pIndex}, ${qIndex}, 'type', this.value)">
+            <option value="경험 개요" ${q.type === '경험 개요' ? 'selected' : ''}>경험 개요</option>
+            <option value="어려웠던 점" ${q.type === '어려웠던 점' ? 'selected' : ''}>어려웠던 점</option>
+            <option value="압박 꼬리질문" ${q.type === '압박 꼬리질문' ? 'selected' : ''}>압박 꼬리질문</option>
+            <option value="현대차 연계" ${q.type === '현대차 연계' ? 'selected' : ''}>현대차 연계</option>
+            <option value="기타 검증" ${q.type === '기타 검증' ? 'selected' : ''}>기타 검증</option>
+          </select>
+          <div class="q-text-editable" contenteditable="true" onclick="event.stopPropagation()" oninput="updateQField(${pIndex}, ${qIndex}, 'question', this.textContent)">${escapeHtml(q.question)}</div>
+          <div style="display: flex; gap: 6px; align-items: center;" onclick="event.stopPropagation()">
+            <button class="btn btn-danger-outline" style="padding: 2px 8px; font-size: 11px;" onclick="deleteQuestion(${pIndex}, ${qIndex})">삭제</button>
+          </div>
+          <span class="q-toggle-arrow">▼</span>
+        </div>
+        <div class="q-item-body">
+          <div class="strategy-grid">
+            <div>
+              <div class="strat-box-title strat-intent-title">🎯 면접관 공격 의도</div>
+              <div class="strat-content-editable" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'intent', this.textContent)">${escapeHtml(q.intent || '')}</div>
+            </div>
+            <div>
+              <div class="strat-box-title strat-defense-title">🛡️ 방어 핵심 키워드</div>
+              <div class="strat-content-editable" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'defense', this.textContent)">${escapeHtml(q.defense || '')}</div>
+            </div>
+          </div>
+          
+          <div class="star-row">
+            <div class="star-letter let-s">S</div>
+            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
+          </div>
+          <div class="star-row">
+            <div class="star-letter let-t">T</div>
+            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
+          </div>
+          <div class="star-row">
+            <div class="star-letter let-a">A</div>
+            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
+          </div>
+          <div class="star-row">
+            <div class="star-letter let-r">R</div>
+            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="project-card-header">
+        <div class="proj-meta-left">
+          <span class="proj-code-badge" contenteditable="true" oninput="updateProjField(${pIndex}, 'code', this.textContent)">${escapeHtml(proj.code)}</span>
+          <div class="proj-title-editable" contenteditable="true" oninput="updateProjField(${pIndex}, 'title', this.textContent)">${escapeHtml(proj.title)}</div>
+        </div>
+        <div class="proj-actions">
+          <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;" onclick="addQuestionToProject(${pIndex})">➕ 꼬리질문 추가</button>
+          <button class="btn btn-danger-outline" style="padding: 4px 10px; font-size: 11px;" onclick="deleteProject(${pIndex})">프로젝트 삭제</button>
+        </div>
+      </div>
+
+      <div class="proj-tags-bar">
+        <span class="tag-label">Tech Stack:</span>
+        ${tagsHtml}
+        <button class="btn-add-tag" onclick="addTagToProject(${pIndex})">+ 태그 추가</button>
+      </div>
+
+      <div class="project-questions-list">
+        ${questionsHtml}
+        <div class="add-q-btn-wrap">
+          <button class="btn-add-q" onclick="addQuestionToProject(${pIndex})">➕ 이 프로젝트에 새로운 면접/꼬리질문 추가하기</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+// ================= PROJECT & QUESTION MUTATIONS =================
+function addNewProject() {
+  const newId = "P" + (projectsData.length + 1);
+  const newProj = {
+    id: newId,
+    code: `PROJECT 0${projectsData.length + 1}`,
+    title: "신규 프로젝트명 (클릭하여 수정하세요)",
+    tags: ["신규 공법", "데이터 분석", "품질 개선"],
+    questions: [
+      {
+        type: "경험 개요",
+        question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요? (질문을 수정하세요)",
+        intent: "면접관의 의도를 입력하세요",
+        defense: "방어할 핵심 키워드를 입력하세요",
+        s: "[Situation] 당시 어떤 상황과 배경에서 문제가 발생했나요?",
+        t: "[Task] 본인이 맡았던 핵심 목표와 역할은 무엇이었나요?",
+        a: "[Action] 문제를 해결하기 위해 어떤 물리적/수학적/공학적 행동과 메커니즘을 적용했나요?",
+        r: "[Result] 정량적 성과(수율, Loss, 시간 등)와 현대차 전극 공정 기여점은 무엇인가요?"
+      }
+    ]
+  };
+  projectsData.push(newProj);
+  saveProjectsData();
+  renderProjects();
+  showToast("새 프로젝트가 추가되었습니다.");
+  
+  // Scroll to new project
+  const newEl = document.getElementById(`proj-card-${newId}`);
+  if (newEl) newEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function deleteProject(pIndex) {
+  if (confirm(`'${projectsData[pIndex].title}' 프로젝트를 정말 삭제하시겠습니까?`)) {
+    projectsData.splice(pIndex, 1);
+    saveProjectsData();
+    renderProjects();
+    showToast("프로젝트가 삭제되었습니다.");
+  }
+}
+
+function updateProjField(pIndex, field, value) {
+  projectsData[pIndex][field] = value.trim();
+  triggerAutoSave();
+}
+
+function addTagToProject(pIndex) {
+  const tag = prompt("추가할 기술 스택 또는 키워드를 입력하세요:");
+  if (tag && tag.trim()) {
+    projectsData[pIndex].tags.push(tag.trim());
+    saveProjectsData();
+    renderProjects();
+  }
+}
+
+function updateTag(pIndex, tIndex, value) {
+  projectsData[pIndex].tags[tIndex] = value.trim();
+  triggerAutoSave();
+}
+
+function deleteTag(pIndex, tIndex) {
+  projectsData[pIndex].tags.splice(tIndex, 1);
+  saveProjectsData();
+  renderProjects();
+}
+
+function addQuestionToProject(pIndex) {
+  const qNum = projectsData[pIndex].questions.length + 1;
+  const newQ = {
+    type: "압박 꼬리질문",
+    question: `Q${qNum}. 새로운 꼬리질문/검증 질문을 입력하세요`,
+    intent: "면접관이 지원자의 진위 여부를 확인하려는 의도",
+    defense: "답변 시 반드시 언급해야 할 공학 수치/메커니즘",
+    s: "[S] 당시 구체적 문제 상황",
+    t: "[T] 달성해야 했던 목표",
+    a: "[A] 본인이 취한 공학적 액션 및 트러블슈팅",
+    r: "[R] 정량적 결과 및 현대차 직무 연계"
+  };
+  projectsData[pIndex].questions.push(newQ);
+  saveProjectsData();
+  renderProjects();
+  showToast("새 질문이 추가되었습니다.");
+}
+
+function deleteQuestion(pIndex, qIndex) {
+  if (confirm("이 질문 카드를 삭제하시겠습니까?")) {
+    projectsData[pIndex].questions.splice(qIndex, 1);
+    saveProjectsData();
+    renderProjects();
+    showToast("질문이 삭제되었습니다.");
+  }
+}
+
+function updateQField(pIndex, qIndex, field, value) {
+  projectsData[pIndex].questions[qIndex][field] = value;
+  triggerAutoSave();
+}
+
+function toggleQCard(headerEl) {
+  const card = headerEl.parentElement;
+  card.classList.toggle('open');
+}
+
+// ================= REFERENCE VIEWER LOGIC =================
+function switchDocTab(docKey) {
+  activeDocKey = docKey;
+  document.getElementById('tab-hyundai').classList.toggle('active', docKey === 'hyundai');
+  document.getElementById('tab-skhynix').classList.toggle('active', docKey === 'skhynix');
+  renderReferenceDoc();
+}
+
+function renderReferenceDoc(searchKeyword = '') {
+  const container = document.getElementById('refContentArea');
+  const chunks = CONTEXT_DOCS[activeDocKey] || [];
+  container.innerHTML = '';
+
+  let matchCount = 0;
+  const kw = searchKeyword.trim().toLowerCase();
+
+  chunks.forEach((chunk, idx) => {
+    const isMatch = kw === '' || chunk.text.toLowerCase().includes(kw) || chunk.tag.toLowerCase().includes(kw);
+    if (!isMatch) return;
+
+    matchCount++;
+
+    let displayText = escapeHtml(chunk.text);
+    if (kw !== '') {
+      const regex = new RegExp(`(${escapeRegex(kw)})`, 'gi');
+      displayText = displayText.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    const card = document.createElement('div');
+    card.className = 'doc-chunk-card';
+    card.innerHTML = `
+      <div class="chunk-header">
+        <span class="chunk-tag">${escapeHtml(chunk.tag)}</span>
+        <button class="chunk-copy-btn" onclick="copyChunkText(${idx})">📋 이 문단 복사</button>
+      </div>
+      <div class="chunk-text">${displayText}</div>
+    `;
+    container.appendChild(card);
+  });
+
+  const countEl = document.getElementById('searchCount');
+  if (kw !== '') {
+    countEl.textContent = `${matchCount}개 항목 검색됨`;
+  } else {
+    countEl.textContent = `전체 ${chunks.length}개 항목`;
+  }
+}
+
+function searchRefDoc() {
+  const query = document.getElementById('refSearchInput').value;
+  renderReferenceDoc(query);
+}
+
+function copyChunkText(idx) {
+  const chunk = CONTEXT_DOCS[activeDocKey][idx];
+  if (chunk) {
+    copyToClipboard(chunk.text);
+    showToast(`'${chunk.tag}' 내용이 복사되었습니다! 원하는 곳에 붙여넣기(Ctrl+V)하세요.`);
+  }
+}
+
+function copyActiveDocAll() {
+  const chunks = CONTEXT_DOCS[activeDocKey] || [];
+  const fullText = chunks.map(c => `[${c.tag}]\n${c.text}`).join('\n\n====================\n\n');
+  copyToClipboard(fullText);
+  showToast("원문 전체가 클립보드에 복사되었습니다!");
+}
+
+// ================= EXPORT & IMPORT =================
+function exportToMarkdown() {
+  let md = `# 현대자동차 배터리 전극 생산운영 직무 압박 면접 검증 대시보드\n\n`;
+  md += `> 최종 갱신: ${new Date().toLocaleString('ko-KR')}\n\n---\n\n`;
+
+  projectsData.forEach(proj => {
+    md += `## [${proj.code}] ${proj.title}\n\n`;
+    md += `- **Tech Stack**: ${proj.tags.join(', ')}\n\n`;
+
+    proj.questions.forEach((q, qIdx) => {
+      md += `### ${q.question} (${q.type})\n\n`;
+      if (q.intent) md += `> **면접관 의도**: ${q.intent}\n`;
+      if (q.defense) md += `> **방어 핵심 키워드**: ${q.defense}\n\n`;
+      md += `- **[S - Situation]**: ${q.s || ''}\n`;
+      md += `- **[T - Task]**: ${q.t || ''}\n`;
+      md += `- **[A - Action]**: ${q.a || ''}\n`;
+      md += `- **[R - Result & 현대차 연계]**: ${q.r || ''}\n\n`;
+    });
+    md += `---\n\n`;
+  });
+
+  downloadFile("260913_interview_dashboard_exported.md", md, "text/markdown;charset=utf-8;");
+  showToast("Markdown 파일이 다운로드되었습니다.");
+}
+
+function exportToHTML() {
+  const currentHtml = document.documentElement.outerHTML;
+  downloadFile("260913_interview_dashboard_backup.html", "<!DOCTYPE html>\n" + currentHtml, "text/html;charset=utf-8;");
+  showToast("현재 상태의 전체 HTML이 다운로드되었습니다.");
+}
+
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ================= UTILITIES =================
+function toggleBlindMode() {
+  document.body.classList.toggle('blind-mode');
+  const btn = document.getElementById('blindBtn');
+  if (document.body.classList.contains('blind-mode')) {
+    btn.textContent = '👁️ 일반 모드 (답변 보이기)';
+    btn.classList.replace('btn-outline', 'btn-primary');
+  } else {
+    btn.textContent = '👁️ 모의면접 모드 (답변 가리기)';
+    btn.classList.replace('btn-primary', 'btn-outline');
+  }
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).catch(err => {
+    // fallback
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+// ================= SECURITY AUTHENTICATION LOGIC =================
+const DEFAULT_ACCESS_PASS = "260913";
+
+function getStoredPassword() {
+  return localStorage.getItem('HYUNDAI_DASH_PASS_2026') || DEFAULT_ACCESS_PASS;
+}
+
+function checkAuthStatus() {
+  const isUnlocked = sessionStorage.getItem('HYUNDAI_DASH_SESSION_UNLOCKED');
+  const overlay = document.getElementById('lockScreenOverlay');
+  if (isUnlocked === 'true') {
+    overlay.classList.add('hidden');
+  } else {
+    overlay.classList.remove('hidden');
+    setTimeout(() => {
+      const input = document.getElementById('lockInputPass');
+      if (input) input.focus();
+    }, 100);
+  }
+}
+
+function handleLockKeyPress(e) {
+  if (e.key === 'Enter') {
+    submitAuthUnlock();
+  }
+}
+
+function submitAuthUnlock() {
+  const input = document.getElementById('lockInputPass');
+  const errMsg = document.getElementById('lockErrorMsg');
+  const entered = input.value.trim();
+  const validPass = getStoredPassword();
+
+  if (entered === validPass) {
+    sessionStorage.setItem('HYUNDAI_DASH_SESSION_UNLOCKED', 'true');
+    const overlay = document.getElementById('lockScreenOverlay');
+    overlay.classList.add('hidden');
+    errMsg.textContent = '';
+    input.value = '';
+    showToast('?뵑 蹂댁븞 ?몄쬆 ?깃났! ?뚰겕?ㅽ럹?댁뒪媛 ?대졇?듬땲??');
+  } else {
+    errMsg.textContent = '鍮꾨?踰덊샇媛 ?щ컮瑜댁? ?딆뒿?덈떎. ?ㅼ떆 ?뺤씤?댁＜?몄슂.';
+    input.classList.add('shake');
+    setTimeout(() => {
+      input.classList.remove('shake');
+    }, 400);
+    input.select();
+  }
+}
+
+function lockDashboardNow() {
+  sessionStorage.removeItem('HYUNDAI_DASH_SESSION_UNLOCKED');
+  const overlay = document.getElementById('lockScreenOverlay');
+  overlay.classList.remove('hidden');
+  const input = document.getElementById('lockInputPass');
+  input.value = '';
+  input.focus();
+  showToast('?뵏 ??쒕낫?쒓? ?좉꼈?듬땲??');
+}
+
+function changePasswordPrompt() {
+  const currentPass = getStoredPassword();
+  const inputOld = prompt('?꾩옱 鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂:');
+  if (inputOld === null) return;
+
+  if (inputOld !== currentPass) {
+    alert('?꾩옱 鍮꾨?踰덊샇媛 ?쇱튂?섏? ?딆뒿?덈떎.');
+    return;
+  }
+
+  const newPass = prompt('?덈줈 ?ㅼ젙??鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂:');
+  if (!newPass || !newPass.trim()) {
+    alert('鍮꾨?踰덊샇瑜?怨듬갚?쇰줈 ?ㅼ젙?????놁뒿?덈떎.');
+    return;
+  }
+
+  localStorage.setItem('HYUNDAI_DASH_PASS_2026', newPass.trim());
+  alert('鍮꾨?踰덊샇媛 ?깃났?곸쑝濡?蹂寃쎈릺?덉뒿?덈떎!');
+  showToast('?뵎 ??鍮꾨?踰덊샇媛 ??λ릺?덉뒿?덈떎.');
+}
+
+// Add checkAuthStatus to window load
+const originalOnLoad = window.onload;
+window.addEventListener('DOMContentLoaded', () => {
+  checkAuthStatus();
+});
+</script>
+
+</body>
+</html>
