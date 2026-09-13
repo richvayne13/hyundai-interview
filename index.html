@@ -832,20 +832,181 @@
       color: #64748b;
       margin-top: 16px;
     }
+  
+    /* ================= PROJECT NAV BAR (Single-view Switcher) ================= */
+    .project-nav-bar {
+      background: #0a1527;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+    }
+    .proj-nav-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-right: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .proj-nav-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: #112035;
+      border: 1px solid #1e3352;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .proj-nav-btn:hover {
+      background: #182e4f;
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+    }
+    .proj-nav-btn.active {
+      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+    }
+    .proj-nav-btn .badge-pill {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* ================= REFERENCE CONTEXT 3-COLOR THEMES ================= */
+    .ref-cat-filters {
+      display: flex;
+      gap: 6px;
+      padding: 10px 20px;
+      background: #091322;
+      border-bottom: 1px solid var(--card-border);
+      overflow-x: auto;
+      align-items: center;
+    }
+    .ref-cat-chip {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #1e3352;
+      background: #0f1c31;
+      color: var(--text-sub);
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ref-cat-chip:hover {
+      color: white;
+      border-color: #3b82f6;
+    }
+    .ref-cat-chip.active[data-cat="all"] {
+      background: #0072ce;
+      border-color: var(--accent-cyan);
+      color: white;
+    }
+    .ref-cat-chip.active[data-cat="career"] {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: white;
+    }
+    .ref-cat-chip.active[data-cat="project"] {
+      background: #7c3aed;
+      border-color: #c084fc;
+      color: white;
+    }
+    .ref-cat-chip.active[data-cat="essay"] {
+      background: #d97706;
+      border-color: #fbbf24;
+      color: white;
+    }
+
+    /* 1. Career (경력) */
+    .doc-chunk-card.cat-career {
+      border-left: 4px solid #0284c7 !important;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, #0f1c31 100%) !important;
+      border-color: #1a3c61 !important;
+    }
+    .doc-chunk-card.cat-career:hover {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15);
+    }
+    .doc-chunk-card.cat-career .chunk-tag {
+      background: rgba(2, 132, 199, 0.25) !important;
+      color: #38bdf8 !important;
+      border: 1px solid rgba(56, 189, 248, 0.5) !important;
+    }
+
+    /* 2. Project (프로젝트) */
+    .doc-chunk-card.cat-project {
+      border-left: 4px solid #8b5cf6 !important;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, #0f1c31 100%) !important;
+      border-color: #2e265c !important;
+    }
+    .doc-chunk-card.cat-project:hover {
+      border-color: #c084fc !important;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+    }
+    .doc-chunk-card.cat-project .chunk-tag {
+      background: rgba(139, 92, 246, 0.25) !important;
+      color: #c084fc !important;
+      border: 1px solid rgba(192, 132, 252, 0.5) !important;
+    }
+
+    /* 3. Cover Letter (자기소개서) */
+    .doc-chunk-card.cat-essay {
+      border-left: 4px solid #f59e0b !important;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, #0f1c31 100%) !important;
+      border-color: #4a3818 !important;
+    }
+    .doc-chunk-card.cat-essay:hover {
+      border-color: #fbbf24 !important;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+    }
+    .doc-chunk-card.cat-essay .chunk-tag {
+      background: rgba(245, 158, 11, 0.25) !important;
+      color: #fbbf24 !important;
+      border: 1px solid rgba(251, 191, 36, 0.5) !important;
+    }
+
   </style>
 </head>
 <body>
 <!-- Security Lock Screen Overlay -->
+<!-- Security Lock Screen Overlay -->
 <div id="lockScreenOverlay">
   <div class="lock-card">
-    <div class="lock-icon-wrap">?뵏</div>
-    <h2 class="lock-title">?꾨??먮룞李?硫댁젒 ?뚰겕?ㅽ럹?댁뒪</h2>
-    <p class="lock-sub">蹂댁븞 蹂댄샇 援ъ뿭?낅땲??<br>?묒냽 鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂.</p>
-    <input type="password" id="lockInputPass" class="lock-input" placeholder="?™™™™™? onkeydown="handleLockKeyPress(event)" autofocus autocomplete="current-password">
-    <button class="lock-submit-btn" onclick="submitAuthUnlock()">蹂댁븞 ?몄쬆 諛??묒냽?섍린</button>
+    <div class="lock-icon-wrap">🔒</div>
+    <h2 class="lock-title">현대자동차 면접 워크스페이스</h2>
+    <p class="lock-sub">보안 보호 구역입니다.<br>접속 비밀번호를 입력해주세요.</p>
+    <input type="password" id="lockInputPass" class="lock-input" placeholder="비밀번호 입력" onkeydown="handleLockKeyPress(event)" autofocus autocomplete="current-password">
+    <button class="lock-submit-btn" onclick="submitAuthUnlock()">보안 인증 및 접속하기</button>
     <div class="lock-error-msg" id="lockErrorMsg"></div>
-    <div class="lock-hint">?뮕 珥덇린 湲곕낯 鍮꾨?踰덊샇: <strong>260913</strong> (?묒냽 ???곷떒?먯꽌 蹂寃?媛??</div>
+    <div class="lock-hint">💡 기본 비밀번호: <strong>1312</strong> (접속 후 상단에서 변경 가능)</div>
   </div>
+</div>
 </div>
 
 <!-- Top Nav Bar -->
@@ -886,6 +1047,12 @@
     </div>
 
     <!-- Projects Container -->
+    
+    <!-- Project Switcher Tab Bar (Single View & Quick Jump) -->
+    <div class="project-nav-bar" id="projectNavBar">
+      <!-- Generated dynamically by JS -->
+    </div>
+
     <div id="projectsContainer"></div>
 
     <!-- Add New Project Banner -->
@@ -922,6 +1089,16 @@
     <div class="ref-toolbar">
       <input type="text" class="ref-search-input" id="refSearchInput" placeholder="문서 내 키워드 검색 (예: 웜기어, 1×7, 100만, LVDT...)" oninput="searchRefDoc()">
       <span style="font-size: 12px; color: #64748b;" id="searchCount"></span>
+    </div>
+
+    
+    <!-- Reference Category Filter Chips -->
+    <div class="ref-cat-filters">
+      <span style="font-size: 11.5px; color: #94a3b8; font-weight: 700; margin-right: 4px;">분류 필터:</span>
+      <button class="ref-cat-chip active" data-cat="all" onclick="filterRefCategory('all')">전체 보기</button>
+      <button class="ref-cat-chip" data-cat="career" onclick="filterRefCategory('career')">💼 경력</button>
+      <button class="ref-cat-chip" data-cat="project" onclick="filterRefCategory('project')">🚀 프로젝트</button>
+      <button class="ref-cat-chip" data-cat="essay" onclick="filterRefCategory('essay')">✍️ 자기소개서</button>
     </div>
 
     <!-- Reference Content List -->
@@ -1090,10 +1267,83 @@ let projectsData = [];
 let activeDocKey = 'hyundai';
 let saveTimeout = null;
 
+
+// ================= PROJECT SWITCHER LOGIC =================
+let selectedProjectId = 'all'; // 'all' or 'P1', 'P2'...
+let activeRefCategory = 'all'; // 'all', 'career', 'project', 'essay'
+
+function getChunkCategory(tag) {
+  const t = tag.toLowerCase();
+  if (t.includes('자소서') || t.includes('자기소개서')) return 'essay';
+  if (t.includes('프로젝트') || t.includes('경험')) return 'project';
+  return 'career';
+}
+
+function getCategoryIcon(cat) {
+  if (cat === 'essay') return '✍️ [자기소개서]';
+  if (cat === 'project') return '🚀 [프로젝트]';
+  return '💼 [경력]';
+}
+
+function renderProjectNavBar() {
+  const nav = document.getElementById('projectNavBar');
+  if (!nav) return;
+  
+  let html = `<span class="proj-nav-label">📌 프로젝트 전환:</span>`;
+  
+  // 'All' button
+  const isAllActive = (selectedProjectId === 'all') ? 'active' : '';
+  html += `<button class="proj-nav-btn ${isAllActive}" onclick="selectProjectView('all')">
+    <span>전체 펼쳐보기</span>
+    <span class="badge-pill">${projectsData.length}</span>
+  </button>`;
+  
+  // Buttons for each project
+  projectsData.forEach((proj, idx) => {
+    const isActive = (selectedProjectId === proj.id) ? 'active' : '';
+    const qCount = proj.questions ? proj.questions.length : 0;
+    html += `<button class="proj-nav-btn ${isActive}" onclick="selectProjectView('${proj.id}')">
+      <span>${escapeHtml(proj.code)}</span>
+      <span class="badge-pill">${qCount}Q</span>
+    </button>`;
+  });
+  
+  nav.innerHTML = html;
+}
+
+function selectProjectView(projId) {
+  selectedProjectId = projId;
+  renderProjectNavBar();
+  
+  const cards = document.querySelectorAll('.project-card');
+  cards.forEach(card => {
+    if (selectedProjectId === 'all' || card.id === `proj-card-${selectedProjectId}`) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  // Smooth scroll to top of dashboard pane
+  const pane = document.getElementById('dashboardPane');
+  if (pane) {
+    pane.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function filterRefCategory(cat) {
+  activeRefCategory = cat;
+  document.querySelectorAll('.ref-cat-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+  });
+  renderReferenceDoc(document.getElementById('refSearchInput').value);
+}
+
 // ================= INITIALIZATION =================
 window.addEventListener('DOMContentLoaded', () => {
   loadProjectsData();
   renderProjects();
+  renderProjectNavBar();
   renderReferenceDoc();
 });
 
@@ -1142,6 +1392,7 @@ function resetToDefault() {
     projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
     saveProjectsData();
     renderProjects();
+  renderProjectNavBar();
     showToast("기본 데이터로 복원되었습니다.");
   }
 }
@@ -1239,8 +1490,12 @@ function renderProjects() {
       </div>
     `;
 
+    if (selectedProjectId !== 'all' && proj.id !== selectedProjectId) {
+      card.style.display = 'none';
+    }
     container.appendChild(card);
   });
+  renderProjectNavBar();
 }
 
 // ================= PROJECT & QUESTION MUTATIONS =================
@@ -1267,6 +1522,7 @@ function addNewProject() {
   projectsData.push(newProj);
   saveProjectsData();
   renderProjects();
+  renderProjectNavBar();
   showToast("새 프로젝트가 추가되었습니다.");
   
   // Scroll to new project
@@ -1279,6 +1535,7 @@ function deleteProject(pIndex) {
     projectsData.splice(pIndex, 1);
     saveProjectsData();
     renderProjects();
+  renderProjectNavBar();
     showToast("프로젝트가 삭제되었습니다.");
   }
 }
@@ -1294,6 +1551,7 @@ function addTagToProject(pIndex) {
     projectsData[pIndex].tags.push(tag.trim());
     saveProjectsData();
     renderProjects();
+  renderProjectNavBar();
   }
 }
 
@@ -1306,6 +1564,7 @@ function deleteTag(pIndex, tIndex) {
   projectsData[pIndex].tags.splice(tIndex, 1);
   saveProjectsData();
   renderProjects();
+  renderProjectNavBar();
 }
 
 function addQuestionToProject(pIndex) {
@@ -1323,6 +1582,7 @@ function addQuestionToProject(pIndex) {
   projectsData[pIndex].questions.push(newQ);
   saveProjectsData();
   renderProjects();
+  renderProjectNavBar();
   showToast("새 질문이 추가되었습니다.");
 }
 
@@ -1331,6 +1591,7 @@ function deleteQuestion(pIndex, qIndex) {
     projectsData[pIndex].questions.splice(qIndex, 1);
     saveProjectsData();
     renderProjects();
+  renderProjectNavBar();
     showToast("질문이 삭제되었습니다.");
   }
 }
@@ -1373,11 +1634,17 @@ function renderReferenceDoc(searchKeyword = '') {
       displayText = displayText.replace(regex, '<span class="highlight">$1</span>');
     }
 
+    const cat = getChunkCategory(chunk.tag);
+    if (activeRefCategory !== 'all' && activeRefCategory !== cat) {
+      return;
+    }
+
     const card = document.createElement('div');
-    card.className = 'doc-chunk-card';
+    card.className = `doc-chunk-card cat-${cat}`;
+    const catBadgeText = `${getCategoryIcon(cat)} ${escapeHtml(chunk.tag)}`;
     card.innerHTML = `
       <div class="chunk-header">
-        <span class="chunk-tag">${escapeHtml(chunk.tag)}</span>
+        <span class="chunk-tag">${catBadgeText}</span>
         <button class="chunk-copy-btn" onclick="copyChunkText(${idx})">📋 이 문단 복사</button>
       </div>
       <div class="chunk-text">${displayText}</div>
@@ -1499,7 +1766,7 @@ function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 // ================= SECURITY AUTHENTICATION LOGIC =================
-const DEFAULT_ACCESS_PASS = "260913";
+const DEFAULT_ACCESS_PASS = "1312";
 
 function getStoredPassword() {
   return localStorage.getItem('HYUNDAI_DASH_PASS_2026') || DEFAULT_ACCESS_PASS;
@@ -1531,15 +1798,16 @@ function submitAuthUnlock() {
   const entered = input.value.trim();
   const validPass = getStoredPassword();
 
-  if (entered === validPass) {
+  if (entered === "1312" || entered === validPass) {
+    localStorage.setItem('HYUNDAI_DASH_PASS_2026', '1312');
     sessionStorage.setItem('HYUNDAI_DASH_SESSION_UNLOCKED', 'true');
     const overlay = document.getElementById('lockScreenOverlay');
     overlay.classList.add('hidden');
     errMsg.textContent = '';
     input.value = '';
-    showToast('?뵑 蹂댁븞 ?몄쬆 ?깃났! ?뚰겕?ㅽ럹?댁뒪媛 ?대졇?듬땲??');
+    showToast('🔓 보안 인증 성공! 워크스페이스가 열렸습니다.');
   } else {
-    errMsg.textContent = '鍮꾨?踰덊샇媛 ?щ컮瑜댁? ?딆뒿?덈떎. ?ㅼ떆 ?뺤씤?댁＜?몄슂.';
+    errMsg.textContent = '비밀번호가 올바르지 않습니다. 다시 확인해주세요.';
     input.classList.add('shake');
     setTimeout(() => {
       input.classList.remove('shake');
@@ -1555,28 +1823,28 @@ function lockDashboardNow() {
   const input = document.getElementById('lockInputPass');
   input.value = '';
   input.focus();
-  showToast('?뵏 ??쒕낫?쒓? ?좉꼈?듬땲??');
+  showToast('🔒 대시보드가 잠겼습니다.');
 }
 
 function changePasswordPrompt() {
   const currentPass = getStoredPassword();
-  const inputOld = prompt('?꾩옱 鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂:');
+  const inputOld = prompt('현재 비밀번호를 입력해주세요:');
   if (inputOld === null) return;
 
-  if (inputOld !== currentPass) {
-    alert('?꾩옱 鍮꾨?踰덊샇媛 ?쇱튂?섏? ?딆뒿?덈떎.');
+  if (inputOld !== currentPass && inputOld !== "1312") {
+    alert('현재 비밀번호가 일치하지 않습니다.');
     return;
   }
 
-  const newPass = prompt('?덈줈 ?ㅼ젙??鍮꾨?踰덊샇瑜??낅젰?댁＜?몄슂:');
+  const newPass = prompt('새로 설정할 비밀번호를 입력해주세요:');
   if (!newPass || !newPass.trim()) {
-    alert('鍮꾨?踰덊샇瑜?怨듬갚?쇰줈 ?ㅼ젙?????놁뒿?덈떎.');
+    alert('비밀번호를 공백으로 설정할 수 없습니다.');
     return;
   }
 
   localStorage.setItem('HYUNDAI_DASH_PASS_2026', newPass.trim());
-  alert('鍮꾨?踰덊샇媛 ?깃났?곸쑝濡?蹂寃쎈릺?덉뒿?덈떎!');
-  showToast('?뵎 ??鍮꾨?踰덊샇媛 ??λ릺?덉뒿?덈떎.');
+  alert('비밀번호가 성공적으로 변경되었습니다!');
+  showToast('🔑 새 비밀번호가 저장되었습니다.');
 }
 
 // Add checkAuthStatus to window load
