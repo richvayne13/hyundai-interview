@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -893,6 +893,47 @@
       background: rgba(0, 0, 0, 0.25);
     }
 
+    /* ================= ONE-LINE SUMMARY BOX (두괄식 요약) ================= */
+    .summary-lead-box {
+      background: linear-gradient(135deg, rgba(0, 114, 206, 0.15) 0%, rgba(13, 30, 56, 0.6) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .summary-lead-badge {
+      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
+      color: #ffffff;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
+    }
+    .summary-lead-text {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #f0fdf4;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .summary-lead-text:empty:before {
+      content: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요 (예: ~를 통해 수율 0.2% 및 Loss 18%를 개선한 경험입니다.)";
+      color: #64748b;
+      font-style: italic;
+    }
+
     /* ================= REFERENCE CONTEXT 3-COLOR THEMES ================= */
     .ref-cat-filters {
       display: flex;
@@ -991,48 +1032,6 @@
       border: 1px solid rgba(251, 191, 36, 0.5) !important;
     }
 
-  
-    /* ================= ONE-LINE SUMMARY BOX (두괄식 요약) ================= */
-    .summary-lead-box {
-      background: linear-gradient(135deg, rgba(0, 114, 206, 0.15) 0%, rgba(13, 30, 56, 0.6) 100%);
-      border: 1px solid rgba(0, 229, 255, 0.35);
-      border-left: 4px solid var(--accent-cyan);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 14px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    .summary-lead-badge {
-      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
-      color: #ffffff;
-      font-size: 11.5px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      border: 1px solid rgba(0, 229, 255, 0.4);
-      flex-shrink: 0;
-      letter-spacing: 0.3px;
-    }
-    .summary-lead-text {
-      font-size: 14.5px;
-      font-weight: 600;
-      color: #f0fdf4;
-      line-height: 1.6;
-      flex: 1;
-    }
-    .summary-lead-text:empty:before {
-      content: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요 (예: ~를 통해 수율 0.2% 및 Loss 18%를 개선한 경험입니다.)";
-      color: #64748b;
-      font-style: italic;
-    }
-
   </style>
 </head>
 <body>
@@ -1044,7 +1043,7 @@
     <h2 class="lock-title">현대자동차 면접 워크스페이스</h2>
     <p class="lock-sub">보안 보호 구역입니다.<br>접속 비밀번호를 입력해주세요.</p>
     <input type="password" id="lockInputPass" class="lock-input" placeholder="비밀번호 입력" onkeydown="handleLockKeyPress(event)" autofocus autocomplete="current-password">
-    <button class="lock-submit-btn" onclick="submitAuthUnlock()">보안 인증 및 접속하기</button>
+    <button class="lock-submit-btn" id="lockSubmitBtn" onclick="submitAuthUnlock()">보안 인증 및 접속하기</button>
     <div class="lock-error-msg" id="lockErrorMsg"></div>
     <div class="lock-hint">💡 기본 비밀번호: <strong>1312</strong> (접속 후 상단에서 변경 가능)</div>
   </div>
@@ -1303,106 +1302,12 @@ const CONTEXT_DOCS = {
     { tag: "자소서 2번: 주요 프로젝트 및 성과 (Shim 전동화 & 웹게이지)", text: "2) 수행했던 주요 프로젝트의 내용 및 성과를 기재하고, 지원자분께서 맡았던 역할에 대하여 서술해 주세요. (1000자)\n생산운영 엔지니어의 필요역량은 '양산을 위한 설비/공법 개발 경험' 입니다. 새로운 제품을 생산하기 위해서는 새로운 설비/공법이 필요하기 때문에 이를 현장의 눈높이에 맞게끔 신규개발하므로써 작업자 숙련도에 따른 공정산포를 제거하여 자동화에 기여해야 합니다. 저는 아래의 장비개조 경험을 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 양산을 안정화시킬 수 있었습니다.\n\n■[신규 기술 개발로 수율 0.2% 개선]\n신규 New-form factor 전극 biz에서 신규격 제품 생산을 위해 장비를 세팅하는 신규 기술이 필요했고, 저는 Loss를 최소화하기 위해 신규 기술을 개발하는 업무를 담당했습니다. 고객이 제시한 타이트한 누적공차 spec과 공정능력을 만족시켜야 하는 공정 특성상, 수동 offset 조정으로 인한 미세한 편차가 초기 양산 수율을 떨어드리고 Loss를 유발하는 핵심 병목이었습니다. 공정 엔지니어로서 이러한 설비적 변동성을 통제하기 위해 미세조절장치의 전면적인 디지털화 기술 도입을 추진했습니다. 수동조작을 대체하기 위해 고감속비의 웜기어와 소형 모터를 결합했고 기계적인 백래시를 최소화하면서 직진 운동으로 변환하는 메커니즘을 설계했습니다. 특히, 설정값과 실제 이동값의 오차를 잡기 위해 ㎛ 단위의 미세 변위를 실시간으로 측정하는 고분해능 LVDT 센서를 부착, 실시간 위치 피드백을 통해 목표한 타겟값에 정확히 안착할 수 있는 정량적 제어 시스템을 구축했습니다.\n그 결과, 장비 개조를 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 재현성을 확보했습니다. 타겟 두께 및 폭 스펙에 도달하는 시간을 대폭 단축하여 Loss를 18% 개선하였고, 수율 0.2%를 개선했습니다.\n\n이 뿐만 아니라 비전 검사기에 잡히지않는 신규 로직을 개발하여 수율 0.12%, 해당 항목의 Loss를 50% 개선하였습니다.공정의 Ref 데이터를 분석하여 이동평균을 적용하고 Noise 제거를 위해 Logic을 설계한 경험을 기반으로 수율 향상에 기여하겠습니다." }
   ],
   skhynix: [
-    { tag: "경력 기본사항", text: "#경력
-LG에너지솔루션 / 46전극생산기술1팀 근무
-4년8개월 (2022.01 입사 ~ 2026.08 현재 재직중)
-근무지 : 충북 청주시
-직무 : 생산기술
-최종 직위 : 선임
-
-담당 업무 :
-■생산운영
--양산 라인 운영 및 모니터링
--BM대응 및 데이터 분석/관리
--SOP 개발
--수율, 생산량 실적 관리
--설비 Issue 현장 대응, 품질 모니터링
--오퍼레이터 관리/교육
-
-■수율 개선
-생산능력 개선 및 설비 효율화 (ERP,MES,DW,Excel)
--설비 효율화 및 Logic 변경 (웹게이지 미세 Line불량 감지 Logic 개발 등)
--생산능력 개선 (코팅 Shim offset 변경을 위한 모터구동식 미세조절장치 개발)
-
-■AX 자동화 업무
-Git,Python을 활용한 자동화 업무 (고객향 Inline 검사데이터 이상여부 감지/수정 pgm 제작 등)
-
-■고객 대응
--고객 기술 대응 : FACA 및 8D report 작성 및 고객 Daily 미팅 대응 (T사와 반제품 Biz 진행중으로, Biz특성으로 인한 기술대응 영업 성격의 업무)
--Audit 대응, 라인투어
-
-■불량 대응
-품질 사고 대책 관리 : 원인 분석, 개선방안 수립, 유효성 검증" },
-    { tag: "경험 1: 미세라인 로직 & Shim 미세조정장치 개발", text: "경험1. LG에너지솔루션
-8개월 (2026-01 ~ 2026-08)
-역할 및 직위 : 선임 엔지니어
-활동 내용 :
-[이슈] 미세 Line Loss 과다 발생
-[경험] 미세 라인 로직 개발
-[성과] 해당 항목 Loss 50% 개선, 수율 0.12% 개선
-[역할] 검사기 Data 분석, 이동평균 적용, Recipe로 관리할 수 있도록 MD방향 scan 수와 TD방향 포인트를 변수화, 일반 산포의 Noise와 구분
-
-[이슈] 조건조정 Loss 과다 (누적공차 spec 만족)
-[경험] 장비 개조를 통한 수율 개선 (작업자의 동작분석을 통한 Shim 오프셋 미세조정장치 개발)
-[성과] Loss 18% 개선, 수율 0.2% 개선
-[역할] 미세조정장치 설계 및 개발(단독개발)
-[기술] 수동 조작을 대체하기 위해 고감속비의 웜기어와 소형 BLDC 모터를 결합하여 기계적인 Backlash를 최소화하는 동시에 직진 운동으로 변환하는 메커니즘을 설계, 고분해능 LVDT 센서 연동하였음" },
-    { tag: "경험 2: 비전 긴급출하 대응 & 품질데이터 이상치 모니터링", text: "경험 2. LG에너지솔루션
-1년7개월 (2025-01 ~ 2026-07)
-역할 및 직위 : 선임 엔지니어
-활동 내용 :
-[이슈] 공정 불량 발생에 따른 출하 지연 (100만 이미지를 육안 전수 선별 필요)
-[경험] 룰 기반 적응형 컴퓨터 비전 엔진 자체 개발을 통한 긴급 출하 대응 (100만 장 전수 자동 선별 프로그램 구현)
-[성과] 100만 장 전수 선별 완료 (장당 5ms 초고속 처리), 미검률 0% 달성 및 출하 지연 0건
-[역할] 이미지 처리 알고리즘 수학적 모델링 및 자동 선별 프로그램 단독 개발
-[기술] 이미지처리 관련 비전 지식
-
-[이슈] 인라인 데이터 수동 검토로 인한 공정 엔지니어 리소스 부족 및 휴먼 에러 리스크
-[경험] 인라인 공정 품질 Data 이상치 자동 검출 모니터링 시스템 구축
-[성과] 검증 공수 100% 절감 및 데이터 무결성 확보
-[역할] AI 기반 품질 검증 로직 구축 / 이상치 수정 및 Lot별 Graph Trend 모니터링할 수 있는 Dashboard 제작
-[기술] 프롬프트 엔지니어링" },
-    { tag: "경험 3: New-form factor 반제품 Biz Build F/up", text: "경험 3. LG에너지솔루션
-2년5개월 (2024-03 ~ 2026-07)
-역할 및 직위 : 선임 엔지니어
-활동 내용 :
-① New-form factor 반제품 Biz Build F/up (개발~양산)
-개발 중 Spec 선정부터, 샘플 생산, 양산 안정화까지 공정 엔지니어로서 역할수행
-② 고객 기술 대응
-이슈 발생에 대한 영문 FACA 레포트 작성 및 기술 설명
-③ 설비/검사기 셋업
-설비, 인라인검사기 셋업 및 안정화
-④ 설비 시운전 / TEST 생산 DOE 계획" },
-    { tag: "자소서 1번: 직무 역량 (2000자 원문 전체)", text: "1)지원 분야 및 직무 역량과 관련된 프로젝트/공모전/논문/연구/학습/활동/경험 등을 작성해 주세요. *(2000자)
-저는 제조업에서 5년차 공정 엔지니어 업무를 수행하며 양산/기술 개발 역량을 쌓았습니다. 뿐만 아니라, 수 건의 프로젝트를 통해 생산능력 개선 및 설비 효율화를 공정 담당자로서 업무를 수행했습니다. 이를 기반으로 공정 자동화 기술 개발과 설비 최적화 업무를 통해 양산기술 전문가로 성장하겠습니다.
-
-■[신규 검사기 로직설계로 고질성 불량Loss 50% 개선]
- 저는 신규 로직을 개발하고 설비에 적용하여 수율 0.12%, 해당 항목의 Loss를 50% 개선하였습니다. '미세라인' 이라는 비전 검사기에 잡히지 않는 고질불량이 있었고, 작업자가 육안으로 음영차이를 확인해야만 인지할 수 있어 Loss가 발생했습니다. 저는 이 문제를 시스템적으로 해결하기 위해 불량이 발생하는 구간의 물리적 특성에 주목했습니다. 불량 부위의 코팅 두께가 미세하게 다를 것이라는 가설을 세우고, 스캔 방식의 측정기인 웹게이지의 국부적인 로딩(단위 면적당 무게) 데이터를 심층 분석했습니다.100Lot의 데이터를 분석한 결과, 1%미만의 국부적인 Data shift를 확인하고 로직 개발을 시작했습니다. 설비가 자동으로 인지할 수 있도록 두 가지 방향성을 고려한 신규 감지 로직을 설계했습니다. 먼저 이동평균을 적용시키고, Recipe로 관리할 수 있도록 진행방향 scan 수와 폭방향 포인트를 아래와 같이 변수화했습니다.
-1. 진행 방향(MD) 로직: 데이터 노이즈와 실제 불량을 구분하기 위해, MD 방향으로 N번의 스윙(Swing) 변동이 발생할 때를 1차 기준으로 설정했습니다.
-2. 폭 방향(TD) 로직: 우연한 오차를 배제하기 위해, TD 방향으로 연속된 N개의 포인트에서 스펙 이탈이 발생할 때만 최종 알람이 울리도록 변수를 지정했습니다.
- 그 결과 검사기보다 정확한 미세라인 감지 로직을 통해 미세라인 Loss를 50% 개선하여 목표수율 달성에 기여했습니다. 반도체 제조 공정 역시 웨이퍼 상의 미세한 산포와 결함을 선제적으로 제어하는 것이 핵심입니다. 공정의 Ref 데이터를 분석하여 이동평균을 적용하고 Noise 제거를 위해 Logic을 설계한 경험을 기반으로, 품질 사고 발생 시 적절한 대책과 Logic 을 설계하고 변수를 최적화하여 제품의 품질 표준화를 확보하고 설비를 효율화하겠습니다. 위의 경험을 활용하여, 장비 Setup 및 공정 안정화를 위한 개선업무 수행에 기여하겠습니다. 
-
-
-'양산을 위한 설비/공법 개발 경험'이 필요역량입니다. 새로운 제품을 생산하기 위해서는 새로운 설비/공법이 필요하기 때문에 이를 현장의 눈높이에 맞게끔 신규개발하므로써 작업자 숙련도에 따른 공정산포를 제거하여 자동화에 기여해야 합니다. 저는 아래의 장비개조 경험을 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 양산을 안정화시킬 수 있었습니다.
-■[신규 기술 개발로 수율 0.2% 개선]
-신규 반제품 biz에서 신규격 제품 생산을 위해 장비를 세팅하는 신규 기술이 필요했고, 저는 Loss를 최소화하기 위해 신규 기술을 개발하는 업무를 담당했습니다. 고객이 제시한 타이트한 누적공차 spec과 공정능력을 만족시켜야 하는 공정 특성상, 수동 offset 조정으로 인한 미세한 편차가 초기 양산 수율을 떨어드리고 Loss를 유발하는 핵심 병목이었습니다. 공정 엔지니어로서 이러한 설비적 변동성을 통제하기 위해 미세조절장치의 전면적인 디지털화 기술 도입을 추진했습니다. 수동조작을 대체하기 위해 고감속비의 웜기어와 소형 모터를 결합했고 기계적인 백래시를 최소화하면서 직진 운동으로 변환하는 메커니즘을 설계했습니다. 특히, 설정값과 실제 이동값의 오차를 잡기 위해 ㎛ 단위의 미세 변위를 실시간으로 측정하는 고분해능 LVDT 센서를 부착, 실시간 위치 피드백을 통해 목표한 타겟값에 정확히 안착할 수 있는 정량적 제어 시스템을 구축했습니다.
- 그 결과, 장비 개조를 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 재현성을 확보했습니다. 타겟 두께 및 폭 스펙에 도달하는 시간을 대폭 단축하여 Loss를 18% 개선하였고, 수율 0.2%를 개선했습니다." },
-    { tag: "자소서 2번: AI 활용 문제 해결 (2000자 원문 전체)", text: "2) AI를 활용한 프로젝트/공모전/논문/연구/문제 해결 경험 등을 작성해 주세요. *(2000자)
-■[이미지 처리 엔진 개발 : 불량 선별 긴급출하 대응]
- AI를 활용하여 고객을 대응하고,NG선별 프로그램을 개발하고 유관부서와 협의를 통해 출하지연을 막은 경험이 있습니다. '실오라기 형태의 Burr' 이슈가 발생하여 출하가 지연됐는데, 출하량 감소를 막기 위해 불량 선별이 필요했습니다. 육안 확인이 필요한 사진은 100만장에 육박했고, 그 중 Burr는 0.5% 수치였습니다. 저는 사람이 음영차이로 구분할 수 있다면, AI를 활용해 픽셀과 그레이스케일로 구분할 수 있다고 생각했습니다. 현장 엔지니어의 도메인 지식과 컴퓨터 비전을 활용하여 '이미지 처리 엔진'을 자체 개발해 72시간 내에 100만 장을 오차 없이 선별하겠다는 과제를 설정했습니다.
- 먼저 사람이 육안 선별한 표준 샘플의 그레이스케일을 심층 분석하여, 불량의 본질이 전극 경계면에는 '국소 음영 낙차'가 존재하고 골짜기처럼 Th값이 있음을 확인했습니다. 
- 1. 랏별 밝기 편차로 인한 오검출 
-초기에는 단일 Th값을 적용했으나, Lot 간 조명 및 코팅 농도 편차로 인해 과검과 미검이 발생했습니다. 이를 위해 배경 코팅의 평균 스케일을 실시간 추정하여 55를 기준으로 레시피를 2개로 자동 전환하는 '이원화 Valley 알고리즘'을 구축했습니다. 절대 밝기가 아닌 배경 대비 상대적 음영 낙차를 계산함으로써 랏간 편차를 상쇄했습니다.
-2.  미세 불연속 크랙의 신호 소실 극복 (수직 모폴로지 닫힘 연산)
-Burr불량은 연속된 직선이 아니라 중간이 끊어지며 지그재그로 파이는 특성이 있어, 단순 컨투어 검출 시 단절된 미세 노이즈로 오인되는 문제가 발생했습니다. 저는 결함의 기하학적 연속성을 복원하기 위해 1×7 수직 Bridge Kernel를 직접 설계하고, 수직 모폴로지 닫힘연산을 적용했습니다. 이를 통해 단절된 미세 균열 신호를 하나의 연속된 결함 다각형으로 연결한 뒤, 8-연결성 성분분석을 거쳐 20px 이상의 치명 결함만 정확히 포착해 냈습니다.
-3. 공정상 노이즈 배제 
-전극 Tape 부착부를 불량으로 오인하지 않도록 적응형 테이프 검출 알고리즘을 적용하여 검사 제외 영역으로 자동 마스킹했습니다. 또한 PyQt5 기반 GUI를 개발하여 결함 부위를 붉은색 바운딩 박스로 즉시 확대 검증할 수 있도록 했습니다.
-  그 결과, 100만 장의 이미지 선별을 장당 평균 5ms 속도로 완수하며 이슈를 클로징했습니다. 이 경험을 통해 문제의 물리적 본질을 Data와 수학적 알고리즘으로 모델링하겠습니다.
-
-■[팀의 AI 대신맨]
- 저는 AI를 활용하여 팀의 반복 업무를 대폭 줄여 공수를 100% 줄인 경험이 있습니다. 저는 '신규 biz를 위한 양산 시스템 구축' 프로젝트를 통해 고객과 직접 기술 커뮤니케이션해야하는 제품 양산을 담당하게 되어 개발빌드에 공정 담당자로 참여했습니다. 당시 고객은 모든 Lot에 대한 검사기 Data를 요청하였는데, 사내의 여러 시스템과 헌팅 Data를 제거해야 해서 엔지니어가 일 2시간을 수작업으로 Data를 다운받고, 발라냈었습니다. 저는 '고객향 Data 송부 100% 자동화'를 목표로 AI기술을 활용하여 단독 개발을 착수했습니다. 
- 우선 수작업을 메뉴얼화하고 이를 기반으로 PRD를 작성했습니다. 시스템에서 검사기 Data를 다운받고, 공정 특성상 헌팅개소를 제거한 뒤 공정능력을 포함한 그래프로 일일 생산량에 대한 검사기 데이터를 모니터링하는 것이 그 순서였습니다. 저 사내 보안 제약으로 직접적인 시스템 연동이 어려운 점을 극복하기 위해 파이썬 기반의 RPA 기술을 도입했습니다. 엔지니어의 마우스 클릭과 화면 이동 경로를 좌표화하여 IoT 시스템에서 Data를 자동으로 다운하는 스크립트를 구현했습니다. 그리고 룰베이스 기반의 헌팅개소를 제거하는 로직을 기반으로,그래프를 Plot하고 일일 대쉬보드를 바로 확인할 수 있도록 HTML로 구현했습니다. 나아가 코딩 지식이 없는 팀원도 쉽게 사용할 수 있도록 직관적인 GUI환경을 구축해 배포했습니다.
- 위의 경험을 활용하여, AI를 활용하여 공정 개선업무 수행에 기여하겠습니다." }
+    { tag: "경력 기본사항", text: "#경력\nLG에너지솔루션 / 46전극생산기술1팀 근무\n4년8개월 (2022.01 입사 ~ 2026.08 현재 재직중)\n근무지 : 충북 청주시\n직무 : 생산기술\n최종 직위 : 선임\n\n담당 업무 :\n■생산운영\n-양산 라인 운영 및 모니터링\n-BM대응 및 데이터 분석/관리\n-SOP 개발\n-수율, 생산량 실적 관리\n-설비 Issue 현장 대응, 품질 모니터링\n-오퍼레이터 관리/교육\n\n■수율 개선\n생산능력 개선 및 설비 효율화 (ERP,MES,DW,Excel)\n-설비 효율화 및 Logic 변경 (웹게이지 미세 Line불량 감지 Logic 개발 등)\n-생산능력 개선 (코팅 Shim offset 변경을 위한 모터구동식 미세조절장치 개발)\n\n■AX 자동화 업무\nGit,Python을 활용한 자동화 업무 (고객향 Inline 검사데이터 이상여부 감지/수정 pgm 제작 등)\n\n■고객 대응\n-고객 기술 대응 : FACA 및 8D report 작성 및 고객 Daily 미팅 대응 (T사와 반제품 Biz 진행중으로, Biz특성으로 인한 기술대응 영업 성격의 업무)\n-Audit 대응, 라인투어\n\n■불량 대응\n품질 사고 대책 관리 : 원인 분석, 개선방안 수립, 유효성 검증" },
+    { tag: "경험 1: 미세라인 로직 & Shim 미세조정장치 개발", text: "경험1. LG에너지솔루션\n8개월 (2026-01 ~ 2026-08)\n역할 및 직위 : 선임 엔지니어\n활동 내용 :\n[이슈] 미세 Line Loss 과다 발생\n[경험] 미세 라인 로직 개발\n[성과] 해당 항목 Loss 50% 개선, 수율 0.12% 개선\n[역할] 검사기 Data 분석, 이동평균 적용, Recipe로 관리할 수 있도록 MD방향 scan 수와 TD방향 포인트를 변수화, 일반 산포의 Noise와 구분\n\n[이슈] 조건조정 Loss 과다 (누적공차 spec 만족)\n[경험] 장비 개조를 통한 수율 개선 (작업자의 동작분석을 통한 Shim 오프셋 미세조정장치 개발)\n[성과] Loss 18% 개선, 수율 0.2% 개선\n[역할] 미세조정장치 설계 및 개발(단독개발)\n[기술] 수동 조작을 대체하기 위해 고감속비의 웜기어와 소형 BLDC 모터를 결합하여 기계적인 Backlash를 최소화하는 동시에 직진 운동으로 변환하는 메커니즘을 설계, 고분해능 LVDT 센서 연동하였음" },
+    { tag: "경험 2: 비전 긴급출하 대응 & 품질데이터 이상치 모니터링", text: "경험 2. LG에너지솔루션\n1년7개월 (2025-01 ~ 2026-07)\n역할 및 직위 : 선임 엔지니어\n활동 내용 :\n[이슈] 공정 불량 발생에 따른 출하 지연 (100만 이미지를 육안 전수 선별 필요)\n[경험] 룰 기반 적응형 컴퓨터 비전 엔진 자체 개발을 통한 긴급 출하 대응 (100만 장 전수 자동 선별 프로그램 구현)\n[성과] 100만 장 전수 선별 완료 (장당 5ms 초고속 처리), 미검률 0% 달성 및 출하 지연 0건\n[역할] 이미지 처리 알고리즘 수학적 모델링 및 자동 선별 프로그램 단독 개발\n[기술] 이미지처리 관련 비전 지식\n\n[이슈] 인라인 데이터 수동 검토로 인한 공정 엔지니어 리소스 부족 및 휴먼 에러 리스크\n[경험] 인라인 공정 품질 Data 이상치 자동 검출 모니터링 시스템 구축\n[성과] 검증 공수 100% 절감 및 데이터 무결성 확보\n[역할] AI 기반 품질 검증 로직 구축 / 이상치 수정 및 Lot별 Graph Trend 모니터링할 수 있는 Dashboard 제작\n[기술] 프롬프트 엔지니어링" },
+    { tag: "경험 3: New-form factor 반제품 Biz Build F/up", text: "경험 3. LG에너지솔루션\n2년5개월 (2024-03 ~ 2026-07)\n역할 및 직위 : 선임 엔지니어\n활동 내용 :\n① New-form factor 반제품 Biz Build F/up (개발~양산)\n개발 중 Spec 선정부터, 샘플 생산, 양산 안정화까지 공정 엔지니어로서 역할수행\n② 고객 기술 대응\n이슈 발생에 대한 영문 FACA 레포트 작성 및 기술 설명\n③ 설비/검사기 셋업\n설비, 인라인검사기 셋업 및 안정화\n④ 설비 시운전 / TEST 생산 DOE 계획" },
+    { tag: "자소서 1번: 직무 역량 (2000자 원문 전체)", text: "1)지원 분야 및 직무 역량과 관련된 프로젝트/공모전/논문/연구/학습/활동/경험 등을 작성해 주세요. *(2000자)\n저는 제조업에서 5년차 공정 엔지니어 업무를 수행하며 양산/기술 개발 역량을 쌓았습니다. 뿐만 아니라, 수 건의 프로젝트를 통해 생산능력 개선 및 설비 효율화를 공정 담당자로서 업무를 수행했습니다. 이를 기반으로 공정 자동화 기술 개발과 설비 최적화 업무를 통해 양산기술 전문가로 성장하겠습니다.\n\n■[신규 검사기 로직설계로 고질성 불량Loss 50% 개선]\n 저는 신규 로직을 개발하고 설비에 적용하여 수율 0.12%, 해당 항목의 Loss를 50% 개선하였습니다. '미세라인' 이라는 비전 검사기에 잡히지 않는 고질불량이 있었고, 작업자가 육안으로 음영차이를 확인해야만 인지할 수 있어 Loss가 발생했습니다. 저는 이 문제를 시스템적으로 해결하기 위해 불량이 발생하는 구간의 물리적 특성에 주목했습니다. 불량 부위의 코팅 두께가 미세하게 다를 것이라는 가설을 세우고, 스캔 방식의 측정기인 웹게이지의 국부적인 로딩(단위 면적당 무게) 데이터를 심층 분석했습니다.100Lot의 데이터를 분석한 결과, 1%미만의 국부적인 Data shift를 확인하고 로직 개발을 시작했습니다. 설비가 자동으로 인지할 수 있도록 두 가지 방향성을 고려한 신규 감지 로직을 설계했습니다. 먼저 이동평균을 적용시키고, Recipe로 관리할 수 있도록 진행방향 scan 수와 폭방향 포인트를 아래와 같이 변수화했습니다.\n1. 진행 방향(MD) 로직: 데이터 노이즈와 실제 불량을 구분하기 위해, MD 방향으로 N번의 스윙(Swing) 변동이 발생할 때를 1차 기준으로 설정했습니다.\n2. 폭 방향(TD) 로직: 우연한 오차를 배제하기 위해, TD 방향으로 연속된 N개의 포인트에서 스펙 이탈이 발생할 때만 최종 알람이 울리도록 변수를 지정했습니다.\n 그 결과 검사기보다 정확한 미세라인 감지 로직을 통해 미세라인 Loss를 50% 개선하여 목표수율 달성에 기여했습니다. 반도체 제조 공정 역시 웨이퍼 상의 미세한 산포와 결함을 선제적으로 제어하는 것이 핵심입니다. 공정의 Ref 데이터를 분석하여 이동평균을 적용하고 Noise 제거를 위해 Logic을 설계한 경험을 기반으로, 품질 사고 발생 시 적절한 대책과 Logic 을 설계하고 변수를 최적화하여 제품의 품질 표준화를 확보하고 설비를 효율화하겠습니다. 위의 경험을 활용하여, 장비 Setup 및 공정 안정화를 위한 개선업무 수행에 기여하겠습니다. \n\n\n'양산을 위한 설비/공법 개발 경험'이 필요역량입니다. 새로운 제품을 생산하기 위해서는 새로운 설비/공법이 필요하기 때문에 이를 현장의 눈높이에 맞게끔 신규개발하므로써 작업자 숙련도에 따른 공정산포를 제거하여 자동화에 기여해야 합니다. 저는 아래의 장비개조 경험을 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 양산을 안정화시킬 수 있었습니다.\n■[신규 기술 개발로 수율 0.2% 개선]\n신규 반제품 biz에서 신규격 제품 생산을 위해 장비를 세팅하는 신규 기술이 필요했고, 저는 Loss를 최소화하기 위해 신규 기술을 개발하는 업무를 담당했습니다. 고객이 제시한 타이트한 누적공차 spec과 공정능력을 만족시켜야 하는 공정 특성상, 수동 offset 조정으로 인한 미세한 편차가 초기 양산 수율을 떨어드리고 Loss를 유발하는 핵심 병목이었습니다. 공정 엔지니어로서 이러한 설비적 변동성을 통제하기 위해 미세조절장치의 전면적인 디지털화 기술 도입을 추진했습니다. 수동조작을 대체하기 위해 고감속비의 웜기어와 소형 모터를 결합했고 기계적인 백래시를 최소화하면서 직진 운동으로 변환하는 메커니즘을 설계했습니다. 특히, 설정값과 실제 이동값의 오차를 잡기 위해 ㎛ 단위의 미세 변위를 실시간으로 측정하는 고분해능 LVDT 센서를 부착, 실시간 위치 피드백을 통해 목표한 타겟값에 정확히 안착할 수 있는 정량적 제어 시스템을 구축했습니다.\n 그 결과, 장비 개조를 통해 작업자 숙련도에 따른 공정 산포를 완벽히 제거하고 재현성을 확보했습니다. 타겟 두께 및 폭 스펙에 도달하는 시간을 대폭 단축하여 Loss를 18% 개선하였고, 수율 0.2%를 개선했습니다." },
+    { tag: "자소서 2번: AI 활용 문제 해결 (2000자 원문 전체)", text: "2) AI를 활용한 프로젝트/공모전/논문/연구/문제 해결 경험 등을 작성해 주세요. *(2000자)\n■[이미지 처리 엔진 개발 : 불량 선별 긴급출하 대응]\n AI를 활용하여 고객을 대응하고,NG선별 프로그램을 개발하고 유관부서와 협의를 통해 출하지연을 막은 경험이 있습니다. '실오라기 형태의 Burr' 이슈가 발생하여 출하가 지연됐는데, 출하량 감소를 막기 위해 불량 선별이 필요했습니다. 육안 확인이 필요한 사진은 100만장에 육박했고, 그 중 Burr는 0.5% 수치였습니다. 저는 사람이 음영차이로 구분할 수 있다면, AI를 활용해 픽셀과 그레이스케일로 구분할 수 있다고 생각했습니다. 현장 엔지니어의 도메인 지식과 컴퓨터 비전을 활용하여 '이미지 처리 엔진'을 자체 개발해 72시간 내에 100만 장을 오차 없이 선별하겠다는 과제를 설정했습니다.\n 먼저 사람이 육안 선별한 표준 샘플의 그레이스케일을 심층 분석하여, 불량의 본질이 전극 경계면에는 '국소 음영 낙차'가 존재하고 골짜기처럼 Th값이 있음을 확인했습니다. \n 1. 랏별 밝기 편차로 인한 오검출 \n초기에는 단일 Th값을 적용했으나, Lot 간 조명 및 코팅 농도 편차로 인해 과검과 미검이 발생했습니다. 이를 위해 배경 코팅의 평균 스케일을 실시간 추정하여 55를 기준으로 레시피를 2개로 자동 전환하는 '이원화 Valley 알고리즘'을 구축했습니다. 절대 밝기가 아닌 배경 대비 상대적 음영 낙차를 계산함으로써 랏간 편차를 상쇄했습니다.\n2.  미세 불연속 크랙의 신호 소실 극복 (수직 모폴로지 닫힘 연산)\nBurr불량은 연속된 직선이 아니라 중간이 끊어지며 지그재그로 파이는 특성이 있어, 단순 컨투어 검출 시 단절된 미세 노이즈로 오인되는 문제가 발생했습니다. 저는 결함의 기하학적 연속성을 복원하기 위해 1×7 수직 Bridge Kernel를 직접 설계하고, 수직 모폴로지 닫힘연산을 적용했습니다. 이를 통해 단절된 미세 균열 신호를 하나의 연속된 결함 다각형으로 연결한 뒤, 8-연결성 성분분석을 거쳐 20px 이상의 치명 결함만 정확히 포착해 냈습니다.\n3. 공정상 노이즈 배제 \n전극 Tape 부착부를 불량으로 오인하지 않도록 적응형 테이프 검출 알고리즘을 적용하여 검사 제외 영역으로 자동 마스킹했습니다. 또한 PyQt5 기반 GUI를 개발하여 결함 부위를 붉은색 바운딩 박스로 즉시 확대 검증할 수 있도록 했습니다.\n  그 결과, 100만 장의 이미지 선별을 장당 평균 5ms 속도로 완수하며 이슈를 클로징했습니다. 이 경험을 통해 문제의 물리적 본질을 Data와 수학적 알고리즘으로 모델링하겠습니다.\n\n■[팀의 AI 대신맨]\n 저는 AI를 활용하여 팀의 반복 업무를 대폭 줄여 공수를 100% 줄인 경험이 있습니다. 저는 '신규 biz를 위한 양산 시스템 구축' 프로젝트를 통해 고객과 직접 기술 커뮤니케이션해야하는 제품 양산을 담당하게 되어 개발빌드에 공정 담당자로 참여했습니다. 당시 고객은 모든 Lot에 대한 검사기 Data를 요청하였는데, 사내의 여러 시스템과 헌팅 Data를 제거해야 해서 엔지니어가 일 2시간을 수작업으로 Data를 다운받고, 발라냈었습니다. 저는 '고객향 Data 송부 100% 자동화'를 목표로 AI기술을 활용하여 단독 개발을 착수했습니다. \n 우선 수작업을 메뉴얼화하고 이를 기반으로 PRD를 작성했습니다. 시스템에서 검사기 Data를 다운받고, 공정 특성상 헌팅개소를 제거한 뒤 공정능력을 포함한 그래프로 일일 생산량에 대한 검사기 데이터를 모니터링하는 것이 그 순서였습니다. 저 사내 보안 제약으로 직접적인 시스템 연동이 어려운 점을 극복하기 위해 파이썬 기반의 RPA 기술을 도입했습니다. 엔지니어의 마우스 클릭과 화면 이동 경로를 좌표화하여 IoT 시스템에서 Data를 자동으로 다운하는 스크립트를 구현했습니다. 그리고 룰베이스 기반의 헌팅개소를 제거하는 로직을 기반으로,그래프를 Plot하고 일일 대쉬보드를 바로 확인할 수 있도록 HTML로 구현했습니다. 나아가 코딩 지식이 없는 팀원도 쉽게 사용할 수 있도록 직관적인 GUI환경을 구축해 배포했습니다.\n 위의 경험을 활용하여, AI를 활용하여 공정 개선업무 수행에 기여하겠습니다." }
   ]
 };
 
@@ -1433,26 +1338,24 @@ function renderProjectNavBar() {
   const nav = document.getElementById('projectNavBar');
   if (!nav) return;
   
-  let html = `<span class="proj-nav-label">📌 프로젝트 전환:</span>`;
+  let htmlStr = `<span class="proj-nav-label">📌 프로젝트 전환:</span>`;
   
-  // 'All' button
   const isAllActive = (selectedProjectId === 'all') ? 'active' : '';
-  html += `<button class="proj-nav-btn ${isAllActive}" onclick="selectProjectView('all')">
+  htmlStr += `<button class="proj-nav-btn ${isAllActive}" onclick="selectProjectView('all')">
     <span>전체 펼쳐보기</span>
     <span class="badge-pill">${projectsData.length}</span>
   </button>`;
   
-  // Buttons for each project
-  projectsData.forEach((proj, idx) => {
+  projectsData.forEach((proj) => {
     const isActive = (selectedProjectId === proj.id) ? 'active' : '';
     const qCount = proj.questions ? proj.questions.length : 0;
-    html += `<button class="proj-nav-btn ${isActive}" onclick="selectProjectView('${proj.id}')">
+    htmlStr += `<button class="proj-nav-btn ${isActive}" onclick="selectProjectView('${proj.id}')">
       <span>${escapeHtml(proj.code)}</span>
       <span class="badge-pill">${qCount}Q</span>
     </button>`;
   });
   
-  nav.innerHTML = html;
+  nav.innerHTML = htmlStr;
 }
 
 function selectProjectView(projId) {
@@ -1468,7 +1371,6 @@ function selectProjectView(projId) {
     }
   });
 
-  // Smooth scroll to top of dashboard pane
   const pane = document.getElementById('dashboardPane');
   if (pane) {
     pane.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1536,7 +1438,6 @@ function resetToDefault() {
     projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
     saveProjectsData();
     renderProjects();
-  renderProjectNavBar();
     showToast("기본 데이터로 복원되었습니다.");
   }
 }
@@ -1672,7 +1573,6 @@ function addNewProject() {
   projectsData.push(newProj);
   saveProjectsData();
   renderProjects();
-  renderProjectNavBar();
   showToast("새 프로젝트가 추가되었습니다.");
   
   // Scroll to new project
@@ -1685,7 +1585,6 @@ function deleteProject(pIndex) {
     projectsData.splice(pIndex, 1);
     saveProjectsData();
     renderProjects();
-  renderProjectNavBar();
     showToast("프로젝트가 삭제되었습니다.");
   }
 }
@@ -1701,7 +1600,6 @@ function addTagToProject(pIndex) {
     projectsData[pIndex].tags.push(tag.trim());
     saveProjectsData();
     renderProjects();
-  renderProjectNavBar();
   }
 }
 
@@ -1714,7 +1612,6 @@ function deleteTag(pIndex, tIndex) {
   projectsData[pIndex].tags.splice(tIndex, 1);
   saveProjectsData();
   renderProjects();
-  renderProjectNavBar();
 }
 
 function addQuestionToProject(pIndex) {
@@ -1724,7 +1621,7 @@ function addQuestionToProject(pIndex) {
     question: `Q${qNum}. 새로운 꼬리질문/검증 질문을 입력하세요`,
     intent: "면접관이 지원자의 진위 여부를 확인하려는 의도",
     defense: "답변 시 반드시 언급해야 할 공학 수치/메커니즘",
-    summary: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요", 
+    summary: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요",
     s: "[S] 당시 구체적 문제 상황",
     t: "[T] 달성해야 했던 목표",
     a: "[A] 본인이 취한 공학적 액션 및 트러블슈팅",
@@ -1733,7 +1630,6 @@ function addQuestionToProject(pIndex) {
   projectsData[pIndex].questions.push(newQ);
   saveProjectsData();
   renderProjects();
-  renderProjectNavBar();
   showToast("새 질문이 추가되었습니다.");
 }
 
@@ -1742,7 +1638,6 @@ function deleteQuestion(pIndex, qIndex) {
     projectsData[pIndex].questions.splice(qIndex, 1);
     saveProjectsData();
     renderProjects();
-  renderProjectNavBar();
     showToast("질문이 삭제되었습니다.");
   }
 }
@@ -1928,9 +1823,9 @@ function checkAuthStatus() {
   const isUnlocked = sessionStorage.getItem('HYUNDAI_DASH_SESSION_UNLOCKED');
   const overlay = document.getElementById('lockScreenOverlay');
   if (isUnlocked === 'true') {
-    overlay.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
   } else {
-    overlay.classList.remove('hidden');
+    if (overlay) overlay.classList.remove('hidden');
     setTimeout(() => {
       const input = document.getElementById('lockInputPass');
       if (input) input.focus();
@@ -1947,6 +1842,8 @@ function handleLockKeyPress(e) {
 function submitAuthUnlock() {
   const input = document.getElementById('lockInputPass');
   const errMsg = document.getElementById('lockErrorMsg');
+  if (!input) return;
+
   const entered = input.value.trim();
   const validPass = getStoredPassword();
 
@@ -1954,12 +1851,12 @@ function submitAuthUnlock() {
     localStorage.setItem('HYUNDAI_DASH_PASS_2026', '1312');
     sessionStorage.setItem('HYUNDAI_DASH_SESSION_UNLOCKED', 'true');
     const overlay = document.getElementById('lockScreenOverlay');
-    overlay.classList.add('hidden');
-    errMsg.textContent = '';
+    if (overlay) overlay.classList.add('hidden');
+    if (errMsg) errMsg.textContent = '';
     input.value = '';
     showToast('🔓 보안 인증 성공! 워크스페이스가 열렸습니다.');
   } else {
-    errMsg.textContent = '비밀번호가 올바르지 않습니다. 다시 확인해주세요.';
+    if (errMsg) errMsg.textContent = '비밀번호가 올바르지 않습니다. (기본: 1312)';
     input.classList.add('shake');
     setTimeout(() => {
       input.classList.remove('shake');
@@ -1971,10 +1868,12 @@ function submitAuthUnlock() {
 function lockDashboardNow() {
   sessionStorage.removeItem('HYUNDAI_DASH_SESSION_UNLOCKED');
   const overlay = document.getElementById('lockScreenOverlay');
-  overlay.classList.remove('hidden');
+  if (overlay) overlay.classList.remove('hidden');
   const input = document.getElementById('lockInputPass');
-  input.value = '';
-  input.focus();
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
   showToast('🔒 대시보드가 잠겼습니다.');
 }
 
