@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>현대자동차 배터리 전극 생산운영 면접 워크스페이스 & 에디터 대시보드</title>
+  <title>현대자동차 배터리 전극 생산운영 면접 워크스페이스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --hyundai-blue: #002c5f;
@@ -14,6 +14,7 @@
       --accent-cyan: #00e5ff;
       --accent-teal: #00b4d8;
       --bg-dark: #070d19;
+      --sidebar-bg: #091322;
       --card-bg: #0f1c31;
       --card-border: #1c2e4c;
       --card-hover: #162744;
@@ -23,9 +24,11 @@
       --star-t: #3b82f6;
       --star-a: #10b981;
       --star-r: #8b5cf6;
+      --prep-p: #00e5ff;
+      --prep-r: #f59e0b;
+      --prep-e: #10b981;
       --danger: #ef4444;
       --success: #10b981;
-      --editable-focus: rgba(0, 229, 255, 0.25);
     }
 
     * {
@@ -39,89 +42,351 @@
       background-color: var(--bg-dark);
       color: var(--text-main);
       line-height: 1.6;
-      overflow-x: hidden;
       height: 100vh;
+      overflow: hidden;
       display: flex;
-      flex-direction: column;
     }
 
-    /* Top Nav Bar */
-    .top-nav {
-      background: #0a1526;
+    /* 3-Pane App Layout */
+    .app-layout {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ================= 1. LEFT COMPACT SIDEBAR ================= */
+    .sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      user-select: none;
+      z-index: 70;
+    }
+
+    .sidebar-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--card-border);
+      background: #0b172a;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .brand-logo-badge {
+      background: linear-gradient(135deg, #002c5f, #0072ce);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      white-space: nowrap;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .brand-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .status-pill {
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+    }
+    .status-pill.saving {
+      color: var(--star-s);
+    }
+
+    /* Sidebar Content: Projects List */
+    .sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-proj-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .sidebar-proj-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .sidebar-proj-item:hover {
+      background: #11223b;
+      color: #ffffff;
+      border-color: #1e365c;
+    }
+
+    .sidebar-proj-item.active {
+      background: linear-gradient(135deg, rgba(0, 114, 206, 0.25) 0%, rgba(15, 28, 49, 0.9) 100%);
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.18);
+    }
+
+    .sidebar-proj-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .sidebar-code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #0d1e38;
+      color: #38bdf8;
+      border: 1px solid #1c3d6e;
+      flex-shrink: 0;
+    }
+
+    .sidebar-proj-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .sidebar-q-count {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-proj-item.active .sidebar-q-count {
+      color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.15);
+    }
+
+    /* Framework Quick Cheat Sheet */
+    .sidebar-cheat-sheet {
+      background: #0d1a2f;
+      border: 1px solid #1a3154;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 10px;
+    }
+
+    .cheat-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cheat-item {
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .cheat-item strong {
+      color: #e2e8f0;
+    }
+    .cheat-item:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Sidebar Footer Tools */
+    .sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid var(--card-border);
+      background: #070e1a;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-btn {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      background: #101e33;
+      color: var(--text-sub);
+      border: 1px solid #1c3254;
+      transition: all 0.15s ease;
+    }
+    .sidebar-btn:hover {
+      background: #172d4d;
+      color: #ffffff;
+      border-color: #2a4c80;
+    }
+    .sidebar-btn.active-mode {
+      background: #0072ce;
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 114, 206, 0.4);
+    }
+
+    /* ================= 2. CENTER MAIN WORKSPACE ================= */
+    .main-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      background: var(--bg-dark);
+      position: relative;
+    }
+
+    .workspace-top-bar {
+      background: #0a1527;
       border-bottom: 1px solid var(--card-border);
       padding: 12px 24px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-shrink: 0;
-      z-index: 100;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
     }
 
-    .nav-left {
+    .top-bar-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
+      flex: 1;
     }
 
-    .logo-badge {
-      background: linear-gradient(135deg, #002c5f, #0072ce);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 8px;
+    .proj-title-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      max-width: 650px;
+    }
+
+    .proj-code-tag {
+      background: #002c5f;
+      color: var(--accent-cyan);
+      border: 1px solid #005691;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(0, 229, 255, 0.3);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
     }
 
-    .nav-title {
-      font-size: 18px;
+    .proj-title-input {
+      flex: 1;
+      background: #070e1c;
+      border: 1px solid #1c355c;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #ffffff;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .proj-title-input:focus {
+      border-color: var(--accent-cyan);
+      background: #0a162b;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+    }
+
+    .top-bar-right {
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .nav-status {
-      font-size: 12px;
-      color: var(--success);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(16, 185, 129, 0.1);
-      padding: 3px 8px;
-      border-radius: 20px;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .nav-status.saving {
-      color: var(--star-s);
-      border-color: rgba(245, 158, 11, 0.3);
-      background: rgba(245, 158, 11, 0.1);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       border: 1px solid transparent;
       user-select: none;
+      white-space: nowrap;
     }
-
     .btn-primary {
       background: linear-gradient(135deg, #0072ce 0%, #00529b 100%);
       color: white;
@@ -129,15 +394,8 @@
     }
     .btn-primary:hover {
       background: linear-gradient(135deg, #0084f0 0%, #0060b5 100%);
-      box-shadow: 0 0 12px rgba(0, 114, 206, 0.4);
+      box-shadow: 0 0 10px rgba(0, 114, 206, 0.4);
     }
-
-    .btn-success {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-    }
-    .btn-success:hover { opacity: 0.9; }
-
     .btn-outline {
       background: #112035;
       color: var(--text-sub);
@@ -148,7 +406,6 @@
       border-color: var(--accent-cyan);
       background: #172a45;
     }
-
     .btn-danger-outline {
       background: #181c2b;
       color: #f87171;
@@ -158,432 +415,228 @@
       background: rgba(239, 68, 68, 0.15);
       border-color: #ef4444;
     }
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11.5px;
+    }
 
-    /* Main Split Container */
-    .split-container {
-      display: flex;
+    /* Workspace Content Container */
+    .workspace-content {
+      padding: 22px 28px 40px;
       flex: 1;
-      overflow: hidden;
-      position: relative;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    /* Left: Workspace Dashboard (65%) */
-    .dashboard-pane {
-      flex: 0 0 65%;
-      overflow-y: auto;
-      padding: 24px 28px;
-      border-right: 1px solid var(--card-border);
-      transition: flex 0.3s ease;
-    }
-
-    /* Right: Context Reference Viewer (35%) */
-    .reference-pane {
-      flex: 0 0 35%;
-      overflow-y: auto;
-      background: #091322;
+    /* Tech Stack Tags Bar */
+    .tech-tags-bar {
+      background: #0a1424;
+      border: 1px solid #162a47;
+      border-radius: 10px;
+      padding: 8px 16px;
+      margin-bottom: 18px;
       display: flex;
-      flex-direction: column;
-      transition: flex 0.3s ease;
-    }
-
-    .pane-header {
-      padding: 16px 20px;
-      background: #0d1a2d;
-      border-bottom: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-shrink: 0;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tags-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.5px;
+    }
+    .tech-chip {
+      background: #13243d;
+      color: #93c5fd;
+      border: 1px solid #23426e;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-family: 'JetBrains Mono', monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tech-chip-del {
+      cursor: pointer;
+      color: #ef4444;
+      font-weight: bold;
+    }
+    .btn-add-tech {
+      background: transparent;
+      color: var(--accent-teal);
+      border: 1px dashed #24416d;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .btn-add-tech:hover {
+      border-color: var(--accent-teal);
+      background: rgba(0, 180, 216, 0.1);
     }
 
-    .pane-title {
-      font-size: 15px;
+    /* ================= QUESTION STEPPER & TABS ================= */
+    .q-stepper-container {
+      background: #0d1b30;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .q-stepper-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      flex: 1;
+    }
+
+    .q-tab-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
       font-weight: 700;
-      color: #38bdf8;
+      color: var(--text-sub);
+      background: #11223b;
+      border: 1px solid #1c345a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .q-tab-btn:hover {
+      background: #172f52;
+      color: #ffffff;
+      border-color: #2b4f85;
+    }
+    .q-tab-btn.active {
+      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+    }
+    .q-tab-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .q-stepper-right {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Reference Tab Navigation */
-    .doc-tabs {
-      display: flex;
-      gap: 6px;
-      padding: 12px 20px 0;
-      background: #0b1626;
-      border-bottom: 1px solid var(--card-border);
-      flex-shrink: 0;
-    }
-
-    .doc-tab {
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-sub);
-      background: #112035;
-      border: 1px solid var(--card-border);
-      border-bottom: none;
-      border-radius: 8px 8px 0 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .doc-tab:hover {
-      color: white;
-      background: #162a47;
-    }
-
-    .doc-tab.active {
-      background: #0f1c31;
-      color: var(--accent-cyan);
-      border-color: var(--card-border);
-      border-top: 2px solid var(--accent-cyan);
-    }
-
-    /* Reference Search & Tools */
-    .ref-toolbar {
-      padding: 12px 20px;
-      background: #0d1a2d;
-      border-bottom: 1px solid var(--card-border);
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .ref-search-input {
-      flex: 1;
-      background: #060c17;
-      border: 1px solid #1e3352;
-      color: white;
-      padding: 8px 12px;
+    .view-toggle-btn {
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: #091322;
+      border: 1px solid #1c3254;
+      cursor: pointer;
+    }
+    .view-toggle-btn.active {
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+    }
+
+    /* ================= QUESTION CARD ================= */
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+      animation: fadeInCard 0.25s ease;
+    }
+
+    @keyframes fadeInCard {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-card-header {
+      background: #112038;
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .q-type-select, .framework-select {
+      background: #091322;
+      color: #60a5fa;
+      border: 1px solid #23416e;
+      border-radius: 6px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
       outline: none;
     }
-    .ref-search-input:focus {
+    .framework-select {
+      color: var(--accent-cyan);
+      border-color: rgba(0, 229, 255, 0.4);
+      background: #081a33;
+    }
+
+    .q-title-input {
+      flex: 1;
+      background: #070e1a;
+      border: 1px solid #1a3154;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #f1f5f9;
+      outline: none;
+      min-width: 260px;
+    }
+    .q-title-input:focus {
       border-color: var(--accent-cyan);
       box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
     }
 
-    .ref-content-area {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-    }
-
-    .doc-chunk-card {
-      background: #0f1c31;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      margin-bottom: 14px;
-      padding: 16px;
-      transition: border-color 0.2s;
-      position: relative;
-    }
-    .doc-chunk-card:hover {
-      border-color: #2b4772;
-    }
-
-    .chunk-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #192a45;
-      padding-bottom: 6px;
-    }
-
-    .chunk-tag {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent-teal);
-      background: rgba(0, 180, 216, 0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    .chunk-copy-btn {
-      background: #142742;
-      color: #90cdf4;
-      border: 1px solid #23426e;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s;
-    }
-    .chunk-copy-btn:hover {
-      background: var(--hyundai-light-blue);
-      color: white;
-      border-color: var(--accent-cyan);
-    }
-
-    .chunk-text {
-      font-size: 13.5px;
-      color: #cbd5e1;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .highlight {
-      background-color: rgba(245, 158, 11, 0.4);
-      color: #fff;
-      padding: 0 2px;
-      border-radius: 2px;
-      font-weight: bold;
-    }
-
-    /* Left Dashboard Elements */
-    .dash-hero {
-      background: linear-gradient(135deg, #0d1e38 0%, #002c5f 100%);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 22px 28px;
-      margin-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .dash-hero-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-      margin-bottom: 6px;
-    }
-
-    .dash-hero-desc {
-      font-size: 13.5px;
-      color: #94a3b8;
-      max-width: 680px;
-    }
-
-    .dash-hero-badge {
-      background: rgba(0, 229, 255, 0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0, 229, 255, 0.3);
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    /* In-place Editable Fields */
-    [contenteditable="true"] {
-      outline: none;
-      border-radius: 4px;
-      transition: all 0.2s;
-      padding: 2px 4px;
-      margin: -2px -4px;
-    }
-    [contenteditable="true"]:hover {
-      background: rgba(255, 255, 255, 0.04);
-      box-shadow: 0 0 0 1px #2a4365;
-    }
-    [contenteditable="true"]:focus {
-      background: rgba(0, 229, 255, 0.08);
-      box-shadow: 0 0 0 2px var(--accent-cyan);
-    }
-
-    /* Project Section Card */
-    .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      margin-bottom: 28px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .project-card-header {
-      background: #112038;
-      border-bottom: 1px solid var(--card-border);
-      padding: 16px 22px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .proj-meta-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex: 1;
-      min-width: 280px;
-    }
-
-    .proj-code-badge {
-      background: #002c5f;
-      color: var(--accent-cyan);
-      border: 1px solid #005691;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .proj-title-editable {
-      font-size: 18px;
-      font-weight: 700;
-      color: #ffffff;
-      flex: 1;
-    }
-
-    .proj-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Tech Stack Tag Editor */
-    .proj-tags-bar {
-      padding: 10px 22px;
-      background: #0a1526;
-      border-bottom: 1px solid #162842;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tag-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .tech-tag-chip {
-      background: #15243c;
-      color: #94a3b8;
-      border: 1px solid #243b5e;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tech-tag-del {
-      cursor: pointer;
-      color: #ef4444;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .btn-add-tag {
-      background: transparent;
-      color: var(--accent-teal);
-      border: 1px dashed #243b5e;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    .btn-add-tag:hover {
-      border-color: var(--accent-teal);
-    }
-
-    /* Questions Inside Project */
-    .project-questions-list {
+    .q-card-body {
       padding: 20px 22px;
     }
 
-    .q-item-card {
-      background: #0a1424;
-      border: 1px solid #1a2d4a;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      overflow: hidden;
-    }
-
-    .q-item-header {
-      background: #0e1b2e;
-      padding: 14px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      gap: 12px;
-    }
-
-    .q-item-header:hover {
-      background: #13243d;
-    }
-
-    .q-type-select {
-      background: #182a44;
-      color: #60a5fa;
-      border: 1px solid #2b456e;
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .q-text-editable {
-      font-size: 15px;
-      font-weight: 600;
-      color: #f1f5f9;
-      flex: 1;
-    }
-
-    .q-toggle-arrow {
-      color: var(--text-sub);
-      font-size: 14px;
-      transition: transform 0.2s;
-    }
-
-    .q-item-card.open .q-toggle-arrow {
-      transform: rotate(180deg);
-      color: var(--accent-cyan);
-    }
-
-    .q-item-body {
-      display: none;
-      padding: 20px;
-      background: #070e1a;
-      border-top: 1px solid #1a2d4a;
-    }
-
-    .q-item-card.open .q-item-body {
-      display: block;
-    }
-
-    /* Strategy block */
+    /* Strategy Grid */
     .strategy-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      background: #0b1626;
-      border: 1px dashed #203656;
-      border-radius: 8px;
+      background: #091426;
+      border: 1px dashed #1e365c;
+      border-radius: 10px;
       padding: 12px 16px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
-
     .strat-box-title {
       font-size: 12px;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       display: flex;
       align-items: center;
       gap: 5px;
@@ -591,22 +644,83 @@
     .strat-intent-title { color: #f87171; }
     .strat-defense-title { color: #38bdf8; }
 
-    .strat-content-editable {
+    .strat-input {
+      width: 100%;
+      background: #060c18;
+      border: 1px solid #172a47;
+      border-radius: 6px;
+      padding: 6px 10px;
       font-size: 13px;
       color: #cbd5e1;
+      outline: none;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .strat-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* One-Line Lead Summary */
+    .summary-lead-box {
+      background: linear-gradient(135deg, rgba(0, 114, 206, 0.15) 0%, rgba(13, 30, 56, 0.5) 100%);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .summary-lead-badge {
+      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      flex-shrink: 0;
+    }
+    .summary-lead-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0fdf4;
       line-height: 1.5;
     }
-
-    /* STAR Step Fields */
-    .star-row {
-      display: flex;
-      gap: 14px;
-      margin-bottom: 14px;
+    .summary-lead-input::placeholder {
+      color: #64748b;
+      font-style: italic;
     }
 
-    .star-letter {
-      width: 30px;
-      height: 30px;
+    /* ================= STEP ANSWER ROWS (STAR & PREP & MECE) ================= */
+    .step-card {
+      background: #091322;
+      border: 1px solid #1a2d4b;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .step-card:hover {
+      border-color: #26436f;
+    }
+
+    .step-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .step-badge {
+      width: 28px;
+      height: 28px;
       border-radius: 6px;
       display: flex;
       align-items: center;
@@ -616,113 +730,361 @@
       flex-shrink: 0;
       font-family: 'JetBrains Mono', monospace;
     }
+    .badge-s { background: rgba(245, 158, 11, 0.2); color: var(--star-s); border: 1px solid var(--star-s); }
+    .badge-t { background: rgba(59, 130, 246, 0.2); color: var(--star-t); border: 1px solid var(--star-t); }
+    .badge-a { background: rgba(16, 185, 129, 0.2); color: var(--star-a); border: 1px solid var(--star-a); }
+    .badge-r { background: rgba(139, 92, 246, 0.2); color: var(--star-r); border: 1px solid var(--star-r); }
+    
+    .badge-p { background: rgba(0, 229, 255, 0.2); color: var(--prep-p); border: 1px solid var(--prep-p); }
+    .badge-reason { background: rgba(245, 158, 11, 0.2); color: var(--prep-r); border: 1px solid var(--prep-r); }
+    .badge-e { background: rgba(16, 185, 129, 0.2); color: var(--prep-e); border: 1px solid var(--prep-e); }
+    
+    .badge-mece-c { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+    .badge-mece-1 { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
+    .badge-mece-2 { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid #c084fc; }
+    .badge-mece-s { background: rgba(52, 211, 153, 0.2); color: #34d399; border: 1px solid #34d399; }
 
-    .let-s { background: rgba(245, 158, 11, 0.2); color: var(--star-s); border: 1px solid var(--star-s); }
-    .let-t { background: rgba(59, 130, 246, 0.2); color: var(--star-t); border: 1px solid var(--star-t); }
-    .let-a { background: rgba(16, 185, 129, 0.2); color: var(--star-a); border: 1px solid var(--star-a); }
-    .let-r { background: rgba(139, 92, 246, 0.2); color: var(--star-r); border: 1px solid var(--star-r); }
+    .step-title-desc {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .step-sub-hint {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
 
-    .star-edit-box {
+    /* 1. KEYWORD INPUT (Directly in front of sentence!) */
+    .step-kw-container {
+      background: #0b182b;
+      border: 1px solid #1e385e;
+      border-radius: 7px;
+      padding: 6px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-kw-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.2px;
+    }
+    .step-kw-input {
       flex: 1;
-      background: #0f1c31;
-      border: 1px solid #1e3352;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #38bdf8;
+      font-family: 'Pretendard', sans-serif;
+    }
+    .step-kw-input::placeholder {
+      color: #475569;
+      font-weight: 500;
+      font-size: 12.5px;
+    }
+
+    /* 2. FULL ANSWER SENTENCE */
+    .step-full-container {
+      position: relative;
+    }
+    .step-full-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .step-full-box {
+      background: #0e1b30;
+      border: 1px solid #182c49;
       border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 14px;
+      padding: 10px 14px;
+      font-size: 13.5px;
       color: #e2e8f0;
       line-height: 1.7;
+      min-height: 48px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .step-full-box:focus {
+      background: #11223d;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+    .step-full-box:empty:before {
+      content: attr(placeholder);
+      color: #475569;
     }
 
-    /* Add Buttons */
-    .add-q-btn-wrap {
-      margin-top: 14px;
-      text-align: center;
+    /* ================= QUESTION BOTTOM NAV BUTTONS ================= */
+    .q-bottom-nav {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #162842;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .btn-add-q {
-      background: #112035;
-      color: #38bdf8;
-      border: 1px dashed #24416a;
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
+    .q-nav-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .q-page-indicator {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .q-dots-list {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .q-dot-pill {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1c3254;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-add-q:hover {
-      background: #172a47;
+    .q-dot-pill:hover {
+      background: #38bdf8;
+    }
+    .q-dot-pill.active {
+      width: 22px;
+      border-radius: 10px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+    }
+
+    /* ================= 3. RIGHT REFERENCE PANE ================= */
+    .reference-pane {
+      width: 380px;
+      flex-shrink: 0;
+      background: #091322;
+      border-left: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      transition: width 0.25s ease;
+      z-index: 60;
+    }
+    .reference-pane.collapsed {
+      width: 0;
+      border-left: none;
+    }
+
+    .ref-header {
+      padding: 14px 18px;
+      background: #0c182b;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ref-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .doc-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 8px 16px 0;
+      background: #0a1424;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .doc-tab {
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      background: #112035;
+      border: 1px solid var(--card-border);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .doc-tab:hover {
+      color: white;
+      background: #162a47;
+    }
+    .doc-tab.active {
+      background: #0f1c31;
+      color: var(--accent-cyan);
+      border-top: 2px solid var(--accent-cyan);
+    }
+
+    .ref-search-bar {
+      padding: 10px 16px;
+      background: #0a1424;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .ref-search-input {
+      flex: 1;
+      background: #060c18;
+      border: 1px solid #1a3154;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      outline: none;
+    }
+    .ref-search-input:focus {
       border-color: var(--accent-cyan);
+    }
+
+    .ref-cat-filters {
+      display: flex;
+      gap: 5px;
+      padding: 8px 16px;
+      background: #091322;
+      border-bottom: 1px solid var(--card-border);
+      overflow-x: auto;
+      align-items: center;
+    }
+    .ref-cat-chip {
+      padding: 3px 9px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #1c3254;
+      background: #0f1c31;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+    .ref-cat-chip.active[data-cat="all"] { background: #0072ce; color: white; border-color: var(--accent-cyan); }
+    .ref-cat-chip.active[data-cat="career"] { background: #0284c7; color: white; border-color: #38bdf8; }
+    .ref-cat-chip.active[data-cat="project"] { background: #7c3aed; color: white; border-color: #c084fc; }
+    .ref-cat-chip.active[data-cat="essay"] { background: #d97706; color: white; border-color: #fbbf24; }
+
+    .ref-content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px;
+    }
+
+    .doc-chunk-card {
+      background: #0f1c31;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      padding: 12px;
+      position: relative;
+    }
+    .doc-chunk-card.cat-career { border-left: 3px solid #0284c7 !important; }
+    .doc-chunk-card.cat-project { border-left: 3px solid #8b5cf6 !important; }
+    .doc-chunk-card.cat-essay { border-left: 3px solid #f59e0b !important; }
+
+    .chunk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #162842;
+    }
+    .chunk-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--accent-teal);
+    }
+    .chunk-copy-btn {
+      background: #142742;
+      color: #90cdf4;
+      border: 1px solid #23426e;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      cursor: pointer;
+    }
+    .chunk-copy-btn:hover {
+      background: var(--hyundai-light-blue);
       color: white;
     }
-
-    .add-project-banner {
-      background: #0b1526;
-      border: 2px dashed #223c63;
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 40px;
+    .chunk-text {
+      font-size: 12.5px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
-    .add-project-banner:hover {
-      background: #101e36;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
-    }
-    .add-project-banner h3 {
-      color: var(--accent-cyan);
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .add-project-banner p {
-      color: var(--text-sub);
-      font-size: 13px;
+    .highlight {
+      background-color: rgba(245, 158, 11, 0.4);
+      color: #fff;
+      font-weight: bold;
+      border-radius: 2px;
     }
 
-    /* Blind mode for simulation */
-    .blind-mode .star-edit-box {
+    /* ================= TRAINING MODES ================= */
+    /* 1. KEYWORDS ONLY TRAINING MODE (Blur full answer) */
+    .keywords-only-mode .step-full-box {
       filter: blur(8px);
+      opacity: 0.3;
+      user-select: none;
+      transition: filter 0.2s, opacity 0.2s;
+    }
+    .keywords-only-mode .step-full-box:hover,
+    .keywords-only-mode .step-full-box:focus {
+      filter: blur(0);
+      opacity: 1;
+      user-select: auto;
+    }
+    .keywords-only-mode .step-kw-container {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+    }
+
+    /* 2. BLIND SIMULATION MODE (Blur both keywords and answers) */
+    .blind-mode .step-kw-container,
+    .blind-mode .step-full-box,
+    .blind-mode .summary-lead-box {
+      filter: blur(9px);
       user-select: none;
       transition: filter 0.2s;
     }
-    .blind-mode .star-edit-box:hover {
+    .blind-mode .step-kw-container:hover,
+    .blind-mode .step-full-box:hover,
+    .blind-mode .summary-lead-box:hover {
       filter: blur(0);
+      user-select: auto;
     }
 
-    /* Toast Notification */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #002c5f;
-      color: #00e5ff;
-      border: 1px solid #00a0e9;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-      z-index: 9999;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-    #toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #070d19; }
-    ::-webkit-scrollbar-thumb { background: #1c304f; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #2a4773; }
-      /* Lock Screen Security Overlay */
+    /* Lock Screen Overlay */
     #lockScreenOverlay {
       position: fixed;
       top: 0;
@@ -832,210 +1194,40 @@
       color: #64748b;
       margin-top: 16px;
     }
-  
-    /* ================= PROJECT NAV BAR (Single-view Switcher) ================= */
-    .project-nav-bar {
-      background: #0a1527;
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 10px 14px;
-      margin-bottom: 22px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      overflow-x: auto;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(8px);
-    }
-    .proj-nav-label {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      margin-right: 4px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-    .proj-nav-btn {
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 13px;
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #002c5f;
+      color: #00e5ff;
+      border: 1px solid #00a0e9;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: var(--text-sub);
-      background: #112035;
-      border: 1px solid #1e3352;
-      cursor: pointer;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 99999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.25s ease;
+      pointer-events: none;
     }
-    .proj-nav-btn:hover {
-      background: #182e4f;
-      color: #ffffff;
-      border-color: var(--accent-cyan);
-    }
-    .proj-nav-btn.active {
-      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
-      color: #ffffff;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
-    }
-    .proj-nav-btn .badge-pill {
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.25);
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* ================= ONE-LINE SUMMARY BOX (두괄식 요약) ================= */
-    .summary-lead-box {
-      background: linear-gradient(135deg, rgba(0, 114, 206, 0.15) 0%, rgba(13, 30, 56, 0.6) 100%);
-      border: 1px solid rgba(0, 229, 255, 0.35);
-      border-left: 4px solid var(--accent-cyan);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 14px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    .summary-lead-badge {
-      background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
-      color: #ffffff;
-      font-size: 11.5px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      border: 1px solid rgba(0, 229, 255, 0.4);
-      flex-shrink: 0;
-      letter-spacing: 0.3px;
-    }
-    .summary-lead-text {
-      font-size: 14.5px;
-      font-weight: 600;
-      color: #f0fdf4;
-      line-height: 1.6;
-      flex: 1;
-    }
-    .summary-lead-text:empty:before {
-      content: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요 (예: ~를 통해 수율 0.2% 및 Loss 18%를 개선한 경험입니다.)";
-      color: #64748b;
-      font-style: italic;
-    }
-
-    /* ================= REFERENCE CONTEXT 3-COLOR THEMES ================= */
-    .ref-cat-filters {
-      display: flex;
-      gap: 6px;
-      padding: 10px 20px;
-      background: #091322;
-      border-bottom: 1px solid var(--card-border);
-      overflow-x: auto;
-      align-items: center;
-    }
-    .ref-cat-chip {
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid #1e3352;
-      background: #0f1c31;
-      color: var(--text-sub);
-      transition: all 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .ref-cat-chip:hover {
-      color: white;
-      border-color: #3b82f6;
-    }
-    .ref-cat-chip.active[data-cat="all"] {
-      background: #0072ce;
-      border-color: var(--accent-cyan);
-      color: white;
-    }
-    .ref-cat-chip.active[data-cat="career"] {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: white;
-    }
-    .ref-cat-chip.active[data-cat="project"] {
-      background: #7c3aed;
-      border-color: #c084fc;
-      color: white;
-    }
-    .ref-cat-chip.active[data-cat="essay"] {
-      background: #d97706;
-      border-color: #fbbf24;
-      color: white;
-    }
-
-    /* 1. Career (경력) */
-    .doc-chunk-card.cat-career {
-      border-left: 4px solid #0284c7 !important;
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, #0f1c31 100%) !important;
-      border-color: #1a3c61 !important;
-    }
-    .doc-chunk-card.cat-career:hover {
-      border-color: #38bdf8 !important;
-      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.15);
-    }
-    .doc-chunk-card.cat-career .chunk-tag {
-      background: rgba(2, 132, 199, 0.25) !important;
-      color: #38bdf8 !important;
-      border: 1px solid rgba(56, 189, 248, 0.5) !important;
-    }
-
-    /* 2. Project (프로젝트) */
-    .doc-chunk-card.cat-project {
-      border-left: 4px solid #8b5cf6 !important;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, #0f1c31 100%) !important;
-      border-color: #2e265c !important;
-    }
-    .doc-chunk-card.cat-project:hover {
-      border-color: #c084fc !important;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
-    }
-    .doc-chunk-card.cat-project .chunk-tag {
-      background: rgba(139, 92, 246, 0.25) !important;
-      color: #c084fc !important;
-      border: 1px solid rgba(192, 132, 252, 0.5) !important;
-    }
-
-    /* 3. Cover Letter (자기소개서) */
-    .doc-chunk-card.cat-essay {
-      border-left: 4px solid #f59e0b !important;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, #0f1c31 100%) !important;
-      border-color: #4a3818 !important;
-    }
-    .doc-chunk-card.cat-essay:hover {
-      border-color: #fbbf24 !important;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
-    }
-    .doc-chunk-card.cat-essay .chunk-tag {
-      background: rgba(245, 158, 11, 0.25) !important;
-      color: #fbbf24 !important;
-      border: 1px solid rgba(251, 191, 36, 0.5) !important;
-    }
-
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #070d19; }
+    ::-webkit-scrollbar-thumb { background: #1a2f4c; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #294775; }
   </style>
 </head>
 <body>
-<!-- Security Lock Screen Overlay -->
+
 <!-- Security Lock Screen Overlay -->
 <div id="lockScreenOverlay">
   <div class="lock-card">
@@ -1045,98 +1237,156 @@
     <input type="password" id="lockInputPass" class="lock-input" placeholder="비밀번호 입력" onkeydown="handleLockKeyPress(event)" autofocus autocomplete="current-password">
     <button class="lock-submit-btn" id="lockSubmitBtn" onclick="submitAuthUnlock()">보안 인증 및 접속하기</button>
     <div class="lock-error-msg" id="lockErrorMsg"></div>
-    <div class="lock-hint">💡 기본 비밀번호: <strong>1312</strong> (접속 후 상단에서 변경 가능)</div>
+    <div class="lock-hint">💡 기본 비밀번호: <strong>1312</strong></div>
   </div>
 </div>
-</div>
 
-<!-- Top Nav Bar -->
-<div class="top-nav">
-  <div class="nav-left">
-    <span class="logo-badge">HYUNDAI BATTERY WORKSPACE</span>
-    <div class="nav-title">
-      <span>배터리 전극 생산운영 면접 워크스페이스</span>
-      <span class="nav-status" id="saveStatus">● 자동 저장 활성</span>
+<!-- 3-Pane App Layout -->
+<div class="app-layout">
+
+  <!-- ================= 1. LEFT COMPACT SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-row">
+        <span class="brand-logo-badge">HYUNDAI BATTERY</span>
+      </div>
+      <div class="brand-title">전극 생산운영 면접 노트</div>
+      <div class="brand-sub">핵심 키워드 & 압박 검증 시스템</div>
+      <div class="brand-status-bar">
+        <span class="status-pill" id="saveStatus">● 실시간 자동 저장</span>
+        <span id="projCountBadge" style="font-size: 10.5px; font-weight: 700; color: #64748b;">5 Projects</span>
+      </div>
     </div>
-  </div>
-  <div class="nav-right">
-    <button class="btn btn-primary" onclick="addNewProject()">➕ 새 프로젝트 추가</button>
-    <button class="btn btn-success" onclick="exportToMarkdown()">📥 Markdown 내보내기</button>
-    <button class="btn btn-outline" onclick="exportToHTML()">🌐 HTML 백업 저장</button>
-    <button class="btn btn-outline" onclick="toggleBlindMode()" id="blindBtn">👁️ 모의면접 모드</button>
-    <button class="btn btn-danger-outline" onclick="resetToDefault()">🔄 기본 데이터 복원</button>
-  </div>
-</div>
 
-<!-- Main Split Layout -->
-<div class="split-container">
+    <div class="sidebar-body">
+      <div class="sidebar-section-title">
+        <span>프로젝트 목록</span>
+        <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewProject()">+ 추가</button>
+      </div>
 
-  <!-- ================= LEFT: WORKSPACE DASHBOARD (65%) ================= -->
-  <div class="dashboard-pane" id="dashboardPane">
-    
-    <!-- Hero Header -->
-    <div class="dash-hero">
-      <div>
-        <div class="dash-hero-title">실시간 편집형 인터뷰 대시보드</div>
-        <div class="dash-hero-desc">
-          텍스트를 <strong>직접 클릭하여 워드처럼 즉시 수정</strong>할 수 있습니다. 
-          우측 패널의 <strong>내 자소서/경력 원문</strong>에서 핵심 문장을 <code>[📋 복사]</code>하여 붙여넣고, 
-          새로운 프로젝트와 꼬리질문을 마음껏 추가하여 나만의 면접 답변 노트를 완성하세요.
+      <div class="sidebar-proj-list" id="sidebarProjList">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Framework Quick Cheat Sheet -->
+      <div class="sidebar-cheat-sheet">
+        <div class="cheat-title">💡 MECE 답변 프레임워크 공식</div>
+        <div class="cheat-item">
+          <strong>⭐ STAR (경험형)</strong><br>
+          상황(S) ➔ 목표(T) ➔ 공학조치(A) ➔ 성과(R)
+        </div>
+        <div class="cheat-item">
+          <strong>💡 PREP (원리/설명형)</strong><br>
+          결론(P) ➔ 공학이유(R) ➔ 공정사례(E) ➔ 기여(P)
+        </div>
+        <div class="cheat-item">
+          <strong>📐 MECE (분류/분석형)</strong><br>
+          본질정의 ➔ 기계요인 ➔ 제어요인 ➔ SOP대책
         </div>
       </div>
-      <span class="dash-hero-badge">인라인 편집 & 실시간 로컬 저장</span>
     </div>
 
-    <!-- Projects Container -->
-    
-    <!-- Project Switcher Tab Bar (Single View & Quick Jump) -->
-    <div class="project-nav-bar" id="projectNavBar">
-      <!-- Generated dynamically by JS -->
-    </div>
-
-    <div id="projectsContainer"></div>
-
-    <!-- Add New Project Banner -->
-    <div class="add-project-banner" onclick="addNewProject()">
-      <h3>➕ 새로운 프로젝트(경험 큰 틀) 추가하기</h3>
-      <p>새로운 배터리 전극/설비 개선 경험을 큰 틀로 등록하고 세부 꼬리질문과 STAR 답변을 구성하세요.</p>
-    </div>
-
-  </div>
-
-  <!-- ================= RIGHT: CONTEXT REFERENCE VIEWER (35%) ================= -->
-  <div class="reference-pane" id="referencePane">
-    
-    <div class="pane-header">
-      <div class="pane-title">
-        <span>📑 레퍼런스 Context 문서 뷰어</span>
-      </div>
-      <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="copyActiveDocAll()">
-        전체 원문 복사
+    <!-- Sidebar Bottom Action Tools -->
+    <div class="sidebar-footer">
+      <button class="sidebar-btn" id="kwModeBtn" onclick="toggleKeywordsOnlyMode()">
+        <span>🔑</span>
+        <span>키워드 연상 모드 (풀 답변 가리기)</span>
       </button>
+      <button class="sidebar-btn" id="blindModeBtn" onclick="toggleBlindMode()">
+        <span>👁️</span>
+        <span>모의면접 모드 (전체 가리기)</span>
+      </button>
+      <button class="sidebar-btn" id="refToggleBtn" onclick="toggleReferencePane()">
+        <span>📑</span>
+        <span>자소서 원문 레퍼런스 토글</span>
+      </button>
+      <div style="display: flex; gap: 4px; margin-top: 4px;">
+        <button class="btn btn-success btn-sm" style="flex: 1;" onclick="exportToMarkdown()">📥 MD 저장</button>
+        <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="exportToHTML()">🌐 HTML 백업</button>
+      </div>
+      <div style="display: flex; gap: 4px;">
+        <button class="btn btn-danger-outline btn-sm" style="flex: 1;" onclick="resetToDefault()">🔄 기본값 복원</button>
+        <button class="btn btn-outline btn-sm" style="padding: 5px 8px;" onclick="changePasswordPrompt()" title="접속 비밀번호 변경">🔑</button>
+        <button class="btn btn-outline btn-sm" style="padding: 5px 8px;" onclick="lockDashboardNow()" title="화면 잠금">🔒</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CENTER MAIN WORKSPACE ================= -->
+  <main class="main-workspace" id="mainWorkspace">
+    <!-- Top Bar: Current Project Info & Controls -->
+    <div class="workspace-top-bar">
+      <div class="top-bar-left">
+        <div class="proj-title-input-wrap">
+          <span class="proj-code-tag" id="currentProjCode">PROJECT 01</span>
+          <input type="text" class="proj-title-input" id="currentProjTitleInput" placeholder="간단한 프로젝트명 입력 (예: 룰기반 비전 선별 엔진)" oninput="handleProjTitleChange(this.value)">
+        </div>
+      </div>
+
+      <div class="top-bar-right">
+        <button class="btn btn-primary btn-sm" onclick="addQuestionToCurrentProject()">➕ 꼬리질문 추가</button>
+        <button class="btn btn-danger-outline btn-sm" onclick="deleteCurrentProject()">프로젝트 삭제</button>
+        <button class="btn btn-outline btn-sm" onclick="toggleReferencePane()" id="refToggleTopBtn">📑 원문 보기</button>
+      </div>
+    </div>
+
+    <!-- Main Workspace Content -->
+    <div class="workspace-content">
+      <!-- Tech Stack Tags -->
+      <div class="tech-tags-bar" id="techTagsBar">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Question Stepper & Mode Switcher -->
+      <div class="q-stepper-container">
+        <div class="q-stepper-left" id="qStepperList">
+          <!-- Rendered by JS -->
+        </div>
+        <div class="q-stepper-right">
+          <button class="view-toggle-btn active" id="viewToggleBtn" onclick="toggleFocusView()">
+            🎯 1문1답 집중 뷰
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Questions Container -->
+      <div id="questionsContainer">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= 3. RIGHT REFERENCE VIEWER ================= -->
+  <aside class="reference-pane" id="referencePane">
+    <div class="ref-header">
+      <div class="ref-title">
+        <span>📑 자소서/경력 원문 뷰어</span>
+      </div>
+      <div style="display: flex; gap: 4px;">
+        <button class="btn btn-outline btn-sm" style="padding: 3px 8px; font-size: 10.5px;" onclick="copyActiveDocAll()">전체 복사</button>
+        <button class="btn btn-outline btn-sm" style="padding: 3px 8px; font-size: 10.5px;" onclick="toggleReferencePane()">✕</button>
+      </div>
     </div>
 
     <!-- Document Tabs -->
     <div class="doc-tabs">
       <div class="doc-tab active" id="tab-hyundai" onclick="switchDocTab('hyundai')">
-        <span>📄 현대자동차 자소서/경력</span>
+        <span>📄 현대자동차</span>
       </div>
       <div class="doc-tab" id="tab-skhynix" onclick="switchDocTab('skhynix')">
-        <span>📄 하이닉스 자소서/경력</span>
+        <span>📄 하이닉스</span>
       </div>
     </div>
 
     <!-- Search in Ref -->
-    <div class="ref-toolbar">
-      <input type="text" class="ref-search-input" id="refSearchInput" placeholder="문서 내 키워드 검색 (예: 웜기어, 1×7, 100만, LVDT...)" oninput="searchRefDoc()">
-      <span style="font-size: 12px; color: #64748b;" id="searchCount"></span>
+    <div class="ref-search-bar">
+      <input type="text" class="ref-search-input" id="refSearchInput" placeholder="키워드 검색 (예: 웜기어, 1×7, 100만, LVDT...)" oninput="searchRefDoc()">
+      <span style="font-size: 11px; color: #64748b;" id="searchCount"></span>
     </div>
 
-    
-    <!-- Reference Category Filter Chips -->
+    <!-- Category Filter Chips -->
     <div class="ref-cat-filters">
-      <span style="font-size: 11.5px; color: #94a3b8; font-weight: 700; margin-right: 4px;">분류 필터:</span>
-      <button class="ref-cat-chip active" data-cat="all" onclick="filterRefCategory('all')">전체 보기</button>
+      <button class="ref-cat-chip active" data-cat="all" onclick="filterRefCategory('all')">전체</button>
       <button class="ref-cat-chip" data-cat="career" onclick="filterRefCategory('career')">💼 경력</button>
       <button class="ref-cat-chip" data-cat="project" onclick="filterRefCategory('project')">🚀 프로젝트</button>
       <button class="ref-cat-chip" data-cat="essay" onclick="filterRefCategory('essay')">✍️ 자기소개서</button>
@@ -1144,103 +1394,132 @@
 
     <!-- Reference Content List -->
     <div class="ref-content-area" id="refContentArea"></div>
-
-  </div>
+  </aside>
 
 </div>
 
 <!-- Toast Popup -->
-<div id="toast">클립보드에 복사되었습니다!</div>
+<div id="toast">알림</div>
 
 <script>
-// ================= DEFAULT INTERVIEW DATA =================
+// ================= DEFAULT INTERVIEW DATA (WITH EXPLICIT KEYWORDS & PREP) =================
 const DEFAULT_PROJECTS = [
   {
     id: "P1",
     code: "PROJECT 01",
-    title: "룰 기반 적응형 컴퓨터 비전 엔진 자체 개발 (100만 장 긴급 선별)",
+    title: "룰기반 비전 선별 엔진 개발 (100만 장 긴급 선별)",
     tags: ["Grayscale Valley", "이원화 Th(55)", "1×7 수직 Bridge Kernel", "모폴로지 Closing", "PyQt5 GUI"],
     questions: [
       {
         type: "경험 개요",
+        framework: "STAR",
         question: "Q1. 이미지 처리 엔진을 자체 개발해서 100만 장을 선별했다고 하셨는데, 구체적으로 어떤 내용인가요?",
         intent: "프로젝트 스케일, 본인의 정확한 R&R, 비전 개발 역량의 실재성 확인",
         defense: "72시간 100만장, 0.5% Burr, 장당 5ms, 1×7 수직 Bridge Kernel, 미검률 0%",
         summary: "현장 도메인 지식과 컴퓨터 비전 알고리즘을 결합한 자체 이미지 처리 엔진으로 72시간 내 100만 장을 장당 5ms로 전수 선별하여 출하 지연 0건과 미검률 0%를 달성한 경험입니다.",
+        s_kw: "46시리즈 New-form, 0.5% 미세 Burr 발생, 출하 전면 중단, 72시간 내 100만장 육안선별 불가",
         s: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다.",
+        t_kw: "출하 지연 0건, 미검률 0% 보장, 딥러닝(학습지연) 배제, 12시간 내 초고속 룰기반 엔진 자체 개발",
         t: "공정 엔지니어로서 출하 지연을 0건으로 막고, 미검률 0%를 보장할 수 있는 고속 자동 선별 프로그램을 자체 개발해야 했습니다. 딥러닝 모델은 데이터 라벨링과 학습에만 수일이 걸리므로, 즉시 배포 가능하고 연산 부하가 극도로 적은 룰 기반 비전 엔진을 12시간 내 구축하는 것을 목표로 설정했습니다.",
+        a_kw: "국소 음영 낙차(Valley), 배경밝기 55 기준 이원화 레시피, 1×7 수직 브릿지 커널(단절 복원), 8-연결성 20px 검출",
         a: "표준 샘플의 픽셀 프로파일을 분석하여 결함 부위에 급격한 국소 음영 낙차(Valley)가 존재함을 수학적으로 증명했습니다. 이를 바탕으로 배경 밝기 55를 기준으로 레시피를 동적 전환하는 '이원화 Valley 알고리즘'을 설계해 랏간 조명 편차를 제거했습니다. 또한 끊어진 미세 결함을 연결하기 위해 직접 1×7 수직 Bridge Kernel을 수학적으로 모델링하고 모폴로지 닫힘(Closing) 연산 및 8-연결성 라벨링을 적용하여 20px 이상의 치명 결함을 100% 검출하도록 구현했습니다.",
+        r_kw: "장당 5ms (초당 200장), 100만장 단 1.4시간 만에 완수, 미검률 0%, 72시간 내 정상 출하 복구",
         r: "장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. 현대자동차 배터리 라인에서도 신규 규격 생산 시 발생하는 돌발 결함에 대해 데이터와 수학적 알고리즘으로 즉각적인 솔루션을 제시하는 생산운영 엔지니어가 되겠습니다."
       },
       {
         type: "어려웠던 점",
+        framework: "STAR",
         question: "Q2. 이 경험에서 가장 힘들었던 기술적 난관은 무엇이었습니까?",
         intent: "진짜 본인이 코딩하고 튜닝했는지, 실패 경험 및 트러블슈팅의 디테일 파악",
         defense: "랏간 밝기 편차로 인한 과검/미검 동시 폭발, 상대적 음영 낙차 수식화, 수직 불연속성 복원",
         summary: "랏간 조명 및 코팅 편차로 과검과 미검이 동시 폭발했던 위기를 배경 밝기 55 기준의 '이원화 Valley 알고리즘'과 1×7 수직 브릿지 커널로 극복했습니다.",
+        s_kw: "단일 임계값(Threshold) 적용 시 랏간 조명 편차로 과검 폭발, 불연속 크랙 신호소실로 미검 동시 발생",
         s: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다.",
+        t_kw: "미검률 0% 절대 사수 + 작업자 2차 확인 가능한 과검률 3% 이하 트레이드오프 동시 만족",
         t: "출하 선별의 대전제는 '미검률 0%'이면서도 작업자가 2차 확인할 수 있는 수준의 '과검률 3% 이하'를 달성해야 했습니다. 단일 수식으로는 이 두 트레이드오프를 도저히 맞출 수 없었습니다.",
+        a_kw: "상대적 음영 낙차 계산, 배경 밝기 55 기준 동적 분기, 지그재그 크랙 복원용 1×7 수직 비대칭 브릿지 커널 독자 고안",
         a: "첫째, 절대 밝기가 아닌 배경 대비 상대적 전압/음영 낙차를 계산하도록 알고리즘을 전면 수정했습니다. 배경 코팅 영역의 그레이스케일 히스토그램을 실시간 추정하여 평균 밝기 55를 기준으로 밝은 Lot과 어두운 Lot으로 동적 분기하는 '이원화 Valley 임계 로직'을 구축했습니다. 둘째, 실오라기 Burr가 직선이 아니라 지그재그로 파이며 끊어지는 물리적 형상 때문에 노이즈로 제거되는 문제를 해결하기 위해, 가로 노이즈는 무시하고 세로 방향 결함 신호만 연결해 주는 1×7 세로 비대칭 Bridge Kernel을 독자 고안하여 신호 연속성을 복원했습니다.",
+        r_kw: "과검률 15% ➔ 1.2%로 대폭 축소, 미검률 0% 유지, 72시간 기한 내 선별 완료",
         r: "과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다."
       },
       {
         type: "압박 꼬리질문",
+        framework: "PREP",
         question: "Q3. 왜 딥러닝(YOLO/CNN)을 쓰지 않고 룰 기반을 썼습니까? 구시대적 접근 아닌가요?",
         intent: "최신 딥러닝 기술을 못 써서 룰 기반으로 도망친 것인지, 공학적 타당성에 근거한 선택인지 검증",
         defense: "라벨링 리드타임 제약(72시간), 불균형 데이터(0.5%), Black-box vs Deterministic 검증 가능성",
         summary: "72시간이라는 극단적 납기 한계, 0.5% 불균형 데이터, 그리고 고객사(T사)에 미검 0%를 수학적으로 증명할 수 있는 Explainable AI라는 현장 조건에 가장 부합했기 때문입니다.",
-        s: "일반적인 비전 과제라면 CNN이나 YOLO 계열이 일반화 성능이 우수합니다. 하지만 현장 조건은 '남은 시간 72시간, 검사 대상 100만 장, 정상 대비 불량률 0.5%(불균형 데이터 극심)'였습니다.",
-        t: "딥러닝 적용 시 불량 이미지 수천 장 바운딩 박스 라벨링에 최소 30시간, 학습 및 하이퍼파라미터 튜닝에 20시간이 소요되며, Black-box 특성상 고객사 감사진에게 '미검 0%'를 수학적으로 증명할 수 없었습니다. 또한 GPU 인퍼런스 속도(20~50ms/장)로는 100만 장 처리에 14시간 이상이 소요됩니다.",
-        a: "반면, 불량의 물리적 본질(전극 경계면 국소 음영 낙차, 수직 방향 불연속성)을 파악한 룰 기반 알고리즘은 라벨링 없이 12시간 만에 수식 모델링 및 코딩을 완료했고, CPU 멀티프로세싱으로 장당 5ms(초당 200장)라는 속도로 1.4시간 만에 100만 장 처리가 가능했습니다. 무엇보다 결정론적(Deterministic) 로직이므로 엔지니어가 판정 기준을 100% 추적/증명할 수 있었습니다.",
-        r: "현대차 양산 라인에서도 유행하는 기술을 무조건 따르기보다, 양산 납기와 물리적 메커니즘에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다."
+        p1_kw: "72시간 극단 납기, 0.5% 극심한 불균형 데이터, 고객사 감사 대응을 위한 설명가능성(Explainable AI)",
+        p1: "현장 상황이 요구한 제약조건(72시간 납기 한계, 0.5% 극심한 불균형 데이터, 고객사에 미검 0%를 수학적으로 입증할 수 있는 설명가능성)에 룰 기반이 가장 최적의 공학적 솔루션이었기 때문입니다.",
+        r_kw: "딥러닝은 라벨링·학습에만 50시간 소요, Black-box 특성상 미검 0% 증명 불가, GPU 인퍼런스 지연(14h 소요)",
+        r: "딥러닝 적용 시 불량 이미지 바운딩 박스 라벨링에 30시간, 학습 및 튜닝에 20시간이 소요되어 납기를 맞출 수 없었고, Black-box 특성상 고객사 감사진에게 미검 0%를 수학적으로 입증할 수 없었으며, 100만 장 GPU 추론에 14시간 이상이 소요되기 때문입니다.",
+        e_kw: "룰 기반 12시간 내 수식 모델링 완료, CPU 멀티프로세싱 장당 5ms (100만장 단 1.4h 선별 완료)",
+        e: "반면 전극 결함의 물리적 본질(국소 음영 낙차, 수직 불연속성)을 수식화한 룰 기반은 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱으로 장당 5ms라는 압도적 속도로 1.4시간 만에 100만 장 처리를 완수했습니다.",
+        p2_kw: "유행 기술 지양, 양산 리드타임과 물리 메커니즘에 기반한 실용적 엔지니어링 실천",
+        p2: "현대차 양산 라인에서도 맹목적으로 유행 기술을 따르기보다, 양산 납기와 물리적 본질에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다."
       }
     ]
   },
   {
     id: "P2",
     code: "PROJECT 02",
-    title: "전극 코팅 Shim 오프셋 미세조절장치 전동화 개발",
+    title: "Shim 미세조절장치 전동화 개발",
     tags: ["50:1 웜기어", "소형 BLDC 모터", "Self-locking", "고분해능 LVDT 센서", "폐루프 제어"],
     questions: [
       {
         type: "경험 개요",
+        framework: "STAR",
         question: "Q1. 미세조절장치 전동화 개발 건은 구체적으로 무엇을 한 것인가요?",
         intent: "기계/기구학적 지식 및 생산설비 개조 실무 역량, 공정능력(Cpk) 개선 메커니즘 확인",
         defense: "웜기어 Self-locking, BLDC 모터, Backlash 최소화, LVDT 센서 ㎛ 피드백, Loss 18% 절감",
         summary: "타이트한 누적공차(Cpk 1.33) 만족을 위해 웜기어와 소형 BLDC 모터, 고분해능 LVDT 센서를 결합한 폐루프 미세조절장치를 단독 개발하여 조건조정 Loss 18% 및 수율 0.2%를 개선한 경험입니다.",
+        s_kw: "46시리즈 코팅 누적폭 공차 ±0.3mm (50% 타이트), 작업자 수동 다이얼게이지 손동작 의존",
         s: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다.",
+        t_kw: "작업자 편차 제거, 조건조정 3~5회 반복 Loss 제거, Cpk 1.5 이상 전동화 디지털 시스템 구축",
         t: "작업자 숙련도에 따라 타겟 폭에 도달하는 데 최소 3~5회의 코팅-정지-측정 반복이 발생하여 조건 조정 Loss가 극심했습니다. 저는 작업자의 손동작을 완벽히 대체하는 '전동화 디지털 미세조절 시스템'을 도입하여 Cpk 1.5 이상 달성 및 셋업 Loss 최소화를 목표로 설정했습니다.",
+        a_kw: "50:1 웜기어 Self-locking(토출배압 지탱), 소형 BLDC 모터, 0.1㎛ 외장 LVDT 실변위 직결 폐루프 제어",
         a: "첫째, 고감속비(50:1) 웜기어(Worm Gear)와 소형 BLDC 모터를 결합하여 회전운동을 정밀 직진운동으로 변환하는 초소형 구동 유닛을 설계했습니다. 웜기어 고유의 자체 락킹(Self-locking) 특성을 활용해 코팅 중 슬러리 토출 압력에 의해 위치가 밀리는 현상을 물리적으로 방지했습니다. 둘째, 기계적 백래시(Backlash)로 인한 위치 오차를 원천 통제하기 위해, 실제 이동 변위를 0.1㎛ 단위로 측정하는 고분해능 LVDT 센서를 직결 장착하여 실시간 위치 피드백 폐루프(Closed-loop) 제어를 구축했습니다.",
+        r_kw: "조건조정 시간 45분 ➔ 8분 단축, 조정 Loss 18% 절감, 라인 수율 0.2% 향상, Cpk 1.67 달성",
         r: "타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. 현대자동차 전극 공정에서도 설비의 기계적 한계를 엔지니어링 센싱과 전동 제어로 극복하여 무인화 스마트 팩토리를 실현하겠습니다."
       },
       {
         type: "압박 꼬리질문",
+        framework: "PREP",
         question: "Q2. 왜 비싼 서보모터나 리니어 모터를 쓰지 않고 '웜기어 + BLDC + LVDT' 조합을 썼습니까?",
         intent: "설비 공간 제약, 코팅부 환경, 원가 및 엔지니어링 설계 타당성 평가",
         defense: "공간 협소성(100×80mm), 슬롯다이 고압 토출 배압 지탱(Self-locking), 직접 변위 계측",
         summary: "슬롯다이 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 고압 배압을 웜기어의 Self-locking으로 지탱하며 0.1㎛ 실변위를 LVDT로 직접 계측하기 위함이었습니다.",
-        s: "슬롯다이 주변의 가혹한 물리적 환경과 제약조건을 철저히 고려한 설계였습니다.",
-        t: "협소한 공간에서 수십 kgf의 반력을 견디며 0.1㎛ 정밀도를 유지해야 했습니다.",
-        a: "1. 공간 협소성: 슬롯다이 배면은 배관과 히터선으로 인해 손바닥만 한 100×80mm 공간에 불과하여 대형 서보모터나 리니어 액추에이터는 장착이 불가능했습니다. 2. 고압 배압 지탱: 슬롯다이 내부는 수 bar 압력으로 슬러리가 토출되므로 Shim에 수십 kgf 반력이 작용합니다. 일반 볼스크류는 밀림 위험이 있으나, 웜기어는 감속비 40:1 이상에서 역구동이 불가능한 Self-locking 구조를 가집니다. 3. 직접 센싱(LVDT): 모터 내장 엔코더는 기어 백래시와 열변형을 감지하지 못하므로, 실제 Shim 종단 변위를 0.1㎛로 직접 측정하는 외부 LVDT 직결만이 오차를 제로화하는 유일한 해법이었습니다.",
-        r: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했습니다."
+        p1_kw: "100×80mm 초협소 공간 제약 극복, 슬러리 토출 고압 배압 지탱(Self-locking), 0.1㎛ 종단 직접 센싱",
+        p1: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다.",
+        r_kw: "대형 서보 장착 불가, 일반 볼스크류 역구동 밀림 위험, 모터 내장 엔코더는 기어 백래시 미감지",
+        r: "슬롯다이 주변은 배관 간섭으로 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다.",
+        e_kw: "50:1 웜기어로 역구동 원천 차단, 초소형 BLDC 결합, 외장 LVDT 직결 폐루프 제어로 원가 1/5 절감",
+        e: "실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다.",
+        p2_kw: "양산 신뢰성 확보, 현대차 전극 설비 개조 및 스마트 팩토리 표준 적용",
+        p2: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, 현대차 생산운영에서도 현장 맞춤형 스마트 엔지니어링을 실현하겠습니다."
       }
     ]
   },
   {
     id: "P3",
     code: "PROJECT 03",
-    title: "웹게이지 국부 로딩 데이터 기반 미세라인 불량 감지 로직 개발",
+    title: "웹게이지 미세라인 감지 로직 개발",
     tags: ["방사선 웹게이지", "1% Data Shift", "이동평균(MA)", "MD 스윙(N=3)", "TD 포인트(N=4)", "ROC Curve"],
     questions: [
       {
         type: "경험 개요",
+        framework: "STAR",
         question: "Q1. 비전 검사기에도 안 잡히는 미세라인을 웹게이지로 어떻게 잡았습니까?",
         intent: "비전과 웹게이지의 물리적 계측 차이, 데이터 가설 설정 및 통계적 필터링 검증",
         defense: "1% 미만 국부 로딩 저하 가설, 이동평균, MD 스윙 3회, TD 포인트 4개, Loss 50% 절감",
         summary: "고가의 신규 비전 검사기 대신 기존 웹게이지의 국부 로딩 데이터 100Lot을 분석하여 1% 미만 시프트를 검출하는 2차원 시계열 알고리즘을 구축해 미세라인 Loss 50%를 절감했습니다.",
+        s_kw: "슬롯다이 립 미세 이물 긁힘(미세라인), 표면 반사율 미미해 비전 미검출, 육안 의존 롤 폐기 발생",
         s: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다.",
+        t_kw: "작업자 육안 검사 배제, 기존 방사선 두께 측정기 원시 데이터 활용 실시간 자동 감지 및 라인 선제 정지",
         t: "작업자 육안 검사를 배제하고, 기존 두께 측정기인 웹게이지의 원시 데이터를 활용하여 불량을 실시간 자동 감지하고 라인을 선제 정지시키는 로직을 구축하고자 했습니다.",
+        a_kw: "100Lot 분석 1% 미만 국부 로딩 저하 규명, 이동평균(MA), MD 스윙 3회 연속 편차 누적, TD 연속 4개 포인트 이탈 조건화",
         a: "'미세라인 부위는 슬러리 토출이 방해받아 단위면적당 로딩(g/㎡)이 국부적으로 1% 미만 떨어질 것이다'라는 가설을 세우고 100Lot 데이터를 분석해 미세 Data Shift를 규명했습니다. 일반 노이즈와 구분하기 위해: 1. 폭방향(TD) 스캔 프로파일에 이동평균(Moving Average)을 적용하고, 2. 진행방향(MD)으로 N=3회 연속 스윙 동안 동일 폭 위치에서 편차가 누적되는지 확인하며, 3. 폭방향(TD)으로 연속된 N=4개 포인트에서 스펙을 이탈할 때만 최종 알람이 울리도록 2차원 시계열 상관 로직을 구현했습니다.",
+        r_kw: "미세라인 불량 Loss 50% 절감, 수율 0.12% 개선, 센서 융합 기반 선제 차단 체계 표준화",
         r: "미세라인 불량 Loss를 50% 절감하고 수율을 0.12% 개선했습니다. 현대차 전극 라인에서도 센서 융합 분석을 통해 보이지 않는 결함을 선제적으로 차단하겠습니다."
       }
     ]
@@ -1248,18 +1527,23 @@ const DEFAULT_PROJECTS = [
   {
     id: "P4",
     code: "PROJECT 04",
-    title: "AX 자동화: 고객향 인라인 데이터 이상치 자동 검출 및 대시보드 구축",
+    title: "고객향 인라인 AX 자동화 대시보드 구축",
     tags: ["Python RPA", "OpenCV Template Matching", "공정 헌팅 데이터 필터링", "Lot 병합 판정", "HTML Dashboard"],
     questions: [
       {
         type: "경험 개요",
+        framework: "STAR",
         question: "Q1. 파이썬 RPA 개발 경험은 무엇을 한 것인가요? 단순 매크로 아닌가요?",
         intent: "단순 코딩 자랑인지, 생산운영 프로세스 혁신 및 공정 데이터에 대한 이해가 담겨 있는지 확인",
         defense: "보안망 우회 RPA, 헌팅구간 룰베이스 필터링, 데이터 무결성 확보, 월 40시간 세이브",
         summary: "사내 보안망을 우회하는 이미지 매칭 기반 파이썬 RPA와 공정 헌팅 데이터 필터링 로직을 구축하여 엔지니어의 단순반복 수작업을 월 40시간 100% 완전 자동화한 경험입니다.",
+        s_kw: "고객사(T사) 전 Lot 인라인 데이터 전수 검증 요구, 사내 보안 방화벽으로 DB 연동 차단, 매일 수작업 2시간 소요",
         s: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다.",
+        t_kw: "단순 매크로 탈피, 공정 도메인 지식 접목 데이터 무결성 검증 & 100% 무인 자동화 (월 40h 절감)",
         t: "단순 매크로를 넘어, 공정 엔지니어의 도메인 지식을 녹여 '데이터 무결성 검증 및 100% 무인 자동화 파이프라인'을 구축하여 월 40시간의 공수를 절감하는 것을 목표로 했습니다.",
+        a_kw: "OpenCV 좌표인식 Python RPA, 가·감속 공정 헌팅 데이터 제거 룰, Lot 병합 알고리즘, HTML 대시보드 배포",
         a: "보안망을 우회하기 위해 이미지 매칭 기반의 Python RPA 스크립트로 무인 데이터 수집 파이프라인을 구축했습니다. 특히 가·감속 시 발생하는 '공정 헌팅 데이터 제거 룰'과 'Lot 병합 가능 여부 자동 검토 알고리즘'을 Pandas로 구현하고, 이상치 알람 및 트렌드가 한눈에 보이는 HTML 대시보드를 제작해 배포했습니다.",
+        r_kw: "월 40시간 단순 반복 공수 100% 절감, 휴먼에러 0건, 비개발자 동료도 원클릭 모니터링 체계 확립",
         r: "월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. 현대차 생산운영에서도 데이터 수집부터 이상 감시까지 전 과정을 자동화하여 스마트 팩토리 표준을 만들겠습니다."
       }
     ]
@@ -1267,25 +1551,30 @@ const DEFAULT_PROJECTS = [
   {
     id: "P5",
     code: "PROJECT 05",
-    title: "New-form factor F/up & 방사능 소스 웹게이지 교체 셋업",
+    title: "방사능 웹게이지 소스 교체 셋업",
     tags: ["T사 Daily 대응", "영문 FACA / 8D Report", "원자력안전법 인허가", "7개 조직 Co-work", "Data 신뢰도 150%"],
     questions: [
       {
         type: "경험 개요",
+        framework: "STAR",
         question: "Q1. 방사능 소스 웹게이지 셋업 시 7개 조직 간 갈등은 무엇이었고 어떻게 해결했나요?",
         intent: "대규모 프로젝트 리딩 능력, 부서 간 이해관계 충돌 조정 및 위기관리 능력 평가",
         defense: "사전 기계/배선 시공(정기 PM), 3회 Dry-run 리허설로 본작업 3시간 단축, 셧다운 0건",
         summary: "정기 PM 사전 시공과 3회 Dry-run 리허설로 본작업 노출 시간을 3시간으로 단축하여 7개 조직 간의 셧다운 갈등을 조율하고 데이터 신뢰도 150%를 달성했습니다.",
+        s_kw: "Kr-85 소스 반감기 초과로 계측 신뢰도 위기, 생산팀(셧다운 거부) vs 환경안전팀(48h 법적점검) 충돌",
         s: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다.",
+        t_kw: "원자력안전법 100% 준수 사수 + 양산 라인 셧다운 극단적 최소화하는 마스터 시공 플랜 수립",
         t: "공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운 시간을 극단적으로 최소화하는 마스터 시공 플랜을 수립해야 했습니다.",
+        a_kw: "정기 PM 4h 기계/배선 사전시공 분리, 치구 3회 Dry-run 리허설(노출 3h로 법정치 1/10 단축), 방사선 차폐 시뮬레이션 설득",
         a: "사전 준비 공정과 방사선 본 작업을 완벽히 분리했습니다. 1. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했습니다. 2. 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 3. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다.",
+        r_kw: "안전사고 0건, 단 6시간 계획 정지만으로 완수, 계측 신뢰도 150% 달성",
         r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. 현대차 대형 라인 셋업에서도 다부서 협업의 구심점이 되는 엔지니어가 되겠습니다."
       }
     ]
   }
 ];
 
-// ================= CONTEXT REFERENCE DOCUMENTS =================
+// ================= CONTEXT REFERENCE DOCUMENTS (100% VERBATIM) =================
 const CONTEXT_DOCS = {
   hyundai: [
     { tag: "경력 요약", text: "#경력\n■수율 개선\n생산능력 개선 및 설비 효율화 (21,46series 및 스트라이프, 원통형모델)\n-설비 효율화 및 Logic 변경 (웹게이지 미세 Line불량 감지 Logic 개발 등)\n-생산능력 개선 (전극 누적폭 Cpk 만족 : 전극 스트라이프코팅 Shim offset 변경을 위한 미세조절장치 전동화 개발)" },
@@ -1313,13 +1602,804 @@ const CONTEXT_DOCS = {
 
 // ================= APP STATE =================
 let projectsData = [];
+let currentProjIndex = 0;
+let activeQuestionIndex = {}; // pIndex -> qIndex
+let isFocusViewMode = true; // true: 1 question at a time, false: all stacked
+let isKeywordsOnlyMode = false;
+let isBlindMode = false;
 let activeDocKey = 'hyundai';
+let activeRefCategory = 'all';
 let saveTimeout = null;
 
+// ================= INITIALIZATION =================
+window.addEventListener('DOMContentLoaded', () => {
+  checkAuthStatus();
+  loadProjectsData();
+  renderSidebar();
+  renderCurrentProject();
+  renderReferenceDoc();
 
-// ================= PROJECT SWITCHER LOGIC =================
-let selectedProjectId = 'all'; // 'all' or 'P1', 'P2'...
-let activeRefCategory = 'all'; // 'all', 'career', 'project', 'essay'
+  // Keyboard shortcut: Alt+Left / Alt+Right for question navigation
+  window.addEventListener('keydown', (e) => {
+    if (e.altKey && e.key === 'ArrowRight') {
+      nextQuestion();
+    } else if (e.altKey && e.key === 'ArrowLeft') {
+      prevQuestion();
+    }
+  });
+});
+
+// ================= DATA PERSISTENCE & MIGRATION =================
+function loadProjectsData() {
+  const saved = localStorage.getItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026');
+  if (saved) {
+    try {
+      projectsData = JSON.parse(saved);
+      // Migrate / ensure all items have keywords and frameworks
+      projectsData.forEach((proj, pIdx) => {
+        if (!proj.questions) proj.questions = [];
+        proj.questions.forEach((q, qIdx) => {
+          if (!q.framework) q.framework = "STAR";
+          // Check if default keywords can be mapped if missing
+          const defaultProj = DEFAULT_PROJECTS[pIdx];
+          const defaultQ = defaultProj && defaultProj.questions ? defaultProj.questions[qIdx] : null;
+
+          if (q.framework === "STAR") {
+            if (q.s_kw === undefined) q.s_kw = defaultQ && defaultQ.s_kw ? defaultQ.s_kw : "";
+            if (q.t_kw === undefined) q.t_kw = defaultQ && defaultQ.t_kw ? defaultQ.t_kw : "";
+            if (q.a_kw === undefined) q.a_kw = defaultQ && defaultQ.a_kw ? defaultQ.a_kw : "";
+            if (q.r_kw === undefined) q.r_kw = defaultQ && defaultQ.r_kw ? defaultQ.r_kw : "";
+          } else if (q.framework === "PREP") {
+            if (q.p1_kw === undefined) q.p1_kw = defaultQ && defaultQ.p1_kw ? defaultQ.p1_kw : "";
+            if (q.r_kw === undefined) q.r_kw = defaultQ && defaultQ.r_kw ? defaultQ.r_kw : "";
+            if (q.e_kw === undefined) q.e_kw = defaultQ && defaultQ.e_kw ? defaultQ.e_kw : "";
+            if (q.p2_kw === undefined) q.p2_kw = defaultQ && defaultQ.p2_kw ? defaultQ.p2_kw : "";
+          }
+        });
+      });
+    } catch (e) {
+      console.error("Failed to parse saved data, fallback to default", e);
+      projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    }
+  } else {
+    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+  }
+
+  // Initialize active question index
+  projectsData.forEach((_, idx) => {
+    activeQuestionIndex[idx] = 0;
+  });
+}
+
+function saveProjectsData() {
+  setSaveStatus("저장 중...", true);
+  localStorage.setItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026', JSON.stringify(projectsData));
+  setTimeout(() => {
+    setSaveStatus("● 실시간 자동 저장", false);
+  }, 250);
+}
+
+function triggerAutoSave() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  setSaveStatus("수정 중...", true);
+  saveTimeout = setTimeout(() => {
+    saveProjectsData();
+  }, 400);
+}
+
+function setSaveStatus(text, isSaving) {
+  const el = document.getElementById('saveStatus');
+  if (!el) return;
+  el.textContent = text;
+  if (isSaving) el.classList.add('saving');
+  else el.classList.remove('saving');
+}
+
+function resetToDefault() {
+  if (confirm("정말 기본 데이터로 초기화하시겠습니까? (수정한 모든 내용이 기본값으로 덮어씌워집니다)")) {
+    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    currentProjIndex = 0;
+    projectsData.forEach((_, idx) => { activeQuestionIndex[idx] = 0; });
+    saveProjectsData();
+    renderSidebar();
+    renderCurrentProject();
+    showToast("기본 데이터로 복원되었습니다.");
+  }
+}
+
+// ================= SIDEBAR RENDERING =================
+function renderSidebar() {
+  const listEl = document.getElementById('sidebarProjList');
+  if (!listEl) return;
+
+  const countBadge = document.getElementById('projCountBadge');
+  if (countBadge) countBadge.textContent = `${projectsData.length} Projects`;
+
+  listEl.innerHTML = projectsData.map((proj, idx) => {
+    const isActive = (idx === currentProjIndex) ? 'active' : '';
+    const qCount = proj.questions ? proj.questions.length : 0;
+    return `
+      <div class="sidebar-proj-item ${isActive}" onclick="selectProject(${idx})">
+        <div class="sidebar-proj-meta">
+          <span class="sidebar-code-pill">${escapeHtml(proj.code || 'P' + (idx + 1))}</span>
+          <span class="sidebar-proj-name" title="${escapeHtml(proj.title)}">${escapeHtml(proj.title)}</span>
+        </div>
+        <span class="sidebar-q-count">${qCount}Q</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectProject(pIdx) {
+  if (pIdx < 0 || pIdx >= projectsData.length) return;
+  currentProjIndex = pIdx;
+  if (activeQuestionIndex[pIdx] === undefined) activeQuestionIndex[pIdx] = 0;
+  renderSidebar();
+  renderCurrentProject();
+}
+
+// ================= MAIN WORKSPACE RENDERING =================
+function renderCurrentProject() {
+  if (projectsData.length === 0) {
+    document.getElementById('questionsContainer').innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b;">등록된 프로젝트가 없습니다. 좌측 + 추가 버튼을 눌러주세요.</div>';
+    return;
+  }
+
+  if (currentProjIndex >= projectsData.length) currentProjIndex = 0;
+  const proj = projectsData[currentProjIndex];
+  if (!activeQuestionIndex[currentProjIndex]) activeQuestionIndex[currentProjIndex] = 0;
+
+  // Top Bar inputs
+  document.getElementById('currentProjCode').textContent = proj.code || `PROJECT 0${currentProjIndex + 1}`;
+  document.getElementById('currentProjTitleInput').value = proj.title || '';
+
+  // Tech Tags
+  renderTechTags(proj);
+
+  // Question Stepper
+  renderQuestionStepper(proj);
+
+  // Questions
+  renderQuestions(proj);
+}
+
+function handleProjTitleChange(val) {
+  projectsData[currentProjIndex].title = val.trim();
+  renderSidebar();
+  triggerAutoSave();
+}
+
+function renderTechTags(proj) {
+  const bar = document.getElementById('techTagsBar');
+  const tags = proj.tags || [];
+  let html = `<span class="tags-label">TECH STACK:</span>`;
+  tags.forEach((t, tIdx) => {
+    html += `
+      <span class="tech-chip">
+        <span contenteditable="true" onblur="updateTechTag(${tIdx}, this.textContent)">${escapeHtml(t)}</span>
+        <span class="tech-chip-del" onclick="deleteTechTag(${tIdx})">×</span>
+      </span>
+    `;
+  });
+  html += `<button class="btn-add-tech" onclick="addTechTag()">+ 태그 추가</button>`;
+  bar.innerHTML = html;
+}
+
+function addTechTag() {
+  const tag = prompt("추가할 기술 스택/키워드를 입력하세요:");
+  if (tag && tag.trim()) {
+    if (!projectsData[currentProjIndex].tags) projectsData[currentProjIndex].tags = [];
+    projectsData[currentProjIndex].tags.push(tag.trim());
+    renderTechTags(projectsData[currentProjIndex]);
+    triggerAutoSave();
+  }
+}
+
+function updateTechTag(tIdx, val) {
+  projectsData[currentProjIndex].tags[tIdx] = val.trim();
+  triggerAutoSave();
+}
+
+function deleteTechTag(tIdx) {
+  projectsData[currentProjIndex].tags.splice(tIdx, 1);
+  renderTechTags(projectsData[currentProjIndex]);
+  triggerAutoSave();
+}
+
+// ================= QUESTION STEPPER =================
+function renderQuestionStepper(proj) {
+  const stepper = document.getElementById('qStepperList');
+  const activeQ = activeQuestionIndex[currentProjIndex] || 0;
+
+  let html = '';
+  proj.questions.forEach((q, qIdx) => {
+    const isActive = (qIdx === activeQ) ? 'active' : '';
+    html += `
+      <button class="q-tab-btn ${isActive}" onclick="goToQuestion(${qIdx})">
+        <span class="q-tab-num">Q${qIdx + 1}</span>
+        <span>${escapeHtml(q.type || '질문')}</span>
+      </button>
+    `;
+  });
+
+  html += `<button class="btn btn-outline btn-sm" style="padding: 5px 10px; font-size: 11px;" onclick="addQuestionToCurrentProject()">+ 꼬리질문</button>`;
+  stepper.innerHTML = html;
+
+  // View toggle button text
+  const viewToggleBtn = document.getElementById('viewToggleBtn');
+  if (viewToggleBtn) {
+    viewToggleBtn.className = `view-toggle-btn ${isFocusViewMode ? 'active' : ''}`;
+    viewToggleBtn.textContent = isFocusViewMode ? '🎯 1문1답 집중 뷰' : '📜 전체 질문 펼쳐보기';
+  }
+}
+
+function toggleFocusView() {
+  isFocusViewMode = !isFocusViewMode;
+  renderQuestionStepper(projectsData[currentProjIndex]);
+  renderQuestions(projectsData[currentProjIndex]);
+}
+
+// ================= QUESTIONS RENDERING (STAR / PREP / MECE / FREE) =================
+function renderQuestions(proj) {
+  const container = document.getElementById('questionsContainer');
+  const questions = proj.questions || [];
+
+  if (questions.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; background: #0c182b; border: 1px dashed #1a345c; border-radius: 12px;">
+        <p style="color: #94a3b8; margin-bottom: 12px;">이 프로젝트에 등록된 면접 질문이 없습니다.</p>
+        <button class="btn btn-primary" onclick="addQuestionToCurrentProject()">➕ 첫 번째 면접 질문 추가</button>
+      </div>
+    `;
+    return;
+  }
+
+  const activeQ = activeQuestionIndex[currentProjIndex] || 0;
+
+  let html = '';
+  questions.forEach((q, qIdx) => {
+    // In focus mode, only show active question
+    if (isFocusViewMode && qIdx !== activeQ) return;
+
+    html += renderSingleQuestionCard(q, qIdx, questions.length);
+  });
+
+  container.innerHTML = html;
+}
+
+function renderSingleQuestionCard(q, qIdx, totalCount) {
+  const framework = q.framework || "STAR";
+
+  return `
+    <div class="question-card" id="q-card-${qIdx}">
+      <!-- Question Card Header -->
+      <div class="q-card-header">
+        <select class="q-type-select" onchange="updateQField(${qIdx}, 'type', this.value)">
+          <option value="경험 개요" ${q.type === '경험 개요' ? 'selected' : ''}>경험 개요</option>
+          <option value="어려웠던 점" ${q.type === '어려웠던 점' ? 'selected' : ''}>어려웠던 점</option>
+          <option value="압박 꼬리질문" ${q.type === '압박 꼬리질문' ? 'selected' : ''}>압박 꼬리질문</option>
+          <option value="개념/원리 설명" ${q.type === '개념/원리 설명' ? 'selected' : ''}>개념/원리 설명 (~설명해봐라)</option>
+          <option value="현대차 연계" ${q.type === '현대차 연계' ? 'selected' : ''}>현대차 연계</option>
+          <option value="기타 검증" ${q.type === '기타 검증' ? 'selected' : ''}>기타 검증</option>
+        </select>
+
+        <!-- Framework Choice Selector -->
+        <select class="framework-select" onchange="changeQuestionFramework(${qIdx}, this.value)" title="답변 로직 방식 선택">
+          <option value="STAR" ${framework === 'STAR' ? 'selected' : ''}>⭐ STAR 방식 (경험/행동형)</option>
+          <option value="PREP" ${framework === 'PREP' ? 'selected' : ''}>💡 PREP 방식 (~설명/개념/원리형)</option>
+          <option value="MECE" ${framework === 'MECE' ? 'selected' : ''}>📐 MECE 방식 (구조화/분류형)</option>
+          <option value="FREE" ${framework === 'FREE' ? 'selected' : ''}>📝 자유 서술형</option>
+        </select>
+
+        <input type="text" class="q-title-input" value="${escapeHtml(q.question || '')}" placeholder="면접 질문을 입력하세요 (예: Q1. ~한 이유는 무엇인가요?)" oninput="updateQField(${qIdx}, 'question', this.value)">
+
+        <button class="btn btn-danger-outline btn-sm" onclick="deleteQuestion(${qIdx})">삭제</button>
+      </div>
+
+      <!-- Question Card Body -->
+      <div class="q-card-body">
+        <!-- Strategy Grid: Intent & Defense -->
+        <div class="strategy-grid">
+          <div>
+            <div class="strat-box-title strat-intent-title">🎯 면접관 공격 의도</div>
+            <textarea class="strat-input" rows="2" placeholder="면접관이 지원자의 진위 여부를 확인하려는 의도" oninput="updateQField(${qIdx}, 'intent', this.value)">${escapeHtml(q.intent || '')}</textarea>
+          </div>
+          <div>
+            <div class="strat-box-title strat-defense-title">🛡️ 방어 핵심 키워드</div>
+            <textarea class="strat-input" rows="2" placeholder="답변 시 반드시 언급해야 할 공학 수치/메커니즘" oninput="updateQField(${qIdx}, 'defense', this.value)">${escapeHtml(q.defense || '')}</textarea>
+          </div>
+        </div>
+
+        <!-- Deductive One-line Summary -->
+        <div class="summary-lead-box">
+          <div class="summary-lead-badge">⚡ 두괄식 요약</div>
+          <input type="text" class="summary-lead-input" value="${escapeHtml(q.summary || '')}" placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요 (예: ~를 통해 수율 0.2% 및 Loss 18%를 개선한 경험입니다.)" oninput="updateQField(${qIdx}, 'summary', this.value)">
+        </div>
+
+        <!-- Step Fields according to Framework -->
+        ${renderFrameworkSteps(q, qIdx, framework)}
+
+        <!-- Bottom Navigation Controls (Smooth Transition between questions!) -->
+        <div class="q-bottom-nav">
+          <button class="btn btn-outline" ${qIdx === 0 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''} onclick="goToQuestion(${qIdx - 1})">
+            ◀ 이전 질문 (Q${qIdx})
+          </button>
+
+          <div class="q-nav-center">
+            <span class="q-page-indicator">질문 ${qIdx + 1} / ${totalCount}</span>
+            <div class="q-dots-list">
+              ${Array.from({ length: totalCount }).map((_, dotIdx) => `
+                <span class="q-dot-pill ${dotIdx === qIdx ? 'active' : ''}" onclick="goToQuestion(${dotIdx})" title="Q${dotIdx + 1}로 이동"></span>
+              `).join('')}
+            </div>
+          </div>
+
+          ${qIdx < totalCount - 1 ? `
+            <button class="btn btn-primary" onclick="goToQuestion(${qIdx + 1})">
+              다음 질문 (Q${qIdx + 2}) ▶
+            </button>
+          ` : `
+            <button class="btn btn-success" onclick="addQuestionToCurrentProject()">
+              ➕ 다음 꼬리질문 추가
+            </button>
+          `}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ================= RENDER STEPS PER FRAMEWORK =================
+function renderFrameworkSteps(q, qIdx, framework) {
+  if (framework === 'PREP') {
+    return `
+      <!-- P: Point -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-p">P</div>
+          <div class="step-title-desc">
+            <span>Point (두괄식 결론 & 핵심 정의)</span>
+            <span class="step-sub-hint">- 질문에 대한 핵심 결론/정의를 한 문장으로 명확히 제시</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.p1_kw || '')}" placeholder="면접관 앞에서 떠올릴 핵심 단어/수치 입력" oninput="updateQField(${qIdx}, 'p1_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'p1', this.textContent)">${escapeHtml(q.p1 || '')}</div>
+        </div>
+      </div>
+
+      <!-- R: Reason -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-reason">R</div>
+          <div class="step-title-desc">
+            <span>Reason (공학적 이유 & 물리적 배경)</span>
+            <span class="step-sub-hint">- 왜 그러한지, 공학적 원리와 물리적 메커니즘 설명</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="공학적 원리/이유 핵심 키워드 입력" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
+        </div>
+      </div>
+
+      <!-- E: Example -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-e">E</div>
+          <div class="step-title-desc">
+            <span>Example (공정 실무 사례 & 데이터 근거)</span>
+            <span class="step-sub-hint">- 실제 배터리/양산 현장에서 검증한 사례나 정량적 수치</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.e_kw || '')}" placeholder="구체적 공정 사례/데이터 키워드 입력" oninput="updateQField(${qIdx}, 'e_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'e', this.textContent)">${escapeHtml(q.e || '')}</div>
+        </div>
+      </div>
+
+      <!-- P: Point / Impact -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-p">P</div>
+          <div class="step-title-desc">
+            <span>Point (결론 재강조 & 현대차 직무 기여)</span>
+            <span class="step-sub-hint">- 핵심 시사점 재강조 및 현대차 전극 양산 라인 기여 방안</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.p2_kw || '')}" placeholder="현대차 기여점 및 최종 결론 키워드 입력" oninput="updateQField(${qIdx}, 'p2_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'p2', this.textContent)">${escapeHtml(q.p2 || '')}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (framework === 'MECE') {
+    return `
+      <!-- Core -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-mece-c">C</div>
+          <div class="step-title-desc">
+            <span>Core Definition (본질적 정의 & 핵심 과제)</span>
+            <span class="step-sub-hint">- 문제/개념의 물리적 본질 한 줄 요약</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.c_kw || '')}" placeholder="핵심 정의 키워드 입력" oninput="updateQField(${qIdx}, 'c_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'c', this.textContent)">${escapeHtml(q.c || '')}</div>
+        </div>
+      </div>
+
+      <!-- Factor 1 -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-mece-1">M1</div>
+          <div class="step-title-desc">
+            <span>Factor 1 (기계/설비 또는 공정 측면 분석)</span>
+            <span class="step-sub-hint">- 1차 분석 축: 물리적/하드웨어적 메커니즘</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.m1_kw || '')}" placeholder="설비/공정 측면 키워드 입력" oninput="updateQField(${qIdx}, 'm1_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'm1', this.textContent)">${escapeHtml(q.m1 || '')}</div>
+        </div>
+      </div>
+
+      <!-- Factor 2 -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-mece-2">M2</div>
+          <div class="step-title-desc">
+            <span>Factor 2 (제어/소프트웨어 또는 품질 측면 분석)</span>
+            <span class="step-sub-hint">- 2차 분석 축: 제어/알고리즘 및 품질 변동 요인</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.m2_kw || '')}" placeholder="제어/품질 측면 키워드 입력" oninput="updateQField(${qIdx}, 'm2_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'm2', this.textContent)">${escapeHtml(q.m2 || '')}</div>
+        </div>
+      </div>
+
+      <!-- Solution -->
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-mece-s">S</div>
+          <div class="step-title-desc">
+            <span>Solution & SOP (종합 관리 기준 및 현장 대책)</span>
+            <span class="step-sub-hint">- 두 요인을 통합한 현장 관리 표준 및 결론</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="종합 대책 키워드 입력" oninput="updateQField(${qIdx}, 's_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (framework === 'FREE') {
+    return `
+      <div class="step-card">
+        <div class="step-header-row">
+          <div class="step-badge badge-p">F</div>
+          <div class="step-title-desc">
+            <span>자유 서술형 답변</span>
+            <span class="step-sub-hint">- 형식에 얽매이지 않고 자유롭게 답변 구성</span>
+          </div>
+        </div>
+        <div class="step-kw-container">
+          <span class="step-kw-label">🔑 연상 키워드</span>
+          <input type="text" class="step-kw-input" value="${escapeHtml(q.free_kw || '')}" placeholder="면접 답변 핵심 키워드 입력" oninput="updateQField(${qIdx}, 'free_kw', this.value)">
+        </div>
+        <div class="step-full-container">
+          <div class="step-full-label">💬 전체 답변 문장</div>
+          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'free_text', this.textContent)">${escapeHtml(q.free_text || '')}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // DEFAULT: STAR FRAMEWORK
+  return `
+    <!-- S: Situation -->
+    <div class="step-card">
+      <div class="step-header-row">
+        <div class="step-badge badge-s">S</div>
+        <div class="step-title-desc">
+          <span>Situation (상황 및 배경)</span>
+          <span class="step-sub-hint">- 문제 발생 당시의 구체적 공정 상황과 위기</span>
+        </div>
+      </div>
+      <div class="step-kw-container">
+        <span class="step-kw-label">🔑 연상 키워드</span>
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="면접관 앞에서 떠올릴 핵심 키워드 (예: 46시리즈, 0.5% Burr, 72시간 내 100만장)" oninput="updateQField(${qIdx}, 's_kw', this.value)">
+      </div>
+      <div class="step-full-container">
+        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
+      </div>
+    </div>
+
+    <!-- T: Task -->
+    <div class="step-card">
+      <div class="step-header-row">
+        <div class="step-badge badge-t">T</div>
+        <div class="step-title-desc">
+          <span>Task (과제 및 핵심 목표)</span>
+          <span class="step-sub-hint">- 공정 엔지니어로서 본인이 부여받은 R&R과 달성 목표</span>
+        </div>
+      </div>
+      <div class="step-kw-container">
+        <span class="step-kw-label">🔑 연상 키워드</span>
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.t_kw || '')}" placeholder="목표/과제 핵심 키워드 (예: 출하지연 0건, 미검률 0%, 12시간 내 개발)" oninput="updateQField(${qIdx}, 't_kw', this.value)">
+      </div>
+      <div class="step-full-container">
+        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
+      </div>
+    </div>
+
+    <!-- A: Action -->
+    <div class="step-card">
+      <div class="step-header-row">
+        <div class="step-badge badge-a">A</div>
+        <div class="step-title-desc">
+          <span>Action (공학적 행동 & 문제 해결 원리)</span>
+          <span class="step-sub-hint">- 문제를 해결하기 위해 적용한 물리적/수학적/공학적 솔루션 메커니즘</span>
+        </div>
+      </div>
+      <div class="step-kw-container">
+        <span class="step-kw-label">🔑 연상 키워드</span>
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.a_kw || '')}" placeholder="공학 솔루션 키워드 (예: 국소 음영 낙차, 이원화 Th(55), 1×7 수직 브릿지 커널)" oninput="updateQField(${qIdx}, 'a_kw', this.value)">
+      </div>
+      <div class="step-full-container">
+        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
+      </div>
+    </div>
+
+    <!-- R: Result -->
+    <div class="step-card">
+      <div class="step-header-row">
+        <div class="step-badge badge-r">R</div>
+        <div class="step-title-desc">
+          <span>Result (정량적 성과 & 현대차 직무 연계)</span>
+          <span class="step-sub-hint">- 정량적 개선 지표(수율, Loss, 시간)와 현대차 전극 생산운영 기여점</span>
+        </div>
+      </div>
+      <div class="step-kw-container">
+        <span class="step-kw-label">🔑 연상 키워드</span>
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="정량 성과/현대차 연계 키워드 (예: 장당 5ms, 1.4h 선별 완료, 미검률 0%)" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
+      </div>
+      <div class="step-full-container">
+        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ================= NAVIGATION BETWEEN QUESTIONS =================
+function goToQuestion(targetIdx) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || targetIdx < 0 || targetIdx >= proj.questions.length) return;
+
+  activeQuestionIndex[currentProjIndex] = targetIdx;
+  renderQuestionStepper(proj);
+  renderQuestions(proj);
+
+  // Smooth scroll into view
+  const targetCard = document.getElementById(`q-card-${targetIdx}`);
+  if (targetCard) {
+    targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function nextQuestion() {
+  const proj = projectsData[currentProjIndex];
+  const currentQ = activeQuestionIndex[currentProjIndex] || 0;
+  if (proj && proj.questions && currentQ < proj.questions.length - 1) {
+    goToQuestion(currentQ + 1);
+  }
+}
+
+function prevQuestion() {
+  const currentQ = activeQuestionIndex[currentProjIndex] || 0;
+  if (currentQ > 0) {
+    goToQuestion(currentQ - 1);
+  }
+}
+
+// ================= QUESTION MUTATIONS =================
+function updateQField(qIdx, field, value) {
+  projectsData[currentProjIndex].questions[qIdx][field] = value;
+  triggerAutoSave();
+}
+
+function changeQuestionFramework(qIdx, newFramework) {
+  projectsData[currentProjIndex].questions[qIdx].framework = newFramework;
+  renderQuestions(projectsData[currentProjIndex]);
+  triggerAutoSave();
+}
+
+function addQuestionToCurrentProject() {
+  const proj = projectsData[currentProjIndex];
+  const newNum = proj.questions.length + 1;
+  const newQ = {
+    type: "압박 꼬리질문",
+    framework: "STAR",
+    question: `Q${newNum}. 새로운 면접/검증 질문을 입력하세요`,
+    intent: "면접관이 지원자의 진위 여부를 확인하려는 의도",
+    defense: "답변 시 반드시 언급해야 할 공학 수치/메커니즘",
+    summary: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요",
+    s_kw: "문제 상황 핵심 키워드",
+    s: "당시 구체적 문제 상황",
+    t_kw: "달성 목표 핵심 키워드",
+    t: "달성해야 했던 목표와 R&R",
+    a_kw: "공학 조치 핵심 키워드",
+    a: "본인이 취한 공학적 액션 및 트러블슈팅 메커니즘",
+    r_kw: "정량 성과 핵심 키워드",
+    r: "정량적 결과 및 현대차 직무 연계"
+  };
+
+  proj.questions.push(newQ);
+  activeQuestionIndex[currentProjIndex] = proj.questions.length - 1;
+  saveProjectsData();
+  renderSidebar();
+  renderQuestionStepper(proj);
+  renderQuestions(proj);
+  showToast("새 꼬리질문이 추가되었습니다.");
+
+  setTimeout(() => {
+    const card = document.getElementById(`q-card-${proj.questions.length - 1}`);
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function deleteQuestion(qIdx) {
+  const proj = projectsData[currentProjIndex];
+  if (confirm("이 질문 카드를 삭제하시겠습니까?")) {
+    proj.questions.splice(qIdx, 1);
+    if (activeQuestionIndex[currentProjIndex] >= proj.questions.length) {
+      activeQuestionIndex[currentProjIndex] = Math.max(0, proj.questions.length - 1);
+    }
+    saveProjectsData();
+    renderSidebar();
+    renderQuestionStepper(proj);
+    renderQuestions(proj);
+    showToast("질문이 삭제되었습니다.");
+  }
+}
+
+// ================= PROJECT MUTATIONS =================
+function addNewProject() {
+  const newIdx = projectsData.length + 1;
+  const newProj = {
+    id: "P" + newIdx,
+    code: `PROJECT 0${newIdx}`,
+    title: `신규 프로젝트 ${newIdx}`,
+    tags: ["신규 공법", "공정 데이터", "품질 개선"],
+    questions: [
+      {
+        type: "경험 개요",
+        framework: "STAR",
+        question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요?",
+        intent: "면접관의 의도를 입력하세요",
+        defense: "방어할 핵심 키워드를 입력하세요",
+        summary: "두괄식 요약 한 문장을 입력하세요",
+        s_kw: "당시 배경 핵심 키워드",
+        s: "[Situation] 당시 어떤 상황과 배경에서 문제가 발생했나요?",
+        t_kw: "목표 핵심 키워드",
+        t: "[Task] 본인이 맡았던 핵심 목표와 역할은 무엇이었나요?",
+        a_kw: "공학 조치 핵심 키워드",
+        a: "[Action] 문제를 해결하기 위해 어떤 물리적/수학적/공학적 행동과 메커니즘을 적용했나요?",
+        r_kw: "정량 성과 핵심 키워드",
+        r: "[Result] 정량적 성과(수율, Loss, 시간 등)와 현대차 전극 공정 기여점은 무엇인가요?"
+      }
+    ]
+  };
+
+  projectsData.push(newProj);
+  currentProjIndex = projectsData.length - 1;
+  activeQuestionIndex[currentProjIndex] = 0;
+  saveProjectsData();
+  renderSidebar();
+  renderCurrentProject();
+  showToast("새 프로젝트가 생성되었습니다.");
+}
+
+function deleteCurrentProject() {
+  const proj = projectsData[currentProjIndex];
+  if (confirm(`'${proj.title}' 프로젝트를 삭제하시겠습니까?`)) {
+    projectsData.splice(currentProjIndex, 1);
+    currentProjIndex = Math.max(0, currentProjIndex - 1);
+    saveProjectsData();
+    renderSidebar();
+    renderCurrentProject();
+    showToast("프로젝트가 삭제되었습니다.");
+  }
+}
+
+// ================= TRAINING MODES TOGGLE =================
+function toggleKeywordsOnlyMode() {
+  isKeywordsOnlyMode = !isKeywordsOnlyMode;
+  document.body.classList.toggle('keywords-only-mode', isKeywordsOnlyMode);
+
+  const btn = document.getElementById('kwModeBtn');
+  if (btn) {
+    if (isKeywordsOnlyMode) {
+      btn.classList.add('active-mode');
+      showToast("🔑 키워드 연상 모드 활성화: 풀 문장이 가려집니다 (마우스 올리면 확인)");
+    } else {
+      btn.classList.remove('active-mode');
+      showToast("일반 모드로 복귀했습니다.");
+    }
+  }
+}
+
+function toggleBlindMode() {
+  isBlindMode = !isBlindMode;
+  document.body.classList.toggle('blind-mode', isBlindMode);
+
+  const btn = document.getElementById('blindModeBtn');
+  if (btn) {
+    if (isBlindMode) {
+      btn.classList.add('active-mode');
+      showToast("👁️ 모의면접 모드 활성화: 모든 답변이 가려집니다 (마우스 올리면 확인)");
+    } else {
+      btn.classList.remove('active-mode');
+      showToast("일반 모드로 복귀했습니다.");
+    }
+  }
+}
+
+function toggleReferencePane() {
+  const pane = document.getElementById('referencePane');
+  if (!pane) return;
+  pane.classList.toggle('collapsed');
+}
+
+// ================= REFERENCE VIEWER LOGIC =================
+function switchDocTab(docKey) {
+  activeDocKey = docKey;
+  document.getElementById('tab-hyundai').classList.toggle('active', docKey === 'hyundai');
+  document.getElementById('tab-skhynix').classList.toggle('active', docKey === 'skhynix');
+  renderReferenceDoc();
+}
 
 function getChunkCategory(tag) {
   const t = tag.toLowerCase();
@@ -1334,330 +2414,12 @@ function getCategoryIcon(cat) {
   return '💼 [경력]';
 }
 
-function renderProjectNavBar() {
-  const nav = document.getElementById('projectNavBar');
-  if (!nav) return;
-  
-  let htmlStr = `<span class="proj-nav-label">📌 프로젝트 전환:</span>`;
-  
-  const isAllActive = (selectedProjectId === 'all') ? 'active' : '';
-  htmlStr += `<button class="proj-nav-btn ${isAllActive}" onclick="selectProjectView('all')">
-    <span>전체 펼쳐보기</span>
-    <span class="badge-pill">${projectsData.length}</span>
-  </button>`;
-  
-  projectsData.forEach((proj) => {
-    const isActive = (selectedProjectId === proj.id) ? 'active' : '';
-    const qCount = proj.questions ? proj.questions.length : 0;
-    htmlStr += `<button class="proj-nav-btn ${isActive}" onclick="selectProjectView('${proj.id}')">
-      <span>${escapeHtml(proj.code)}</span>
-      <span class="badge-pill">${qCount}Q</span>
-    </button>`;
-  });
-  
-  nav.innerHTML = htmlStr;
-}
-
-function selectProjectView(projId) {
-  selectedProjectId = projId;
-  renderProjectNavBar();
-  
-  const cards = document.querySelectorAll('.project-card');
-  cards.forEach(card => {
-    if (selectedProjectId === 'all' || card.id === `proj-card-${selectedProjectId}`) {
-      card.style.display = 'block';
-    } else {
-      card.style.display = 'none';
-    }
-  });
-
-  const pane = document.getElementById('dashboardPane');
-  if (pane) {
-    pane.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
-
 function filterRefCategory(cat) {
   activeRefCategory = cat;
   document.querySelectorAll('.ref-cat-chip').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
   });
   renderReferenceDoc(document.getElementById('refSearchInput').value);
-}
-
-// ================= INITIALIZATION =================
-window.addEventListener('DOMContentLoaded', () => {
-  loadProjectsData();
-  renderProjects();
-  renderProjectNavBar();
-  renderReferenceDoc();
-});
-
-function loadProjectsData() {
-  const saved = localStorage.getItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026');
-  if (saved) {
-    try {
-      projectsData = JSON.parse(saved);
-    } catch (e) {
-      console.error("Failed to parse saved data, fallback to default", e);
-      projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-    }
-  } else {
-    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-  }
-}
-
-function saveProjectsData() {
-  setSaveStatus("저장 중...", true);
-  localStorage.setItem('HYUNDAI_INTERVIEW_DASHBOARD_DATA_2026', JSON.stringify(projectsData));
-  setTimeout(() => {
-    setSaveStatus("● 자동 저장 완료", false);
-  }, 300);
-}
-
-function triggerAutoSave() {
-  if (saveTimeout) clearTimeout(saveTimeout);
-  setSaveStatus("수정 중...", true);
-  saveTimeout = setTimeout(() => {
-    saveProjectsData();
-  }, 600);
-}
-
-function setSaveStatus(text, isSaving) {
-  const el = document.getElementById('saveStatus');
-  el.textContent = text;
-  if (isSaving) {
-    el.classList.add('saving');
-  } else {
-    el.classList.remove('saving');
-  }
-}
-
-function resetToDefault() {
-  if (confirm("정말 기본 데이터로 초기화하시겠습니까? (직접 수정한 모든 내용이 기본값으로 덮어씌워집니다)")) {
-    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
-    saveProjectsData();
-    renderProjects();
-    showToast("기본 데이터로 복원되었습니다.");
-  }
-}
-
-// ================= RENDER PROJECTS =================
-function renderProjects() {
-  const container = document.getElementById('projectsContainer');
-  container.innerHTML = '';
-
-  projectsData.forEach((proj, pIndex) => {
-    const card = document.createElement('div');
-    card.className = 'project-card';
-    card.id = `proj-card-${proj.id}`;
-
-    // Tags HTML
-    const tagsHtml = proj.tags.map((tag, tIndex) => `
-      <span class="tech-tag-chip">
-        <span contenteditable="true" onblur="updateTag(${pIndex}, ${tIndex}, this.textContent)">${escapeHtml(tag)}</span>
-        <span class="tech-tag-del" onclick="deleteTag(${pIndex}, ${tIndex})">×</span>
-      </span>
-    `).join('');
-
-    // Questions HTML
-    const questionsHtml = proj.questions.map((q, qIndex) => `
-      <div class="q-item-card open" id="q-card-${pIndex}-${qIndex}">
-        <div class="q-item-header" onclick="toggleQCard(this)">
-          <select class="q-type-select" onclick="event.stopPropagation()" onchange="updateQField(${pIndex}, ${qIndex}, 'type', this.value)">
-            <option value="경험 개요" ${q.type === '경험 개요' ? 'selected' : ''}>경험 개요</option>
-            <option value="어려웠던 점" ${q.type === '어려웠던 점' ? 'selected' : ''}>어려웠던 점</option>
-            <option value="압박 꼬리질문" ${q.type === '압박 꼬리질문' ? 'selected' : ''}>압박 꼬리질문</option>
-            <option value="현대차 연계" ${q.type === '현대차 연계' ? 'selected' : ''}>현대차 연계</option>
-            <option value="기타 검증" ${q.type === '기타 검증' ? 'selected' : ''}>기타 검증</option>
-          </select>
-          <div class="q-text-editable" contenteditable="true" onclick="event.stopPropagation()" oninput="updateQField(${pIndex}, ${qIndex}, 'question', this.textContent)">${escapeHtml(q.question)}</div>
-          <div style="display: flex; gap: 6px; align-items: center;" onclick="event.stopPropagation()">
-            <button class="btn btn-danger-outline" style="padding: 2px 8px; font-size: 11px;" onclick="deleteQuestion(${pIndex}, ${qIndex})">삭제</button>
-          </div>
-          <span class="q-toggle-arrow">▼</span>
-        </div>
-        <div class="q-item-body">
-          <div class="strategy-grid">
-            <div>
-              <div class="strat-box-title strat-intent-title">🎯 면접관 공격 의도</div>
-              <div class="strat-content-editable" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'intent', this.textContent)">${escapeHtml(q.intent || '')}</div>
-            </div>
-            <div>
-              <div class="strat-box-title strat-defense-title">🛡️ 방어 핵심 키워드</div>
-              <div class="strat-content-editable" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'defense', this.textContent)">${escapeHtml(q.defense || '')}</div>
-            </div>
-          </div>
-          
-          <!-- 두괄식 요약 한 문장 (One-line Summary) -->
-          <div class="summary-lead-box">
-            <div class="summary-lead-badge">⚡ 두괄식 요약</div>
-            <div class="summary-lead-text" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'summary', this.textContent)">${escapeHtml(q.summary || '')}</div>
-          </div>
-
-          <div class="star-row">
-            <div class="star-letter let-s">S</div>
-            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
-          </div>
-          <div class="star-row">
-            <div class="star-letter let-t">T</div>
-            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
-          </div>
-          <div class="star-row">
-            <div class="star-letter let-a">A</div>
-            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
-          </div>
-          <div class="star-row">
-            <div class="star-letter let-r">R</div>
-            <div class="star-edit-box" contenteditable="true" oninput="updateQField(${pIndex}, ${qIndex}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-
-    card.innerHTML = `
-      <div class="project-card-header">
-        <div class="proj-meta-left">
-          <span class="proj-code-badge" contenteditable="true" oninput="updateProjField(${pIndex}, 'code', this.textContent)">${escapeHtml(proj.code)}</span>
-          <div class="proj-title-editable" contenteditable="true" oninput="updateProjField(${pIndex}, 'title', this.textContent)">${escapeHtml(proj.title)}</div>
-        </div>
-        <div class="proj-actions">
-          <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;" onclick="addQuestionToProject(${pIndex})">➕ 꼬리질문 추가</button>
-          <button class="btn btn-danger-outline" style="padding: 4px 10px; font-size: 11px;" onclick="deleteProject(${pIndex})">프로젝트 삭제</button>
-        </div>
-      </div>
-
-      <div class="proj-tags-bar">
-        <span class="tag-label">Tech Stack:</span>
-        ${tagsHtml}
-        <button class="btn-add-tag" onclick="addTagToProject(${pIndex})">+ 태그 추가</button>
-      </div>
-
-      <div class="project-questions-list">
-        ${questionsHtml}
-        <div class="add-q-btn-wrap">
-          <button class="btn-add-q" onclick="addQuestionToProject(${pIndex})">➕ 이 프로젝트에 새로운 면접/꼬리질문 추가하기</button>
-        </div>
-      </div>
-    `;
-
-    if (selectedProjectId !== 'all' && proj.id !== selectedProjectId) {
-      card.style.display = 'none';
-    }
-    container.appendChild(card);
-  });
-  renderProjectNavBar();
-}
-
-// ================= PROJECT & QUESTION MUTATIONS =================
-function addNewProject() {
-  const newId = "P" + (projectsData.length + 1);
-  const newProj = {
-    id: newId,
-    code: `PROJECT 0${projectsData.length + 1}`,
-    title: "신규 프로젝트명 (클릭하여 수정하세요)",
-    tags: ["신규 공법", "데이터 분석", "품질 개선"],
-    questions: [
-      {
-        type: "경험 개요",
-        question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요? (질문을 수정하세요)",
-        intent: "면접관의 의도를 입력하세요",
-        defense: "방어할 핵심 키워드를 입력하세요",
-        s: "[Situation] 당시 어떤 상황과 배경에서 문제가 발생했나요?",
-        t: "[Task] 본인이 맡았던 핵심 목표와 역할은 무엇이었나요?",
-        a: "[Action] 문제를 해결하기 위해 어떤 물리적/수학적/공학적 행동과 메커니즘을 적용했나요?",
-        r: "[Result] 정량적 성과(수율, Loss, 시간 등)와 현대차 전극 공정 기여점은 무엇인가요?"
-      }
-    ]
-  };
-  projectsData.push(newProj);
-  saveProjectsData();
-  renderProjects();
-  showToast("새 프로젝트가 추가되었습니다.");
-  
-  // Scroll to new project
-  const newEl = document.getElementById(`proj-card-${newId}`);
-  if (newEl) newEl.scrollIntoView({ behavior: 'smooth' });
-}
-
-function deleteProject(pIndex) {
-  if (confirm(`'${projectsData[pIndex].title}' 프로젝트를 정말 삭제하시겠습니까?`)) {
-    projectsData.splice(pIndex, 1);
-    saveProjectsData();
-    renderProjects();
-    showToast("프로젝트가 삭제되었습니다.");
-  }
-}
-
-function updateProjField(pIndex, field, value) {
-  projectsData[pIndex][field] = value.trim();
-  triggerAutoSave();
-}
-
-function addTagToProject(pIndex) {
-  const tag = prompt("추가할 기술 스택 또는 키워드를 입력하세요:");
-  if (tag && tag.trim()) {
-    projectsData[pIndex].tags.push(tag.trim());
-    saveProjectsData();
-    renderProjects();
-  }
-}
-
-function updateTag(pIndex, tIndex, value) {
-  projectsData[pIndex].tags[tIndex] = value.trim();
-  triggerAutoSave();
-}
-
-function deleteTag(pIndex, tIndex) {
-  projectsData[pIndex].tags.splice(tIndex, 1);
-  saveProjectsData();
-  renderProjects();
-}
-
-function addQuestionToProject(pIndex) {
-  const qNum = projectsData[pIndex].questions.length + 1;
-  const newQ = {
-    type: "압박 꼬리질문",
-    question: `Q${qNum}. 새로운 꼬리질문/검증 질문을 입력하세요`,
-    intent: "면접관이 지원자의 진위 여부를 확인하려는 의도",
-    defense: "답변 시 반드시 언급해야 할 공학 수치/메커니즘",
-    summary: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요",
-    s: "[S] 당시 구체적 문제 상황",
-    t: "[T] 달성해야 했던 목표",
-    a: "[A] 본인이 취한 공학적 액션 및 트러블슈팅",
-    r: "[R] 정량적 결과 및 현대차 직무 연계"
-  };
-  projectsData[pIndex].questions.push(newQ);
-  saveProjectsData();
-  renderProjects();
-  showToast("새 질문이 추가되었습니다.");
-}
-
-function deleteQuestion(pIndex, qIndex) {
-  if (confirm("이 질문 카드를 삭제하시겠습니까?")) {
-    projectsData[pIndex].questions.splice(qIndex, 1);
-    saveProjectsData();
-    renderProjects();
-    showToast("질문이 삭제되었습니다.");
-  }
-}
-
-function updateQField(pIndex, qIndex, field, value) {
-  projectsData[pIndex].questions[qIndex][field] = value;
-  triggerAutoSave();
-}
-
-function toggleQCard(headerEl) {
-  const card = headerEl.parentElement;
-  card.classList.toggle('open');
-}
-
-// ================= REFERENCE VIEWER LOGIC =================
-function switchDocTab(docKey) {
-  activeDocKey = docKey;
-  document.getElementById('tab-hyundai').classList.toggle('active', docKey === 'hyundai');
-  document.getElementById('tab-skhynix').classList.toggle('active', docKey === 'skhynix');
-  renderReferenceDoc();
 }
 
 function renderReferenceDoc(searchKeyword = '') {
@@ -1672,6 +2434,9 @@ function renderReferenceDoc(searchKeyword = '') {
     const isMatch = kw === '' || chunk.text.toLowerCase().includes(kw) || chunk.tag.toLowerCase().includes(kw);
     if (!isMatch) return;
 
+    const cat = getChunkCategory(chunk.tag);
+    if (activeRefCategory !== 'all' && activeRefCategory !== cat) return;
+
     matchCount++;
 
     let displayText = escapeHtml(chunk.text);
@@ -1680,18 +2445,13 @@ function renderReferenceDoc(searchKeyword = '') {
       displayText = displayText.replace(regex, '<span class="highlight">$1</span>');
     }
 
-    const cat = getChunkCategory(chunk.tag);
-    if (activeRefCategory !== 'all' && activeRefCategory !== cat) {
-      return;
-    }
-
     const card = document.createElement('div');
     card.className = `doc-chunk-card cat-${cat}`;
     const catBadgeText = `${getCategoryIcon(cat)} ${escapeHtml(chunk.tag)}`;
     card.innerHTML = `
       <div class="chunk-header">
         <span class="chunk-tag">${catBadgeText}</span>
-        <button class="chunk-copy-btn" onclick="copyChunkText(${idx})">📋 이 문단 복사</button>
+        <button class="chunk-copy-btn" onclick="copyChunkText(${idx})">📋 복사</button>
       </div>
       <div class="chunk-text">${displayText}</div>
     `;
@@ -1699,10 +2459,9 @@ function renderReferenceDoc(searchKeyword = '') {
   });
 
   const countEl = document.getElementById('searchCount');
-  if (kw !== '') {
-    countEl.textContent = `${matchCount}개 항목 검색됨`;
-  } else {
-    countEl.textContent = `전체 ${chunks.length}개 항목`;
+  if (countEl) {
+    if (kw !== '') countEl.textContent = `${matchCount}개 검색됨`;
+    else countEl.textContent = `전체 ${chunks.length}개`;
   }
 }
 
@@ -1715,7 +2474,7 @@ function copyChunkText(idx) {
   const chunk = CONTEXT_DOCS[activeDocKey][idx];
   if (chunk) {
     copyToClipboard(chunk.text);
-    showToast(`'${chunk.tag}' 내용이 복사되었습니다! 원하는 곳에 붙여넣기(Ctrl+V)하세요.`);
+    showToast(`'${chunk.tag}' 복사 완료! 원하는 칸에 붙여넣기(Ctrl+V)하세요.`);
   }
 }
 
@@ -1728,33 +2487,50 @@ function copyActiveDocAll() {
 
 // ================= EXPORT & IMPORT =================
 function exportToMarkdown() {
-  let md = `# 현대자동차 배터리 전극 생산운영 직무 압박 면접 검증 대시보드\n\n`;
-  md += `> 최종 갱신: ${new Date().toLocaleString('ko-KR')}\n\n---\n\n`;
+  let md = `# 현대자동차 배터리 전극 생산운영 면접 노트 (키워드 & 압박 검증)\n\n`;
+  md += `> 최종 내보내기 일시: ${new Date().toLocaleString('ko-KR')}\n\n---\n\n`;
 
   projectsData.forEach(proj => {
     md += `## [${proj.code}] ${proj.title}\n\n`;
-    md += `- **Tech Stack**: ${proj.tags.join(', ')}\n\n`;
+    md += `- **Tech Stack**: ${(proj.tags || []).join(', ')}\n\n`;
 
-    proj.questions.forEach((q, qIdx) => {
-      md += `### ${q.question} (${q.type})\n\n`;
-      if (q.intent) md += `> **면접관 의도**: ${q.intent}\n`;
-      if (q.defense) md += `> **방어 핵심 키워드**: ${q.defense}\n\n`;
+    (proj.questions || []).forEach((q, qIdx) => {
+      const framework = q.framework || 'STAR';
+      md += `### Q${qIdx + 1}. ${q.question} (${q.type}) [${framework}]\n\n`;
+      if (q.intent) md += `> **면접관 공격 의도**: ${q.intent}\n`;
+      if (q.defense) md += `> **방어 핵심 키워드**: ${q.defense}\n`;
       if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
-      md += `- **[S - Situation]**: ${q.s || ''}\n`;
-      md += `- **[T - Task]**: ${q.t || ''}\n`;
-      md += `- **[A - Action]**: ${q.a || ''}\n`;
-      md += `- **[R - Result & 현대차 연계]**: ${q.r || ''}\n\n`;
+
+      if (framework === 'PREP') {
+        md += `- **[P - 결론/핵심]**\n  - 🔑 키워드: ${q.p1_kw || ''}\n  - 💬 풀 답변: ${q.p1 || ''}\n`;
+        md += `- **[R - 공학 이유]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 풀 답변: ${q.r || ''}\n`;
+        md += `- **[E - 공정 사례]**\n  - 🔑 키워드: ${q.e_kw || ''}\n  - 💬 풀 답변: ${q.e || ''}\n`;
+        md += `- **[P - 현대차 기여]**\n  - 🔑 키워드: ${q.p2_kw || ''}\n  - 💬 풀 답변: ${q.p2 || ''}\n\n`;
+      } else if (framework === 'MECE') {
+        md += `- **[C - 본질 정의]**\n  - 🔑 키워드: ${q.c_kw || ''}\n  - 💬 풀 답변: ${q.c || ''}\n`;
+        md += `- **[M1 - 설비/공정]**\n  - 🔑 키워드: ${q.m1_kw || ''}\n  - 💬 풀 답변: ${q.m1 || ''}\n`;
+        md += `- **[M2 - 제어/품질]**\n  - 🔑 키워드: ${q.m2_kw || ''}\n  - 💬 풀 답변: ${q.m2 || ''}\n`;
+        md += `- **[S - 현장 대책]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 풀 답변: ${q.s || ''}\n\n`;
+      } else if (framework === 'FREE') {
+        md += `- **[F - 자유 서술]**\n  - 🔑 키워드: ${q.free_kw || ''}\n  - 💬 풀 답변: ${q.free_text || ''}\n\n`;
+      } else {
+        // STAR
+        md += `- **[S - Situation]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 풀 답변: ${q.s || ''}\n`;
+        md += `- **[T - Task]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 풀 답변: ${q.t || ''}\n`;
+        md += `- **[A - Action]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 풀 답변: ${q.a || ''}\n`;
+        md += `- **[R - Result]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 풀 답변: ${q.r || ''}\n\n`;
+      }
     });
     md += `---\n\n`;
   });
 
-  downloadFile("260913_interview_dashboard_exported.md", md, "text/markdown;charset=utf-8;");
+  downloadFile("hyundai_battery_interview_notes.md", md, "text/markdown;charset=utf-8;");
   showToast("Markdown 파일이 다운로드되었습니다.");
 }
 
 function exportToHTML() {
   const currentHtml = document.documentElement.outerHTML;
-  downloadFile("260913_interview_dashboard_backup.html", "<!DOCTYPE html>\n" + currentHtml, "text/html;charset=utf-8;");
+  downloadFile("hyundai_battery_interview_backup.html", "<!DOCTYPE html>\n" + currentHtml, "text/html;charset=utf-8;");
   showToast("현재 상태의 전체 HTML이 다운로드되었습니다.");
 }
 
@@ -1771,47 +2547,42 @@ function downloadFile(filename, content, mimeType) {
 }
 
 // ================= UTILITIES =================
-function toggleBlindMode() {
-  document.body.classList.toggle('blind-mode');
-  const btn = document.getElementById('blindBtn');
-  if (document.body.classList.contains('blind-mode')) {
-    btn.textContent = '👁️ 일반 모드 (답변 보이기)';
-    btn.classList.replace('btn-outline', 'btn-primary');
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
   } else {
-    btn.textContent = '👁️ 모의면접 모드 (답변 가리기)';
-    btn.classList.replace('btn-primary', 'btn-outline');
+    fallbackCopy(text);
   }
 }
 
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).catch(err => {
-    // fallback
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-  });
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
 }
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 2500);
+  }, 2300);
 }
 
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
 // ================= SECURITY AUTHENTICATION LOGIC =================
 const DEFAULT_ACCESS_PASS = "1312";
 
@@ -1897,12 +2668,6 @@ function changePasswordPrompt() {
   alert('비밀번호가 성공적으로 변경되었습니다!');
   showToast('🔑 새 비밀번호가 저장되었습니다.');
 }
-
-// Add checkAuthStatus to window load
-const originalOnLoad = window.onload;
-window.addEventListener('DOMContentLoaded', () => {
-  checkAuthStatus();
-});
 </script>
 
 </body>
