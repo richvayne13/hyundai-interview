@@ -584,23 +584,6 @@
       flex-wrap: wrap;
     }
 
-    .q-type-select, .framework-select {
-      background: #091322;
-      color: #60a5fa;
-      border: 1px solid #23416e;
-      border-radius: 6px;
-      padding: 5px 9px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      outline: none;
-    }
-    .framework-select {
-      color: var(--accent-cyan);
-      border-color: rgba(0, 229, 255, 0.4);
-      background: #081a33;
-    }
-
     .q-title-input {
       flex: 1;
       background: #070e1a;
@@ -620,44 +603,6 @@
 
     .q-card-body {
       padding: 20px 22px;
-    }
-
-    /* Strategy Grid */
-    .strategy-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      background: #091426;
-      border: 1px dashed #1e365c;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-    }
-    .strat-box-title {
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .strat-intent-title { color: #f87171; }
-    .strat-defense-title { color: #38bdf8; }
-
-    .strat-input {
-      width: 100%;
-      background: #060c18;
-      border: 1px solid #172a47;
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 13px;
-      color: #cbd5e1;
-      outline: none;
-      line-height: 1.5;
-      resize: vertical;
-    }
-    .strat-input:focus {
-      border-color: var(--accent-cyan);
     }
 
     /* One-Line Lead Summary */
@@ -1052,19 +997,23 @@
 
     /* ================= TRAINING MODES ================= */
     /* 1. KEYWORDS ONLY TRAINING MODE (Blur full answer) */
-    .keywords-only-mode .step-full-box {
+    .keywords-only-mode .step-full-box,
+    .keywords-only-mode .plain-full-box {
       filter: blur(8px);
       opacity: 0.3;
       user-select: none;
       transition: filter 0.2s, opacity 0.2s;
     }
     .keywords-only-mode .step-full-box:hover,
-    .keywords-only-mode .step-full-box:focus {
+    .keywords-only-mode .step-full-box:focus,
+    .keywords-only-mode .plain-full-box:hover,
+    .keywords-only-mode .plain-full-box:focus {
       filter: blur(0);
       opacity: 1;
       user-select: auto;
     }
-    .keywords-only-mode .step-kw-container {
+    .keywords-only-mode .step-kw-container,
+    .keywords-only-mode .plain-kw-row {
       border-color: var(--accent-cyan);
       box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
     }
@@ -1072,6 +1021,7 @@
     /* 2. BLIND SIMULATION MODE (Blur both keywords and answers) */
     .blind-mode .step-kw-container,
     .blind-mode .step-full-box,
+    .blind-mode .plain-answer-card,
     .blind-mode .summary-lead-box {
       filter: blur(9px);
       user-select: none;
@@ -1079,6 +1029,7 @@
     }
     .blind-mode .step-kw-container:hover,
     .blind-mode .step-full-box:hover,
+    .blind-mode .plain-answer-card:hover,
     .blind-mode .summary-lead-box:hover {
       filter: blur(0);
       user-select: auto;
@@ -1342,6 +1293,248 @@
     body.theme-skhynix ::-webkit-scrollbar-track { background: #14080b; }
     body.theme-skhynix ::-webkit-scrollbar-thumb { background: #3b1720; }
     body.theme-skhynix ::-webkit-scrollbar-thumb:hover { background: #5c202e; }
+
+    /* ================= SIMPLIFIED Q-CARD & STAR TOGGLE ================= */
+    .q-badge-num {
+      background: linear-gradient(135deg, var(--hyundai-light-blue), var(--accent-cyan));
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 114, 206, 0.4);
+      flex-shrink: 0;
+    }
+    body.theme-skhynix .q-badge-num {
+      background: linear-gradient(135deg, #ea0029, #ff7a00);
+      box-shadow: 0 2px 8px rgba(234, 0, 41, 0.4);
+    }
+
+    .answer-section {
+      margin-top: 14px;
+    }
+
+    .answer-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .answer-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .star-toggle-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(3, 7, 18, 0.65);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .star-toggle-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #64748b;
+      transition: all 0.2s;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .star-toggle-label.active {
+      color: var(--accent-cyan);
+      font-weight: 800;
+    }
+    body.theme-skhynix .star-toggle-label.active {
+      color: #ff7a00;
+    }
+
+    /* Switch UI */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #1e293b;
+      transition: .22s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
+      border: 1px solid #334155;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #94a3b8;
+      transition: .22s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background: linear-gradient(135deg, #0052cc, #00c2ff);
+      border-color: #00e5ff;
+    }
+    body.theme-skhynix input:checked + .slider {
+      background: linear-gradient(135deg, #ea0029, #ff7a00);
+      border-color: #ff7a00;
+    }
+    input:checked + .slider:before {
+      transform: translateX(16px);
+      background-color: #ffffff;
+    }
+
+    /* Plain Answer Card */
+    .plain-answer-card {
+      background: #091322;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+    body.theme-skhynix .plain-answer-card {
+      background: #19090e;
+      border-color: #3b1720;
+    }
+
+    .plain-kw-row {
+      margin-bottom: 14px;
+    }
+    .plain-kw-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f59e0b;
+      margin-bottom: 6px;
+    }
+    .plain-text-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .plain-full-box {
+      min-height: 130px;
+      line-height: 1.75;
+      font-size: 14px;
+      color: #f1f5f9;
+      white-space: pre-wrap;
+    }
+
+    /* ================= SIDEBAR CATEGORY GROUPING ================= */
+    .sidebar-category-section {
+      margin-bottom: 18px;
+    }
+    .sidebar-cat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px 8px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 8px;
+    }
+    .sidebar-cat-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #cbd5e1;
+      letter-spacing: 0.3px;
+    }
+    .cat-num-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent-cyan);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    body.theme-skhynix .cat-num-pill {
+      color: #ff7a00;
+    }
+    .cat-count-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .sidebar-code-pill.code-career {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .sidebar-code-pill.code-project {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    body.theme-skhynix .sidebar-code-pill.code-project {
+      background: rgba(234, 0, 41, 0.15);
+      color: #ff7a00;
+      border-color: rgba(234, 0, 41, 0.3);
+    }
+
+    /* Top Bar Category Badge */
+    .category-toggle-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .category-toggle-badge.is-project {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+    body.theme-skhynix .category-toggle-badge.is-project {
+      background: rgba(234, 0, 41, 0.15);
+      color: #ff7a00;
+      border-color: rgba(234, 0, 41, 0.35);
+    }
+    .category-toggle-badge:hover {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+    
   </style>
 </head>
 <body>
@@ -1389,13 +1582,34 @@
     </div>
 
     <div class="sidebar-body">
-      <div class="sidebar-section-title">
-        <span>프로젝트 목록</span>
-        <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewProject()">+ 추가</button>
+      <!-- 1. 경력 Section -->
+      <div class="sidebar-category-section">
+        <div class="sidebar-cat-header">
+          <div class="sidebar-cat-title">
+            <span class="cat-num-pill">1</span>
+            <span>💼 경력</span>
+            <span class="cat-count-badge" id="careerCountBadge">0</span>
+          </div>
+          <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('career')">+ 추가</button>
+        </div>
+        <div class="sidebar-proj-list" id="sidebarCareerList">
+          <!-- Dynamically rendered -->
+        </div>
       </div>
 
-      <div class="sidebar-proj-list" id="sidebarProjList">
-        <!-- Dynamically rendered -->
+      <!-- 2. 프로젝트 Section -->
+      <div class="sidebar-category-section">
+        <div class="sidebar-cat-header">
+          <div class="sidebar-cat-title">
+            <span class="cat-num-pill">2</span>
+            <span>🚀 프로젝트</span>
+            <span class="cat-count-badge" id="projectCountBadge">0</span>
+          </div>
+          <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('project')">+ 추가</button>
+        </div>
+        <div class="sidebar-proj-list" id="sidebarProjectList">
+          <!-- Dynamically rendered -->
+        </div>
       </div>
 
       <!-- Framework Quick Cheat Sheet -->
@@ -1448,8 +1662,13 @@
     <div class="workspace-top-bar">
       <div class="top-bar-left">
         <div class="proj-title-input-wrap">
-          <span class="proj-code-tag" id="currentProjCode">PROJECT 01</span>
-          <input type="text" class="proj-title-input" id="currentProjTitleInput" placeholder="간단한 프로젝트명 입력 (예: 룰기반 비전 선별 엔진)" oninput="handleProjTitleChange(this.value)">
+          <div class="category-toggle-badge" id="categoryToggleBadge" onclick="cycleItemCategory()" title="클릭하여 경력/프로젝트 분류 전환">
+            <span id="catBadgeIcon">💼</span>
+            <span id="catBadgeText">1. 경력</span>
+            <span style="opacity: 0.6; font-size: 10px;">▾</span>
+          </div>
+          <span class="proj-code-tag" id="currentProjCode">CAREER 01</span>
+          <input type="text" class="proj-title-input" id="currentProjTitleInput" placeholder="간단한 명칭 입력 (예: 룰기반 비전 선별 엔진)" oninput="handleProjTitleChange(this.value)">
         </div>
       </div>
 
@@ -1532,21 +1751,69 @@
 <div id="toast">알림</div>
 
 <script>
-// ================= DEFAULT INTERVIEW DATA (WITH EXPLICIT KEYWORDS & PREP) =================
+// ================= DEFAULT INTERVIEW DATA (WITH 1.경력 / 2.프로젝트 & STAR/줄글) =================
 const DEFAULT_PROJECTS_HYUNDAI = [
   {
+    id: "C1",
+    category: "career",
+    code: "CAREER 01",
+    title: "전극 양산 라인 생산운영 및 설비·수율 관리",
+    tags: ["R2R 코팅 라인", "Cpk 관리", "수율 모니터링", "SOP 표준화", "오퍼레이터 교육"],
+    questions: [
+      {
+        question: "Q1. 전극 양산 라인 생산운영 및 모니터링 시 가장 중점적으로 관리했던 지표와 트러블슈팅 경험은 무엇인가요?",
+        summary: "R2R 전극 코팅 라인에서 일일 수율 및 Cpk 변동을 실시간 모니터링하고, 설비 Issue 및 오퍼레이터 작업 편차를 SOP 표준화와 데이터 분석으로 제어하여 목표 라인 가동률과 양산 안정성을 사수한 경험입니다.",
+        use_star: false,
+        plain_kw: "R2R 양산 라인 | Cpk 1.45 달성 | SOP 현장 표준화 | 설비 Issue 선제 대응 | 오퍼레이터 교육",
+        plain_text: "46시리즈 및 New-form factor 전극 R2R 양산 라인 운영을 담당하며, 간헐코팅 및 스트라이프 코팅 공정의 수율과 생산량을 일일 단위로 정밀 모니터링했습니다. 특히 작업자 숙련도 편차로 인한 초기 셋업 손실을 줄이기 위해 표준 작업 지침서(SOP)를 현장 눈높이에 맞게 개정하고 오퍼레이터 교육을 체계화했습니다. 또한 MES 및 QMS 데이터를 기반으로 코팅 두께와 폭 산포의 이상 징후를 선제 감지하여 돌발 설비 정지를 차단함으로써, 목표 라인 가동률을 안정적으로 달성했습니다. 현대자동차 전극 생산운영에서도 현장 작업자와 긴밀히 호흡하며 산포 없는 양산 표준을 확립하겠습니다.",
+        s_kw: "46시리즈 신규 규격 양산 셋업, 랏간 코팅 편차 및 오퍼레이터 작업 숙련도 편차 발생",
+        s: "46시리즈 New-form factor 전극 양산 라인 운영 초기, 작업자 숙련도 편차와 랏간 코팅 두께 변동으로 인해 일일 수율 산포가 발생하는 운영상 이슈가 있었습니다.",
+        t_kw: "라인 가동률 95% 이상 사수, Cpk 1.33 이상 확보 및 현장 표준화 체계 구축",
+        t: "공정 엔지니어로서 라인 가동률을 사수하고 코팅 공정능력(Cpk 1.33 이상)을 안정화하기 위해, 현장 중심의 SOP 개정 및 데이터 기반 모니터링 체계를 구축하는 것을 목표로 설정했습니다.",
+        a_kw: "SOP 개정 및 오퍼레이터 교육, 일일 두께/폭 트렌드 MES 모니터링, 이상 징후 선제 대응",
+        a: "첫째, 작업자별 수동 조작 편차를 유발하는 포인트를 분석하여 체크리스트와 직관적인 SOP를 재수립하고 현장 오퍼레이터 교육을 진행했습니다. 둘째, MES/QMS 데이터에서 코팅 두께와 로딩 편차의 미세 시프트를 일일 모니터링하여 설비 이상 징후를 선제적으로 조치했습니다.",
+        r_kw: "초기 셋업 손실 20% 절감, Cpk 1.45 달성 및 무사고 안정 양산 달성",
+        r: "초기 조건 셋업 손실을 20% 절감하고 Cpk 1.45를 달성하여 양산 조기 안정화에 기여했습니다. 현대차 배터리 라인에서도 현장 표준화와 데이터 분석을 결합해 최고 수준의 생산운영을 이끌겠습니다."
+      }
+    ]
+  },
+  {
+    id: "C2",
+    category: "career",
+    code: "CAREER 02",
+    title: "방사능 웹게이지 소스 교체 셋업 (7개 조직 협업)",
+    tags: ["Kr-85 방사능 소스", "원자력안전법", "7개 조직 Co-work", "FACA/8D Report", "셧다운 최소화"],
+    questions: [
+      {
+        question: "Q1. 방사능 소스 웹게이지 셋업 시 7개 조직 간 갈등은 무엇이었고 어떻게 해결했나요?",
+        summary: "정기 PM 사전 시공과 3회 Dry-run 리허설로 본작업 노출 시간을 3시간으로 단축하여 7개 조직 간의 셧다운 갈등을 조율하고 데이터 신뢰도 150%를 달성했습니다.",
+        use_star: false,
+        plain_kw: "사전 기계/배선 시공(정기 PM) | 3회 Dry-run 리허설 | 본작업 3시간 단축 | 셧다운 0건 | 데이터 신뢰도 150%",
+        plain_text: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다. 공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운을 극단적으로 줄이기 위해 사전 준비 공정과 본 작업을 완벽히 분리했습니다. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했고, 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다. 그 결과 안전사고 0건, 단 6시간 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. 현대차 대형 라인 셋업에서도 다부서 협업의 구심점이 되는 엔지니어가 되겠습니다.",
+        s_kw: "Kr-85 소스 반감기 초과로 계측 신뢰도 위기, 생산팀(셧다운 거부) vs 환경안전팀(48h 법적점검) 충돌",
+        s: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다.",
+        t_kw: "원자력안전법 100% 준수 사수 + 양산 라인 셧다운 극단적 최소화하는 마스터 시공 플랜 수립",
+        t: "공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운 시간을 극단적으로 최소화하는 마스터 시공 플랜을 수립해야 했습니다.",
+        a_kw: "정기 PM 4h 기계/배선 사전시공 분리, 치구 3회 Dry-run 리허설(노출 3h로 법정치 1/10 단축), 방사선 차폐 시뮬레이션 설득",
+        a: "사전 준비 공정과 방사선 본 작업을 완벽히 분리했습니다. 1. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했습니다. 2. 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 3. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다.",
+        r_kw: "안전사고 0건, 단 6시간 계획 정지만으로 완수, 계측 신뢰도 150% 달성",
+        r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. 현대차 대형 라인 셋업에서도 다부서 협업의 구심점이 되는 엔지니어가 되겠습니다."
+      }
+    ]
+  },
+  {
     id: "P1",
+    category: "project",
     code: "PROJECT 01",
     title: "룰기반 비전 선별 엔진 개발 (100만 장 긴급 선별)",
     tags: ["Grayscale Valley", "이원화 Th(55)", "1×7 수직 Bridge Kernel", "모폴로지 Closing", "PyQt5 GUI"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 이미지 처리 엔진을 자체 개발해서 100만 장을 선별했다고 하셨는데, 구체적으로 어떤 내용인가요?",
-        intent: "프로젝트 스케일, 본인의 정확한 R&R, 비전 개발 역량의 실재성 확인",
-        defense: "72시간 100만장, 0.5% Burr, 장당 5ms, 1×7 수직 Bridge Kernel, 미검률 0%",
         summary: "현장 도메인 지식과 컴퓨터 비전 알고리즘을 결합한 자체 이미지 처리 엔진으로 72시간 내 100만 장을 장당 5ms로 전수 선별하여 출하 지연 0건과 미검률 0%를 달성한 경험입니다.",
+        use_star: false,
+        plain_kw: "72시간 100만장 | 0.5% Burr | 장당 5ms | 1×7 수직 Bridge Kernel | 미검률 0%",
+        plain_text: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다. 공정 엔지니어로서 출하 지연을 0건으로 막고 미검률 0%를 보장하기 위해, 딥러닝(라벨링·학습 지연)을 배제하고 즉각 배포 가능한 룰 기반 비전 엔진을 12시간 내 자체 개발했습니다. 표준 샘플의 픽셀 프로파일을 분석하여 결함 부위에 급격한 국소 음영 낙차(Valley)가 존재함을 규명하고, 배경 밝기 55를 기준으로 레시피를 동적 전환하는 '이원화 Valley 알고리즘'을 설계했습니다. 또한 지그재그로 끊어지는 미세 결함을 복원하기 위해 1×7 수직 Bridge Kernel과 모폴로지 닫힘(Closing) 연산을 적용해 20px 이상의 치명 결함을 100% 검출했습니다. 그 결과 장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. 현대차 배터리 라인에서도 신규 규격 생산 시 발생하는 돌발 결함에 대해 데이터와 수학적 알고리즘으로 즉각적인 솔루션을 제시하는 생산운영 엔지니어가 되겠습니다.",
         s_kw: "46시리즈 New-form, 0.5% 미세 Burr 발생, 출하 전면 중단, 72시간 내 100만장 육안선별 불가",
         s: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다.",
         t_kw: "출하 지연 0건, 미검률 0% 보장, 딥러닝(학습지연) 배제, 12시간 내 초고속 룰기반 엔진 자체 개발",
@@ -1557,12 +1824,11 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         r: "장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. 현대자동차 배터리 라인에서도 신규 규격 생산 시 발생하는 돌발 결함에 대해 데이터와 수학적 알고리즘으로 즉각적인 솔루션을 제시하는 생산운영 엔지니어가 되겠습니다."
       },
       {
-        type: "어려웠던 점",
-        framework: "STAR",
         question: "Q2. 이 경험에서 가장 힘들었던 기술적 난관은 무엇이었습니까?",
-        intent: "진짜 본인이 코딩하고 튜닝했는지, 실패 경험 및 트러블슈팅의 디테일 파악",
-        defense: "랏간 밝기 편차로 인한 과검/미검 동시 폭발, 상대적 음영 낙차 수식화, 수직 불연속성 복원",
         summary: "랏간 조명 및 코팅 편차로 과검과 미검이 동시 폭발했던 위기를 배경 밝기 55 기준의 '이원화 Valley 알고리즘'과 1×7 수직 브릿지 커널로 극복했습니다.",
+        use_star: false,
+        plain_kw: "랏간 밝기 편차 | 과검/미검 동시 폭발 | 상대적 음영 낙차 수식화 | 수직 불연속성 복원 | 과검률 1.2% 축소",
+        plain_text: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다. 출하 선별의 대전제인 '미검률 0%'이면서도 작업자가 2차 확인할 수 있는 수준의 '과검률 3% 이하'를 달성해야 했습니다. 이를 위해 첫째, 절대 밝기가 아닌 배경 대비 상대적 전압/음영 낙차를 계산하도록 알고리즘을 전면 수정했습니다. 배경 코팅 영역의 그레이스케일 히스토그램을 실시간 추정하여 평균 밝기 55를 기준으로 밝은 Lot과 어두운 Lot으로 동적 분기하는 '이원화 Valley 임계 로직'을 구축했습니다. 둘째, 실오라기 Burr가 직선이 아니라 지그재그로 파이며 끊어지는 물리적 형상 때문에 노이즈로 제거되는 문제를 해결하기 위해, 가로 노이즈는 무시하고 세로 방향 결함 신호만 연결해 주는 1×7 세로 비대칭 Bridge Kernel을 독자 고안하여 신호 연속성을 복원했습니다. 그 결과 과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다.",
         s_kw: "단일 임계값(Threshold) 적용 시 랏간 조명 편차로 과검 폭발, 불연속 크랙 신호소실로 미검 동시 발생",
         s: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다.",
         t_kw: "미검률 0% 절대 사수 + 작업자 2차 확인 가능한 과검률 3% 이하 트레이드오프 동시 만족",
@@ -1573,36 +1839,35 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         r: "과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다."
       },
       {
-        type: "압박 꼬리질문",
-        framework: "PREP",
         question: "Q3. 왜 딥러닝(YOLO/CNN)을 쓰지 않고 룰 기반을 썼습니까? 구시대적 접근 아닌가요?",
-        intent: "최신 딥러닝 기술을 못 써서 룰 기반으로 도망친 것인지, 공학적 타당성에 근거한 선택인지 검증",
-        defense: "라벨링 리드타임 제약(72시간), 불균형 데이터(0.5%), Black-box vs Deterministic 검증 가능성",
         summary: "72시간이라는 극단적 납기 한계, 0.5% 불균형 데이터, 그리고 고객사(T사)에 미검 0%를 수학적으로 증명할 수 있는 Explainable AI라는 현장 조건에 가장 부합했기 때문입니다.",
-        p1_kw: "72시간 극단 납기, 0.5% 극심한 불균형 데이터, 고객사 감사 대응을 위한 설명가능성(Explainable AI)",
-        p1: "현장 상황이 요구한 제약조건(72시간 납기 한계, 0.5% 극심한 불균형 데이터, 고객사에 미검 0%를 수학적으로 입증할 수 있는 설명가능성)에 룰 기반이 가장 최적의 공학적 솔루션이었기 때문입니다.",
-        r_kw: "딥러닝은 라벨링·학습에만 50시간 소요, Black-box 특성상 미검 0% 증명 불가, GPU 인퍼런스 지연(14h 소요)",
-        r: "딥러닝 적용 시 불량 이미지 바운딩 박스 라벨링에 30시간, 학습 및 튜닝에 20시간이 소요되어 납기를 맞출 수 없었고, Black-box 특성상 고객사 감사진에게 미검 0%를 수학적으로 입증할 수 없었으며, 100만 장 GPU 추론에 14시간 이상이 소요되기 때문입니다.",
-        e_kw: "룰 기반 12시간 내 수식 모델링 완료, CPU 멀티프로세싱 장당 5ms (100만장 단 1.4h 선별 완료)",
-        e: "반면 전극 결함의 물리적 본질(국소 음영 낙차, 수직 불연속성)을 수식화한 룰 기반은 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱으로 장당 5ms라는 압도적 속도로 1.4시간 만에 100만 장 처리를 완수했습니다.",
-        p2_kw: "유행 기술 지양, 양산 리드타임과 물리 메커니즘에 기반한 실용적 엔지니어링 실천",
-        p2: "현대차 양산 라인에서도 맹목적으로 유행 기술을 따르기보다, 양산 납기와 물리적 본질에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다."
+        use_star: false,
+        plain_kw: "라벨링 리드타임 제약(72시간) | 불균형 데이터(0.5%) | Explainable AI(설명가능성) | 장당 5ms 초고속 연산",
+        plain_text: "현장 상황이 요구한 제약조건(72시간 납기 한계, 0.5% 극심한 불균형 데이터, 고객사에 미검 0%를 수학적으로 입증할 수 있는 설명가능성)에 룰 기반이 가장 최적의 공학적 솔루션이었기 때문입니다. 딥러닝 적용 시 불량 이미지 바운딩 박스 라벨링에 30시간, 학습 및 튜닝에 20시간이 소요되어 납기를 맞출 수 없었고, Black-box 특성상 고객사 감사진에게 미검 0%를 수학적으로 입증할 수 없었으며, 100만 장 GPU 추론에 14시간 이상이 소요되기 때문입니다. 반면 전극 결함의 물리적 본질(국소 음영 낙차, 수직 불연속성)을 수식화한 룰 기반은 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱으로 장당 5ms라는 압도적 속도로 1.4시간 만에 100만 장 처리를 완수했습니다. 현대차 양산 라인에서도 맹목적으로 유행 기술을 따르기보다, 양산 납기와 물리적 본질에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다.",
+        s_kw: "72시간 극단 납기, 0.5% 극심한 불균형 데이터, 고객사 감사 대응을 위한 설명가능성(Explainable AI)",
+        s: "72시간이라는 긴급한 출하 기한과 0.5%라는 극단적인 불균형 데이터 상황에서 즉시 배포할 수 있는 신뢰성 높은 선별 체계가 필요했습니다.",
+        t_kw: "라벨링 지연 없는 12시간 내 개발 및 수학적 무결성 검증 가능한 아키텍처 선정",
+        t: "딥러닝의 라벨링·학습 지연과 Black-box 불확실성을 배제하고, 현장 도메인 지식을 바탕으로 연산 부하가 극도로 적고 검증 가능한 아키텍처를 선택해야 했습니다.",
+        a_kw: "결함 물리 메커니즘 수식 모델링, CPU 멀티프로세싱 최적화",
+        a: "전극 결함의 물리적 특성(국소 음영 낙차, 수직 불연속성)을 수식 모델링하여 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱을 적용해 장당 5ms의 초고속 파이프라인을 구축했습니다.",
+        r_kw: "단 1.4시간 만에 100만장 선별 완료, 고객사 감사 100% 통과, 실용적 엔지니어링 실천",
+        r: "단 1.4시간 만에 100만 장 처리를 완수하고 고객사 감사에서 수학적 알고리즘을 성공적으로 입증했습니다. 현대차 양산 라인에서도 유행 기술에 매몰되지 않고 양산 납기와 물리적 본질에 부합하는 실용적 엔지니어링을 실천하겠습니다."
       }
     ]
   },
   {
     id: "P2",
+    category: "project",
     code: "PROJECT 02",
     title: "Shim 미세조절장치 전동화 개발",
     tags: ["50:1 웜기어", "소형 BLDC 모터", "Self-locking", "고분해능 LVDT 센서", "폐루프 제어"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 미세조절장치 전동화 개발 건은 구체적으로 무엇을 한 것인가요?",
-        intent: "기계/기구학적 지식 및 생산설비 개조 실무 역량, 공정능력(Cpk) 개선 메커니즘 확인",
-        defense: "웜기어 Self-locking, BLDC 모터, Backlash 최소화, LVDT 센서 ㎛ 피드백, Loss 18% 절감",
         summary: "타이트한 누적공차(Cpk 1.33) 만족을 위해 웜기어와 소형 BLDC 모터, 고분해능 LVDT 센서를 결합한 폐루프 미세조절장치를 단독 개발하여 조건조정 Loss 18% 및 수율 0.2%를 개선한 경험입니다.",
+        use_star: false,
+        plain_kw: "웜기어 Self-locking | 소형 BLDC 모터 | Backlash 최소화 | LVDT 센서 ㎛ 피드백 | Loss 18% 절감",
+        plain_text: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다. 작업자 숙련도에 따라 타겟 폭에 도달하는 데 최소 3~5회의 코팅-정지-측정 반복이 발생하여 조건 조정 Loss가 극심했습니다. 저는 작업자의 손동작을 완벽히 대체하는 '전동화 디지털 미세조절 시스템'을 도입하여 Cpk 1.5 이상 달성 및 셋업 Loss 최소화를 목표로 설정했습니다. 첫째, 고감속비(50:1) 웜기어(Worm Gear)와 소형 BLDC 모터를 결합하여 회전운동을 정밀 직진운동으로 변환하는 초소형 구동 유닛을 설계했습니다. 웜기어 고유의 자체 락킹(Self-locking) 특성을 활용해 코팅 중 슬러리 토출 압력에 의해 위치가 밀리는 현상을 물리적으로 방지했습니다. 둘째, 기계적 백래시(Backlash)로 인한 위치 오차를 원천 통제하기 위해, 실제 이동 변위를 0.1㎛ 단위로 측정하는 고분해능 LVDT 센서를 직결 장착하여 실시간 위치 피드백 폐루프(Closed-loop) 제어를 구축했습니다. 그 결과 타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. 현대자동차 전극 공정에서도 설비의 기계적 한계를 엔지니어링 센싱과 전동 제어로 극복하여 무인화 스마트 팩토리를 실현하겠습니다.",
         s_kw: "46시리즈 코팅 누적폭 공차 ±0.3mm (50% 타이트), 작업자 수동 다이얼게이지 손동작 의존",
         s: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다.",
         t_kw: "작업자 편차 제거, 조건조정 3~5회 반복 Loss 제거, Cpk 1.5 이상 전동화 디지털 시스템 구축",
@@ -1613,36 +1878,35 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         r: "타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. 현대자동차 전극 공정에서도 설비의 기계적 한계를 엔지니어링 센싱과 전동 제어로 극복하여 무인화 스마트 팩토리를 실현하겠습니다."
       },
       {
-        type: "압박 꼬리질문",
-        framework: "PREP",
         question: "Q2. 왜 비싼 서보모터나 리니어 모터를 쓰지 않고 '웜기어 + BLDC + LVDT' 조합을 썼습니까?",
-        intent: "설비 공간 제약, 코팅부 환경, 원가 및 엔지니어링 설계 타당성 평가",
-        defense: "공간 협소성(100×80mm), 슬롯다이 고압 토출 배압 지탱(Self-locking), 직접 변위 계측",
         summary: "슬롯다이 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 고압 배압을 웜기어의 Self-locking으로 지탱하며 0.1㎛ 실변위를 LVDT로 직접 계측하기 위함이었습니다.",
-        p1_kw: "100×80mm 초협소 공간 제약 극복, 슬러리 토출 고압 배압 지탱(Self-locking), 0.1㎛ 종단 직접 센싱",
-        p1: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다.",
-        r_kw: "대형 서보 장착 불가, 일반 볼스크류 역구동 밀림 위험, 모터 내장 엔코더는 기어 백래시 미감지",
-        r: "슬롯다이 주변은 배관 간섭으로 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다.",
-        e_kw: "50:1 웜기어로 역구동 원천 차단, 초소형 BLDC 결합, 외장 LVDT 직결 폐루프 제어로 원가 1/5 절감",
-        e: "실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다.",
-        p2_kw: "양산 신뢰성 확보, 현대차 전극 설비 개조 및 스마트 팩토리 표준 적용",
-        p2: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, 현대차 생산운영에서도 현장 맞춤형 스마트 엔지니어링을 실현하겠습니다."
+        use_star: false,
+        plain_kw: "공간 협소성(100×80mm) | 슬러리 고압 토출 배압 지탱(Self-locking) | 직접 변위 계측 | 원가 1/5 절감",
+        plain_text: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다. 슬롯다이 주변은 배관 간섭으로 대형 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다. 실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다. 비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, 현대차 생산운영에서도 현장 맞춤형 스마트 엔지니어링을 실현하겠습니다.",
+        s_kw: "100×80mm 초협소 공간 제약 극복, 슬러리 토출 고압 배압 지탱(Self-locking), 0.1㎛ 종단 직접 센싱",
+        s: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다.",
+        t_kw: "대형 서보 장착 불가, 일반 볼스크류 역구동 밀림 위험, 모터 내장 엔코더는 기어 백래시 미감지",
+        t: "슬롯다이 주변은 배관 간섭으로 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다.",
+        a_kw: "50:1 웜기어로 역구동 원천 차단, 초소형 BLDC 결합, 외장 LVDT 직결 폐루프 제어로 원가 1/5 절감",
+        a: "실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다.",
+        r_kw: "양산 신뢰성 확보, 현대차 전극 설비 개조 및 스마트 팩토리 표준 적용",
+        r: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, 현대차 생산운영에서도 현장 맞춤형 스마트 엔지니어링을 실현하겠습니다."
       }
     ]
   },
   {
     id: "P3",
+    category: "project",
     code: "PROJECT 03",
     title: "웹게이지 미세라인 감지 로직 개발",
     tags: ["방사선 웹게이지", "1% Data Shift", "이동평균(MA)", "MD 스윙(N=3)", "TD 포인트(N=4)", "ROC Curve"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 비전 검사기에도 안 잡히는 미세라인을 웹게이지로 어떻게 잡았습니까?",
-        intent: "비전과 웹게이지의 물리적 계측 차이, 데이터 가설 설정 및 통계적 필터링 검증",
-        defense: "1% 미만 국부 로딩 저하 가설, 이동평균, MD 스윙 3회, TD 포인트 4개, Loss 50% 절감",
         summary: "고가의 신규 비전 검사기 대신 기존 웹게이지의 국부 로딩 데이터 100Lot을 분석하여 1% 미만 시프트를 검출하는 2차원 시계열 알고리즘을 구축해 미세라인 Loss 50%를 절감했습니다.",
+        use_star: false,
+        plain_kw: "1% 미만 국부 로딩 저하 가설 | 이동평균(MA) | MD 스윙 3회 | TD 포인트 4개 | Loss 50% 절감",
+        plain_text: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다. 작업자 육안 검사를 배제하고, 기존 두께 측정기인 웹게이지의 원시 데이터를 활용하여 불량을 실시간 자동 감지하고 라인을 선제 정지시키는 로직을 구축하고자 했습니다. '미세라인 부위는 슬러리 토출이 방해받아 단위면적당 로딩(g/㎡)이 국부적으로 1% 미만 떨어질 것이다'라는 가설을 세우고 100Lot 데이터를 분석해 미세 Data Shift를 규명했습니다. 일반 노이즈와 구분하기 위해: 1. 폭방향(TD) 스캔 프로파일에 이동평균(Moving Average)을 적용하고, 2. 진행방향(MD)으로 N=3회 연속 스윙 동안 동일 폭 위치에서 편차가 누적되는지 확인하며, 3. 폭방향(TD)으로 연속된 N=4개 포인트에서 스펙을 이탈할 때만 최종 알람이 울리도록 2차원 시계열 상관 로직을 구현했습니다. 그 결과 미세라인 불량 Loss를 50% 절감하고 수율을 0.12% 개선했습니다. 현대차 전극 라인에서도 센서 융합 분석을 통해 보이지 않는 결함을 선제적으로 차단하겠습니다.",
         s_kw: "슬롯다이 립 미세 이물 긁힘(미세라인), 표면 반사율 미미해 비전 미검출, 육안 의존 롤 폐기 발생",
         s: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다.",
         t_kw: "작업자 육안 검사 배제, 기존 방사선 두께 측정기 원시 데이터 활용 실시간 자동 감지 및 라인 선제 정지",
@@ -1656,17 +1920,17 @@ const DEFAULT_PROJECTS_HYUNDAI = [
   },
   {
     id: "P4",
+    category: "project",
     code: "PROJECT 04",
     title: "고객향 인라인 AX 자동화 대시보드 구축",
     tags: ["Python RPA", "OpenCV Template Matching", "공정 헌팅 데이터 필터링", "Lot 병합 판정", "HTML Dashboard"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 파이썬 RPA 개발 경험은 무엇을 한 것인가요? 단순 매크로 아닌가요?",
-        intent: "단순 코딩 자랑인지, 생산운영 프로세스 혁신 및 공정 데이터에 대한 이해가 담겨 있는지 확인",
-        defense: "보안망 우회 RPA, 헌팅구간 룰베이스 필터링, 데이터 무결성 확보, 월 40시간 세이브",
         summary: "사내 보안망을 우회하는 이미지 매칭 기반 파이썬 RPA와 공정 헌팅 데이터 필터링 로직을 구축하여 엔지니어의 단순반복 수작업을 월 40시간 100% 완전 자동화한 경험입니다.",
+        use_star: false,
+        plain_kw: "보안망 우회 RPA | 헌팅구간 룰베이스 필터링 | 데이터 무결성 확보 | 월 40시간 세이브 | 휴먼에러 0건",
+        plain_text: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다. 단순 매크로를 넘어, 공정 엔지니어의 도메인 지식을 녹여 '데이터 무결성 검증 및 100% 무인 자동화 파이프라인'을 구축하여 월 40시간의 공수를 절감하는 것을 목표로 했습니다. 보안망을 우회하기 위해 이미지 매칭 기반의 Python RPA 스크립트로 무인 데이터 수집 파이프라인을 구축했습니다. 특히 가·감속 시 발생하는 '공정 헌팅 데이터 제거 룰'과 'Lot 병합 가능 여부 자동 검토 알고리즘'을 Pandas로 구현하고, 이상치 알람 및 트렌드가 한눈에 보이는 HTML 대시보드를 제작해 배포했습니다. 월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. 현대차 생산운영에서도 데이터 수집부터 이상 감시까지 전 과정을 자동화하여 스마트 팩토리 표준을 만들겠습니다.",
         s_kw: "고객사(T사) 전 Lot 인라인 데이터 전수 검증 요구, 사내 보안 방화벽으로 DB 연동 차단, 매일 수작업 2시간 소요",
         s: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다.",
         t_kw: "단순 매크로 탈피, 공정 도메인 지식 접목 데이터 무결성 검증 & 100% 무인 자동화 (월 40h 절감)",
@@ -1677,20 +1941,48 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         r: "월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. 현대차 생산운영에서도 데이터 수집부터 이상 감시까지 전 과정을 자동화하여 스마트 팩토리 표준을 만들겠습니다."
       }
     ]
-  },
+  }
+];
+
+// ================= DEFAULT INTERVIEW DATA (WITH 1.경력 / 2.프로젝트 & STAR/줄글) =================
+const DEFAULT_PROJECTS_SKHYNIX = [
   {
-    id: "P5",
-    code: "PROJECT 05",
-    title: "방사능 웹게이지 소스 교체 셋업",
-    tags: ["T사 Daily 대응", "영문 FACA / 8D Report", "원자력안전법 인허가", "7개 조직 Co-work", "Data 신뢰도 150%"],
+    id: "C1",
+    category: "career",
+    code: "CAREER 01",
+    title: "FAB 양산 라인 공정·설비 운영 및 수율 관리",
+    tags: ["R2R 코팅 라인", "Cpk 관리", "수율 모니터링", "SOP 표준화", "오퍼레이터 교육"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
+        question: "Q1. 전극 양산 라인 생산운영 및 모니터링 시 가장 중점적으로 관리했던 지표와 트러블슈팅 경험은 무엇인가요?",
+        summary: "R2R 전극 코팅 라인에서 일일 수율 및 Cpk 변동을 실시간 모니터링하고, 설비 Issue 및 오퍼레이터 작업 편차를 SOP 표준화와 데이터 분석으로 제어하여 목표 라인 가동률과 양산 안정성을 사수한 경험입니다.",
+        use_star: false,
+        plain_kw: "R2R 양산 라인 | Cpk 1.45 달성 | SOP 현장 표준화 | 설비 Issue 선제 대응 | 오퍼레이터 교육",
+        plain_text: "46시리즈 및 New-form factor 전극 R2R 양산 라인 운영을 담당하며, 간헐코팅 및 스트라이프 코팅 공정의 수율과 생산량을 일일 단위로 정밀 모니터링했습니다. 특히 작업자 숙련도 편차로 인한 초기 셋업 손실을 줄이기 위해 표준 작업 지침서(SOP)를 현장 눈높이에 맞게 개정하고 오퍼레이터 교육을 체계화했습니다. 또한 MES 및 QMS 데이터를 기반으로 코팅 두께와 폭 산포의 이상 징후를 선제 감지하여 돌발 설비 정지를 차단함으로써, 목표 라인 가동률을 안정적으로 달성했습니다. SK하이닉스 양산기술에서도 현장 오퍼레이터 및 장비 엔지니어와 긴밀히 호흡하며 결함 산포 없는 고수율 양산 표준을 확립하겠습니다.",
+        s_kw: "46시리즈 신규 규격 양산 셋업, 랏간 코팅 편차 및 오퍼레이터 작업 숙련도 편차 발생",
+        s: "46시리즈 New-form factor 전극 양산 라인 운영 초기, 작업자 숙련도 편차와 랏간 코팅 두께 변동으로 인해 일일 수율 산포가 발생하는 운영상 이슈가 있었습니다.",
+        t_kw: "라인 가동률 95% 이상 사수, Cpk 1.33 이상 확보 및 현장 표준화 체계 구축",
+        t: "공정 엔지니어로서 라인 가동률을 사수하고 코팅 공정능력(Cpk 1.33 이상)을 안정화하기 위해, 현장 중심의 SOP 개정 및 데이터 기반 모니터링 체계를 구축하는 것을 목표로 설정했습니다.",
+        a_kw: "SOP 개정 및 오퍼레이터 교육, 일일 두께/폭 트렌드 MES 모니터링, 이상 징후 선제 대응",
+        a: "첫째, 작업자별 수동 조작 편차를 유발하는 포인트를 분석하여 체크리스트와 직관적인 SOP를 재수립하고 현장 오퍼레이터 교육을 진행했습니다. 둘째, MES/QMS 데이터에서 코팅 두께와 로딩 편차의 미세 시프트를 일일 모니터링하여 설비 이상 징후를 선제적으로 조치했습니다.",
+        r_kw: "초기 셋업 손실 20% 절감, Cpk 1.45 달성 및 무사고 안정 양산 달성",
+        r: "초기 조건 셋업 손실을 20% 절감하고 Cpk 1.45를 달성하여 양산 조기 안정화에 기여했습니다. SK하이닉스 양산기술에서도 현장 표준화와 빅데이터 분석을 결합해 최고 수준의 FAB 생산운영과 수율 극대화를 이끌겠습니다."
+      }
+    ]
+  },
+  {
+    id: "C2",
+    category: "career",
+    code: "CAREER 02",
+    title: "방사능 웹게이지 소스 교체 셋업 (7개 조직 협업)",
+    tags: ["Kr-85 방사능 소스", "원자력안전법", "7개 조직 Co-work", "FACA/8D Report", "셧다운 최소화"],
+    questions: [
+      {
         question: "Q1. 방사능 소스 웹게이지 셋업 시 7개 조직 간 갈등은 무엇이었고 어떻게 해결했나요?",
-        intent: "대규모 프로젝트 리딩 능력, 부서 간 이해관계 충돌 조정 및 위기관리 능력 평가",
-        defense: "사전 기계/배선 시공(정기 PM), 3회 Dry-run 리허설로 본작업 3시간 단축, 셧다운 0건",
         summary: "정기 PM 사전 시공과 3회 Dry-run 리허설로 본작업 노출 시간을 3시간으로 단축하여 7개 조직 간의 셧다운 갈등을 조율하고 데이터 신뢰도 150%를 달성했습니다.",
+        use_star: false,
+        plain_kw: "사전 기계/배선 시공(정기 PM) | 3회 Dry-run 리허설 | 본작업 3시간 단축 | 셧다운 0건 | 데이터 신뢰도 150%",
+        plain_text: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다. 공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운을 극단적으로 줄이기 위해 사전 준비 공정과 본 작업을 완벽히 분리했습니다. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했고, 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다. 그 결과 안전사고 0건, 단 6시간 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. SK하이닉스의 대규모 FAB 라인 셋업 및 설비 개조에서도 다부서 이해관계를 정밀 조율하고 셧다운을 극소화하는 협업의 구심점이 되겠습니다.",
         s_kw: "Kr-85 소스 반감기 초과로 계측 신뢰도 위기, 생산팀(셧다운 거부) vs 환경안전팀(48h 법적점검) 충돌",
         s: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다.",
         t_kw: "원자력안전법 100% 준수 사수 + 양산 라인 셧다운 극단적 최소화하는 마스터 시공 플랜 수립",
@@ -1698,27 +1990,23 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         a_kw: "정기 PM 4h 기계/배선 사전시공 분리, 치구 3회 Dry-run 리허설(노출 3h로 법정치 1/10 단축), 방사선 차폐 시뮬레이션 설득",
         a: "사전 준비 공정과 방사선 본 작업을 완벽히 분리했습니다. 1. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했습니다. 2. 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 3. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다.",
         r_kw: "안전사고 0건, 단 6시간 계획 정지만으로 완수, 계측 신뢰도 150% 달성",
-        r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. 현대차 대형 라인 셋업에서도 다부서 협업의 구심점이 되는 엔지니어가 되겠습니다."
+        r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. SK하이닉스의 대규모 FAB 라인 셋업 및 설비 개조에서도 다부서 이해관계를 정밀 조율하고 셧다운을 극소화하는 협업의 구심점이 되겠습니다."
       }
     ]
-  }
-];
-
-
-const DEFAULT_PROJECTS_SKHYNIX = [
+  },
   {
     id: "P1",
+    category: "project",
     code: "PROJECT 01",
     title: "룰기반 비전 선별 엔진 개발 (100만 장 긴급 선별)",
     tags: ["Grayscale Valley", "이원화 Th(55)", "1×7 수직 Bridge Kernel", "모폴로지 Closing", "PyQt5 GUI"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 이미지 처리 엔진을 자체 개발해서 100만 장을 선별했다고 하셨는데, 구체적으로 어떤 내용인가요?",
-        intent: "프로젝트 스케일, 본인의 정확한 R&R, 비전 개발 역량의 실재성 확인",
-        defense: "72시간 100만장, 0.5% Burr, 장당 5ms, 1×7 수직 Bridge Kernel, 미검률 0%",
         summary: "현장 도메인 지식과 컴퓨터 비전 알고리즘을 결합한 자체 이미지 처리 엔진으로 72시간 내 100만 장을 장당 5ms로 전수 선별하여 출하 지연 0건과 미검률 0%를 달성한 경험입니다.",
+        use_star: false,
+        plain_kw: "72시간 100만장 | 0.5% Burr | 장당 5ms | 1×7 수직 Bridge Kernel | 미검률 0%",
+        plain_text: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다. 공정 엔지니어로서 출하 지연을 0건으로 막고 미검률 0%를 보장하기 위해, 딥러닝(라벨링·학습 지연)을 배제하고 즉각 배포 가능한 룰 기반 비전 엔진을 12시간 내 자체 개발했습니다. 표준 샘플의 픽셀 프로파일을 분석하여 결함 부위에 급격한 국소 음영 낙차(Valley)가 존재함을 규명하고, 배경 밝기 55를 기준으로 레시피를 동적 전환하는 '이원화 Valley 알고리즘'을 설계했습니다. 또한 지그재그로 끊어지는 미세 결함을 복원하기 위해 1×7 수직 Bridge Kernel과 모폴로지 닫힘(Closing) 연산을 적용해 20px 이상의 치명 결함을 100% 검출했습니다. 그 결과 장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. SK하이닉스 반도체 FAB 양산 라인에서도 웨이퍼 미세 패턴 검사 및 돌발 결함 선별 시, 도메인 지식과 컴퓨터 비전을 융합하여 미검률 0%의 양산 안정성을 확보하는 양산기술 엔지니어가 되겠습니다.",
         s_kw: "46시리즈 New-form, 0.5% 미세 Burr 발생, 출하 전면 중단, 72시간 내 100만장 육안선별 불가",
         s: "46시리즈 New-form factor 전극 생산 중, 슬리팅 및 코팅 경계부에서 0.5% 확률로 발생하는 '실오라기 형태의 미세 Burr'로 인해 고객사 출하가 전면 중단되는 긴급 품질 위기가 발생했습니다. 출하 스케줄 상 72시간 이내에 100만 장에 달하는 인라인 비전 이미지를 전수 선별해야 했으나, 육안 선별은 물리적으로 불가능했습니다.",
         t_kw: "출하 지연 0건, 미검률 0% 보장, 딥러닝(학습지연) 배제, 12시간 내 초고속 룰기반 엔진 자체 개발",
@@ -1729,12 +2017,11 @@ const DEFAULT_PROJECTS_SKHYNIX = [
         r: "장당 5ms, 전체 100만 장을 단 1.4시간 만에 초고속 처리하여 미검률 0%로 72시간 내 고객 출하를 완벽히 정상화했습니다. SK하이닉스 반도체 FAB 양산 라인에서도 웨이퍼 미세 패턴 검사 및 돌발 결함 선별 시, 도메인 지식과 컴퓨터 비전을 융합하여 미검률 0%의 양산 안정성을 확보하는 양산기술 엔지니어가 되겠습니다."
       },
       {
-        type: "어려웠던 점",
-        framework: "STAR",
         question: "Q2. 이 경험에서 가장 힘들었던 기술적 난관은 무엇이었습니까?",
-        intent: "진짜 본인이 코딩하고 튜닝했는지, 실패 경험 및 트러블슈팅의 디테일 파악",
-        defense: "랏간 밝기 편차로 인한 과검/미검 동시 폭발, 상대적 음영 낙차 수식화, 수직 불연속성 복원",
         summary: "랏간 조명 및 코팅 편차로 과검과 미검이 동시 폭발했던 위기를 배경 밝기 55 기준의 '이원화 Valley 알고리즘'과 1×7 수직 브릿지 커널로 극복했습니다.",
+        use_star: false,
+        plain_kw: "랏간 밝기 편차 | 과검/미검 동시 폭발 | 상대적 음영 낙차 수식화 | 수직 불연속성 복원 | 과검률 1.2% 축소",
+        plain_text: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다. 출하 선별의 대전제인 '미검률 0%'이면서도 작업자가 2차 확인할 수 있는 수준의 '과검률 3% 이하'를 달성해야 했습니다. 이를 위해 첫째, 절대 밝기가 아닌 배경 대비 상대적 전압/음영 낙차를 계산하도록 알고리즘을 전면 수정했습니다. 배경 코팅 영역의 그레이스케일 히스토그램을 실시간 추정하여 평균 밝기 55를 기준으로 밝은 Lot과 어두운 Lot으로 동적 분기하는 '이원화 Valley 임계 로직'을 구축했습니다. 둘째, 실오라기 Burr가 직선이 아니라 지그재그로 파이며 끊어지는 물리적 형상 때문에 노이즈로 제거되는 문제를 해결하기 위해, 가로 노이즈는 무시하고 세로 방향 결함 신호만 연결해 주는 1×7 세로 비대칭 Bridge Kernel을 독자 고안하여 신호 연속성을 복원했습니다. 그 결과 과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다.",
         s_kw: "단일 임계값(Threshold) 적용 시 랏간 조명 편차로 과검 폭발, 불연속 크랙 신호소실로 미검 동시 발생",
         s: "초기 단일 임계값(Threshold) 알고리즘을 적용했을 때, 'Lot 간 조명 및 코팅 농도 편차로 인한 과검(False Positive) 폭발'과 '불연속 크랙의 신호 소실로 인한 미검(False Negative)'이 동시에 터져 나온 것이 가장 큰 난관이었습니다.",
         t_kw: "미검률 0% 절대 사수 + 작업자 2차 확인 가능한 과검률 3% 이하 트레이드오프 동시 만족",
@@ -1745,36 +2032,35 @@ const DEFAULT_PROJECTS_SKHYNIX = [
         r: "과검률을 15%에서 1.2%로 대폭 축소하면서도 미검률 0%를 완벽히 유지하여 알고리즘의 신뢰성을 확보하고 계획 기한 내 선별을 마쳤습니다."
       },
       {
-        type: "압박 꼬리질문",
-        framework: "PREP",
         question: "Q3. 왜 딥러닝(YOLO/CNN)을 쓰지 않고 룰 기반을 썼습니까? 구시대적 접근 아닌가요?",
-        intent: "최신 딥러닝 기술을 못 써서 룰 기반으로 도망친 것인지, 공학적 타당성에 근거한 선택인지 검증",
-        defense: "라벨링 리드타임 제약(72시간), 불균형 데이터(0.5%), Black-box vs Deterministic 검증 가능성",
         summary: "72시간이라는 극단적 납기 한계, 0.5% 불균형 데이터, 그리고 고객사(T사)에 미검 0%를 수학적으로 증명할 수 있는 Explainable AI라는 현장 조건에 가장 부합했기 때문입니다.",
-        p1_kw: "72시간 극단 납기, 0.5% 극심한 불균형 데이터, 고객사 감사 대응을 위한 설명가능성(Explainable AI)",
-        p1: "현장 상황이 요구한 제약조건(72시간 납기 한계, 0.5% 극심한 불균형 데이터, 고객사에 미검 0%를 수학적으로 입증할 수 있는 설명가능성)에 룰 기반이 가장 최적의 공학적 솔루션이었기 때문입니다.",
-        r_kw: "딥러닝은 라벨링·학습에만 50시간 소요, Black-box 특성상 미검 0% 증명 불가, GPU 인퍼런스 지연(14h 소요)",
-        r: "딥러닝 적용 시 불량 이미지 바운딩 박스 라벨링에 30시간, 학습 및 튜닝에 20시간이 소요되어 납기를 맞출 수 없었고, Black-box 특성상 고객사 감사진에게 미검 0%를 수학적으로 입증할 수 없었으며, 100만 장 GPU 추론에 14시간 이상이 소요되기 때문입니다.",
-        e_kw: "룰 기반 12시간 내 수식 모델링 완료, CPU 멀티프로세싱 장당 5ms (100만장 단 1.4h 선별 완료)",
-        e: "반면 전극 결함의 물리적 본질(국소 음영 낙차, 수직 불연속성)을 수식화한 룰 기반은 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱으로 장당 5ms라는 압도적 속도로 1.4시간 만에 100만 장 처리를 완수했습니다.",
-        p2_kw: "유행 기술 지양, 양산 리드타임과 물리 메커니즘에 기반한 실용적 엔지니어링 실천",
-        p2: "SK하이닉스 양산기술에서도 유행 기술에 매몰되기보다, 반도체 수율과 팹 납기, 물리적 결함 메커니즘에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다."
+        use_star: false,
+        plain_kw: "라벨링 리드타임 제약(72시간) | 불균형 데이터(0.5%) | Explainable AI(설명가능성) | 장당 5ms 초고속 연산",
+        plain_text: "현장 상황이 요구한 제약조건(72시간 납기 한계, 0.5% 극심한 불균형 데이터, 고객사에 미검 0%를 수학적으로 입증할 수 있는 설명가능성)에 룰 기반이 가장 최적의 공학적 솔루션이었기 때문입니다. 딥러닝 적용 시 불량 이미지 바운딩 박스 라벨링에 30시간, 학습 및 튜닝에 20시간이 소요되어 납기를 맞출 수 없었고, Black-box 특성상 고객사 감사진에게 미검 0%를 수학적으로 입증할 수 없었으며, 100만 장 GPU 추론에 14시간 이상이 소요되기 때문입니다. 반면 전극 결함의 물리적 본질(국소 음영 낙차, 수직 불연속성)을 수식화한 룰 기반은 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱으로 장당 5ms라는 압도적 속도로 1.4시간 만에 100만 장 처리를 완수했습니다. SK하이닉스 양산기술에서도 유행 기술에 매몰되기보다, 반도체 수율과 팹 납기, 물리적 결함 메커니즘에 가장 부합하는 최적의 공학적 솔루션을 선택하는 실용적 엔지니어링을 실천하겠습니다.",
+        s_kw: "72시간 극단 납기, 0.5% 극심한 불균형 데이터, 고객사 감사 대응을 위한 설명가능성(Explainable AI)",
+        s: "72시간이라는 긴급한 출하 기한과 0.5%라는 극단적인 불균형 데이터 상황에서 즉시 배포할 수 있는 신뢰성 높은 선별 체계가 필요했습니다.",
+        t_kw: "라벨링 지연 없는 12시간 내 개발 및 수학적 무결성 검증 가능한 아키텍처 선정",
+        t: "딥러닝의 라벨링·학습 지연과 Black-box 불확실성을 배제하고, 현장 도메인 지식을 바탕으로 연산 부하가 극도로 적고 검증 가능한 아키텍처를 선택해야 했습니다.",
+        a_kw: "결함 물리 메커니즘 수식 모델링, CPU 멀티프로세싱 최적화",
+        a: "전극 결함의 물리적 특성(국소 음영 낙차, 수직 불연속성)을 수식 모델링하여 라벨링 없이 12시간 만에 개발을 완료했고, CPU 멀티프로세싱을 적용해 장당 5ms의 초고속 파이프라인을 구축했습니다.",
+        r_kw: "단 1.4시간 만에 100만장 선별 완료, 고객사 감사 100% 통과, 실용적 엔지니어링 실천",
+        r: "단 1.4시간 만에 100만 장 처리를 완수하고 고객사 감사에서 수학적 알고리즘을 성공적으로 입증했습니다. 현대차 양산 라인에서도 유행 기술에 매몰되지 않고 양산 납기와 물리적 본질에 부합하는 실용적 엔지니어링을 실천하겠습니다."
       }
     ]
   },
   {
     id: "P2",
+    category: "project",
     code: "PROJECT 02",
     title: "Shim 미세조절장치 전동화 개발",
     tags: ["50:1 웜기어", "소형 BLDC 모터", "Self-locking", "고분해능 LVDT 센서", "폐루프 제어"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 미세조절장치 전동화 개발 건은 구체적으로 무엇을 한 것인가요?",
-        intent: "기계/기구학적 지식 및 생산설비 개조 실무 역량, 공정능력(Cpk) 개선 메커니즘 확인",
-        defense: "웜기어 Self-locking, BLDC 모터, Backlash 최소화, LVDT 센서 ㎛ 피드백, Loss 18% 절감",
         summary: "타이트한 누적공차(Cpk 1.33) 만족을 위해 웜기어와 소형 BLDC 모터, 고분해능 LVDT 센서를 결합한 폐루프 미세조절장치를 단독 개발하여 조건조정 Loss 18% 및 수율 0.2%를 개선한 경험입니다.",
+        use_star: false,
+        plain_kw: "웜기어 Self-locking | 소형 BLDC 모터 | Backlash 최소화 | LVDT 센서 ㎛ 피드백 | Loss 18% 절감",
+        plain_text: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다. 작업자 숙련도에 따라 타겟 폭에 도달하는 데 최소 3~5회의 코팅-정지-측정 반복이 발생하여 조건 조정 Loss가 극심했습니다. 저는 작업자의 손동작을 완벽히 대체하는 '전동화 디지털 미세조절 시스템'을 도입하여 Cpk 1.5 이상 달성 및 셋업 Loss 최소화를 목표로 설정했습니다. 첫째, 고감속비(50:1) 웜기어(Worm Gear)와 소형 BLDC 모터를 결합하여 회전운동을 정밀 직진운동으로 변환하는 초소형 구동 유닛을 설계했습니다. 웜기어 고유의 자체 락킹(Self-locking) 특성을 활용해 코팅 중 슬러리 토출 압력에 의해 위치가 밀리는 현상을 물리적으로 방지했습니다. 둘째, 기계적 백래시(Backlash)로 인한 위치 오차를 원천 통제하기 위해, 실제 이동 변위를 0.1㎛ 단위로 측정하는 고분해능 LVDT 센서를 직결 장착하여 실시간 위치 피드백 폐루프(Closed-loop) 제어를 구축했습니다. 그 결과 타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. SK하이닉스 양산기술에서도 고가 신규 장비에만 의존하지 않고 기존 FAB 설비의 기구학적 한계를 엔지니어링 센싱과 전동화 개조로 극복하여 초정밀 공정능력과 지능형 스마트 팹을 실현하겠습니다.",
         s_kw: "46시리즈 코팅 누적폭 공차 ±0.3mm (50% 타이트), 작업자 수동 다이얼게이지 손동작 의존",
         s: "46시리즈 전극 Biz 셋업 초기, 고객이 요구한 코팅 누적폭 공차는 ±0.3mm 수준으로 기존 대비 50% 이상 타이트했습니다. 그러나 코터 설비의 Shim 오프셋 조정은 작업자가 원형 수동 다이얼게이지를 손으로 돌려 눈금을 맞추는 방식이었습니다.",
         t_kw: "작업자 편차 제거, 조건조정 3~5회 반복 Loss 제거, Cpk 1.5 이상 전동화 디지털 시스템 구축",
@@ -1785,36 +2071,35 @@ const DEFAULT_PROJECTS_SKHYNIX = [
         r: "타겟 코팅폭 도달 시간을 기존 45분에서 8분으로 단축하여 조건조정 Loss를 18% 절감했고, 전체 라인 수율 0.2% 향상 및 Cpk 1.67을 달성했습니다. SK하이닉스 양산기술에서도 고가 신규 장비에만 의존하지 않고 기존 FAB 설비의 기구학적 한계를 엔지니어링 센싱과 전동화 개조로 극복하여 초정밀 공정능력과 지능형 스마트 팹을 실현하겠습니다."
       },
       {
-        type: "압박 꼬리질문",
-        framework: "PREP",
         question: "Q2. 왜 비싼 서보모터나 리니어 모터를 쓰지 않고 '웜기어 + BLDC + LVDT' 조합을 썼습니까?",
-        intent: "설비 공간 제약, 코팅부 환경, 원가 및 엔지니어링 설계 타당성 평가",
-        defense: "공간 협소성(100×80mm), 슬롯다이 고압 토출 배압 지탱(Self-locking), 직접 변위 계측",
         summary: "슬롯다이 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 고압 배압을 웜기어의 Self-locking으로 지탱하며 0.1㎛ 실변위를 LVDT로 직접 계측하기 위함이었습니다.",
-        p1_kw: "100×80mm 초협소 공간 제약 극복, 슬러리 토출 고압 배압 지탱(Self-locking), 0.1㎛ 종단 직접 센싱",
-        p1: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다.",
-        r_kw: "대형 서보 장착 불가, 일반 볼스크류 역구동 밀림 위험, 모터 내장 엔코더는 기어 백래시 미감지",
-        r: "슬롯다이 주변은 배관 간섭으로 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다.",
-        e_kw: "50:1 웜기어로 역구동 원천 차단, 초소형 BLDC 결합, 외장 LVDT 직결 폐루프 제어로 원가 1/5 절감",
-        e: "실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다.",
-        p2_kw: "양산 신뢰성 확보, SK하이닉스 FAB 설비 개조 및 스마트 팩토리 표준 적용",
-        p2: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, SK하이닉스 양산기술에서도 현장 맞춤형 스마트 팹 엔지니어링을 실현하겠습니다."
+        use_star: false,
+        plain_kw: "공간 협소성(100×80mm) | 슬러리 고압 토출 배압 지탱(Self-locking) | 직접 변위 계측 | 원가 1/5 절감",
+        plain_text: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다. 슬롯다이 주변은 배관 간섭으로 대형 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다. 실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다. 비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, SK하이닉스 양산기술에서도 현장 맞춤형 스마트 팹 엔지니어링을 실현하겠습니다.",
+        s_kw: "100×80mm 초협소 공간 제약 극복, 슬러리 토출 고압 배압 지탱(Self-locking), 0.1㎛ 종단 직접 센싱",
+        s: "슬롯다이 배면의 100×80mm 협소 공간 제약을 극복하고, 슬러리 토출 시 발생하는 수십 kgf 고압 배압을 물리적으로 지탱하며, 실제 변위를 0.1㎛로 직접 계측하기 위한 최적 조합이었기 때문입니다.",
+        t_kw: "대형 서보 장착 불가, 일반 볼스크류 역구동 밀림 위험, 모터 내장 엔코더는 기어 백래시 미감지",
+        t: "슬롯다이 주변은 배관 간섭으로 서보모터 장착이 불가능했고, 슬러리 토출 배압으로 인해 일반 볼스크류는 역구동 밀림 위험이 있었으며, 모터 내장 엔코더는 기어 백래시와 열변형 오차를 감지하지 못하기 때문입니다.",
+        a_kw: "50:1 웜기어로 역구동 원천 차단, 초소형 BLDC 결합, 외장 LVDT 직결 폐루프 제어로 원가 1/5 절감",
+        a: "실제 50:1 웜기어를 통해 역구동이 불가능한 Self-locking 구조를 만들어 모터 전원이 꺼져도 위치를 유지시켰고, 외장 LVDT를 Shim 끝단에 직결하여 백래시를 완전히 보정함으로써 고가 서보 대비 1/5 원가로 Cpk 1.67을 달성했습니다.",
+        r_kw: "양산 신뢰성 확보, 현대차 전극 설비 개조 및 스마트 팩토리 표준 적용",
+        r: "비용을 1/5로 절감하면서도 양산 신뢰성이 완벽히 보장되는 전동화 메커니즘을 완성했으며, SK하이닉스 양산기술에서도 현장 맞춤형 스마트 팹 엔지니어링을 실현하겠습니다."
       }
     ]
   },
   {
     id: "P3",
+    category: "project",
     code: "PROJECT 03",
     title: "웹게이지 미세라인 감지 로직 개발",
     tags: ["방사선 웹게이지", "1% Data Shift", "이동평균(MA)", "MD 스윙(N=3)", "TD 포인트(N=4)", "ROC Curve"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 비전 검사기에도 안 잡히는 미세라인을 웹게이지로 어떻게 잡았습니까?",
-        intent: "비전과 웹게이지의 물리적 계측 차이, 데이터 가설 설정 및 통계적 필터링 검증",
-        defense: "1% 미만 국부 로딩 저하 가설, 이동평균, MD 스윙 3회, TD 포인트 4개, Loss 50% 절감",
         summary: "고가의 신규 비전 검사기 대신 기존 웹게이지의 국부 로딩 데이터 100Lot을 분석하여 1% 미만 시프트를 검출하는 2차원 시계열 알고리즘을 구축해 미세라인 Loss 50%를 절감했습니다.",
+        use_star: false,
+        plain_kw: "1% 미만 국부 로딩 저하 가설 | 이동평균(MA) | MD 스윙 3회 | TD 포인트 4개 | Loss 50% 절감",
+        plain_text: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다. 작업자 육안 검사를 배제하고, 기존 두께 측정기인 웹게이지의 원시 데이터를 활용하여 불량을 실시간 자동 감지하고 라인을 선제 정지시키는 로직을 구축하고자 했습니다. '미세라인 부위는 슬러리 토출이 방해받아 단위면적당 로딩(g/㎡)이 국부적으로 1% 미만 떨어질 것이다'라는 가설을 세우고 100Lot 데이터를 분석해 미세 Data Shift를 규명했습니다. 일반 노이즈와 구분하기 위해: 1. 폭방향(TD) 스캔 프로파일에 이동평균(Moving Average)을 적용하고, 2. 진행방향(MD)으로 N=3회 연속 스윙 동안 동일 폭 위치에서 편차가 누적되는지 확인하며, 3. 폭방향(TD)으로 연속된 N=4개 포인트에서 스펙을 이탈할 때만 최종 알람이 울리도록 2차원 시계열 상관 로직을 구현했습니다. 그 결과 미세라인 불량 Loss를 50% 절감하고 수율을 0.12% 개선했습니다. 반도체 제조 공정 역시 웨이퍼 상의 미세 산포와 결함을 선제적으로 제어하는 것이 핵심이므로, SK하이닉스에서도 계측 데이터 분석 및 로직 설계를 통해 결함을 선제 차단하고 수율을 극대화하겠습니다.",
         s_kw: "슬롯다이 립 미세 이물 긁힘(미세라인), 표면 반사율 미미해 비전 미검출, 육안 의존 롤 폐기 발생",
         s: "슬롯다이 립에 미세 이물이 끼어 코팅 두께가 긁히는 '미세라인' 불량이 발생했으나, 비전 검사기에는 표면 반사율 차이가 미미하여 잡히지 않았고 육안 검사 의존으로 롤 전체가 폐기되는 수율 손실이 심각했습니다.",
         t_kw: "작업자 육안 검사 배제, 기존 방사선 두께 측정기 원시 데이터 활용 실시간 자동 감지 및 라인 선제 정지",
@@ -1828,17 +2113,17 @@ const DEFAULT_PROJECTS_SKHYNIX = [
   },
   {
     id: "P4",
+    category: "project",
     code: "PROJECT 04",
     title: "고객향 인라인 AX 자동화 대시보드 구축",
     tags: ["Python RPA", "OpenCV Template Matching", "공정 헌팅 데이터 필터링", "Lot 병합 판정", "HTML Dashboard"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 파이썬 RPA 개발 경험은 무엇을 한 것인가요? 단순 매크로 아닌가요?",
-        intent: "단순 코딩 자랑인지, 생산운영 프로세스 혁신 및 공정 데이터에 대한 이해가 담겨 있는지 확인",
-        defense: "보안망 우회 RPA, 헌팅구간 룰베이스 필터링, 데이터 무결성 확보, 월 40시간 세이브",
         summary: "사내 보안망을 우회하는 이미지 매칭 기반 파이썬 RPA와 공정 헌팅 데이터 필터링 로직을 구축하여 엔지니어의 단순반복 수작업을 월 40시간 100% 완전 자동화한 경험입니다.",
+        use_star: false,
+        plain_kw: "보안망 우회 RPA | 헌팅구간 룰베이스 필터링 | 데이터 무결성 확보 | 월 40시간 세이브 | 휴먼에러 0건",
+        plain_text: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다. 단순 매크로를 넘어, 공정 엔지니어의 도메인 지식을 녹여 '데이터 무결성 검증 및 100% 무인 자동화 파이프라인'을 구축하여 월 40시간의 공수를 절감하는 것을 목표로 했습니다. 보안망을 우회하기 위해 이미지 매칭 기반의 Python RPA 스크립트로 무인 데이터 수집 파이프라인을 구축했습니다. 특히 가·감속 시 발생하는 '공정 헌팅 데이터 제거 룰'과 'Lot 병합 가능 여부 자동 검토 알고리즘'을 Pandas로 구현하고, 이상치 알람 및 트렌드가 한눈에 보이는 HTML 대시보드를 제작해 배포했습니다. 월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. SK하이닉스 양산기술에서도 제조 빅데이터 수집부터 이상 감시까지 전 과정을 무인화하여 엔지니어가 고부가가치 수율 개선에 집중하는 스마트 팹 환경을 만들겠습니다.",
         s_kw: "고객사(T사) 전 Lot 인라인 데이터 전수 검증 요구, 사내 보안 방화벽으로 DB 연동 차단, 매일 수작업 2시간 소요",
         s: "고객사(T사)에서 전 Lot 인라인 품질 데이터 전수 검증을 요구했으나, 사내 보안 방화벽으로 DB 직접 연동이 차단되어 엔지니어가 매일 2시간씩 엑셀을 수작업으로 다운받고 정제하는 리소스 낭비가 극심했습니다.",
         t_kw: "단순 매크로 탈피, 공정 도메인 지식 접목 데이터 무결성 검증 & 100% 무인 자동화 (월 40h 절감)",
@@ -1849,33 +2134,8 @@ const DEFAULT_PROJECTS_SKHYNIX = [
         r: "월 40시간의 수작업을 100% 완전 자동화하고 휴먼 에러를 0건으로 제거했습니다. SK하이닉스 양산기술에서도 제조 빅데이터 수집부터 이상 감시까지 전 과정을 무인화하여 엔지니어가 고부가가치 수율 개선에 집중하는 스마트 팹 환경을 만들겠습니다."
       }
     ]
-  },
-  {
-    id: "P5",
-    code: "PROJECT 05",
-    title: "방사능 웹게이지 소스 교체 셋업",
-    tags: ["T사 Daily 대응", "영문 FACA / 8D Report", "원자력안전법 인허가", "7개 조직 Co-work", "Data 신뢰도 150%"],
-    questions: [
-      {
-        type: "경험 개요",
-        framework: "STAR",
-        question: "Q1. 방사능 소스 웹게이지 셋업 시 7개 조직 간 갈등은 무엇이었고 어떻게 해결했나요?",
-        intent: "대규모 프로젝트 리딩 능력, 부서 간 이해관계 충돌 조정 및 위기관리 능력 평가",
-        defense: "사전 기계/배선 시공(정기 PM), 3회 Dry-run 리허설로 본작업 3시간 단축, 셧다운 0건",
-        summary: "정기 PM 사전 시공과 3회 Dry-run 리허설로 본작업 노출 시간을 3시간으로 단축하여 7개 조직 간의 셧다운 갈등을 조율하고 데이터 신뢰도 150%를 달성했습니다.",
-        s_kw: "Kr-85 소스 반감기 초과로 계측 신뢰도 위기, 생산팀(셧다운 거부) vs 환경안전팀(48h 법적점검) 충돌",
-        s: "웹게이지 방사능 소스(Kr-85)의 반감기 초과로 두께 계측 신뢰도가 흔들려 소스 교체 공사가 시급했습니다. 이때 '단 1시간의 셧다운도 거부하는 생산팀'과 '원자력안전법상 48시간 점검을 요구하는 환경안전팀', 그리고 '해외 엔지니어 입국 일정과 외주 공사업체' 간의 일정이 정면 충돌했습니다.",
-        t_kw: "원자력안전법 100% 준수 사수 + 양산 라인 셧다운 극단적 최소화하는 마스터 시공 플랜 수립",
-        t: "공정 메인 담당자로서 법적 안전 기준을 100% 준수하면서도 양산 라인 셧다운 시간을 극단적으로 최소화하는 마스터 시공 플랜을 수립해야 했습니다.",
-        a_kw: "정기 PM 4h 기계/배선 사전시공 분리, 치구 3회 Dry-run 리허설(노출 3h로 법정치 1/10 단축), 방사선 차폐 시뮬레이션 설득",
-        a: "사전 준비 공정과 방사선 본 작업을 완벽히 분리했습니다. 1. 기계/배선 공사는 정기 PM 4시간 동안 사전 시공을 완료했습니다. 2. 방사선 소스 탈부착 본 작업은 사전 치구 리허설(Dry-run)을 3회 실시하여 동선을 최적화함으로써 방사선 노출 시간을 법정 기준치의 1/10인 3시간 이내로 단축시켰습니다. 3. 안전팀에는 방사선 차폐 시뮬레이션 데이터를 제공하고 생산팀에는 교체 후 계측 신뢰도 150% 달성에 따른 수율 회복 데이터를 제시해 합의를 이끌어냈습니다.",
-        r_kw: "안전사고 0건, 단 6시간 계획 정지만으로 완수, 계측 신뢰도 150% 달성",
-        r: "안전사고 0건, 단 6시간의 계획 정지만으로 공사를 완수하여 라인 수율을 지켜냈습니다. SK하이닉스의 대규모 FAB 라인 셋업 및 설비 개조에서도 다부서 이해관계를 정밀 조율하고 셧다운을 극소화하는 협업의 구심점이 되겠습니다."
-      }
-    ]
   }
 ];
-
 
 // ================= CONTEXT REFERENCE DOCUMENTS (100% VERBATIM) =================
 const CONTEXT_DOCS = {
@@ -2066,7 +2326,39 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
 // ================= DATA PERSISTENCE & MIGRATION =================
+function getActiveCompanyConfig() {
+  return COMPANY_CONFIGS[currentCompanyMode] || COMPANY_CONFIGS.hyundai;
+}
+
+function getActiveDefaultProjects() {
+  return (currentCompanyMode === 'skhynix') ? DEFAULT_PROJECTS_SKHYNIX : DEFAULT_PROJECTS_HYUNDAI;
+}
+
+function ensurePlainText(q) {
+  if (q.plain_text && q.plain_text.trim().length > 0) return q.plain_text;
+  const parts = [];
+  if (q.s) parts.push(`[상황] ${q.s}`);
+  if (q.t) parts.push(`[목표] ${q.t}`);
+  if (q.a) parts.push(`[조치] ${q.a}`);
+  if (q.r) parts.push(`[성과] ${q.r}`);
+  if (q.p1) parts.push(`[결론] ${q.p1}`);
+  if (q.e) parts.push(`[사례] ${q.e}`);
+  if (q.p2) parts.push(`[기여] ${q.p2}`);
+  const res = parts.join('\n\n');
+  q.plain_text = res;
+  return res;
+}
+
+function ensurePlainKeywords(q) {
+  if (q.plain_kw && q.plain_kw.trim().length > 0) return q.plain_kw;
+  const kws = [q.s_kw, q.t_kw, q.a_kw, q.r_kw, q.p1_kw, q.p2_kw, q.e_kw].filter(Boolean);
+  const res = kws.join(' | ');
+  q.plain_kw = res;
+  return res;
+}
+
 function loadProjectsData() {
   const config = getActiveCompanyConfig();
   const defaultList = getActiveDefaultProjects();
@@ -2084,25 +2376,21 @@ function loadProjectsData() {
   if (saved) {
     try {
       projectsData = JSON.parse(saved);
-      // Migrate / ensure all items have keywords and frameworks
+      // Migrate / ensure category & questions integrity
       projectsData.forEach((proj, pIdx) => {
-        if (!proj.questions) proj.questions = [];
-        proj.questions.forEach((q, qIdx) => {
-          if (!q.framework) q.framework = "STAR";
-          const defaultProj = defaultList[pIdx];
-          const defaultQ = defaultProj && defaultProj.questions ? defaultProj.questions[qIdx] : null;
-
-          if (q.framework === "STAR") {
-            if (q.s_kw === undefined) q.s_kw = defaultQ && defaultQ.s_kw ? defaultQ.s_kw : "";
-            if (q.t_kw === undefined) q.t_kw = defaultQ && defaultQ.t_kw ? defaultQ.t_kw : "";
-            if (q.a_kw === undefined) q.a_kw = defaultQ && defaultQ.a_kw ? defaultQ.a_kw : "";
-            if (q.r_kw === undefined) q.r_kw = defaultQ && defaultQ.r_kw ? defaultQ.r_kw : "";
-          } else if (q.framework === "PREP") {
-            if (q.p1_kw === undefined) q.p1_kw = defaultQ && defaultQ.p1_kw ? defaultQ.p1_kw : "";
-            if (q.r_kw === undefined) q.r_kw = defaultQ && defaultQ.r_kw ? defaultQ.r_kw : "";
-            if (q.e_kw === undefined) q.e_kw = defaultQ && defaultQ.e_kw ? defaultQ.e_kw : "";
-            if (q.p2_kw === undefined) q.p2_kw = defaultQ && defaultQ.p2_kw ? defaultQ.p2_kw : "";
+        if (!proj.category) {
+          if (proj.id === 'P5' || (proj.code && proj.code.startsWith('C')) || (proj.title && (proj.title.includes('셋업') || proj.title.includes('운영')))) {
+            proj.category = 'career';
+            if (!proj.code || proj.code.startsWith('PROJECT 05')) proj.code = 'CAREER 02';
+          } else {
+            proj.category = 'project';
           }
+        }
+        if (!proj.questions) proj.questions = [];
+        proj.questions.forEach((q) => {
+          if (q.use_star === undefined) q.use_star = false; // Default clean plain text
+          if (!q.plain_text) ensurePlainText(q);
+          if (!q.plain_kw) ensurePlainKeywords(q);
         });
       });
     } catch (e) {
@@ -2163,27 +2451,58 @@ function resetToDefault() {
   }
 }
 
-// ================= SIDEBAR RENDERING =================
+// ================= SIDEBAR RENDERING (1.경력 / 2.프로젝트) =================
 function renderSidebar() {
-  const listEl = document.getElementById('sidebarProjList');
-  if (!listEl) return;
+  const careerListEl = document.getElementById('sidebarCareerList');
+  const projectListEl = document.getElementById('sidebarProjectList');
+  if (!careerListEl || !projectListEl) return;
+
+  const careerItems = [];
+  const projectItems = [];
+
+  projectsData.forEach((proj, idx) => {
+    if (!proj.category) proj.category = 'project';
+    if (proj.category === 'career') {
+      careerItems.push({ ...proj, originalIndex: idx });
+    } else {
+      projectItems.push({ ...proj, originalIndex: idx });
+    }
+  });
 
   const countBadge = document.getElementById('projCountBadge');
-  if (countBadge) countBadge.textContent = `${projectsData.length} Projects`;
+  if (countBadge) countBadge.textContent = `${projectsData.length} 항목`;
 
-  listEl.innerHTML = projectsData.map((proj, idx) => {
-    const isActive = (idx === currentProjIndex) ? 'active' : '';
-    const qCount = proj.questions ? proj.questions.length : 0;
+  const careerBadge = document.getElementById('careerCountBadge');
+  if (careerBadge) careerBadge.textContent = careerItems.length;
+
+  const projectBadge = document.getElementById('projectCountBadge');
+  if (projectBadge) projectBadge.textContent = projectItems.length;
+
+  function renderItemHtml(item) {
+    const isActive = (item.originalIndex === currentProjIndex) ? 'active' : '';
+    const qCount = item.questions ? item.questions.length : 0;
+    const isCareer = item.category === 'career';
+    const pillClass = isCareer ? 'code-career' : 'code-project';
+    const defaultCode = isCareer ? `C${item.originalIndex + 1}` : `P${item.originalIndex + 1}`;
+
     return `
-      <div class="sidebar-proj-item ${isActive}" onclick="selectProject(${idx})">
+      <div class="sidebar-proj-item ${isActive}" onclick="selectProject(${item.originalIndex})">
         <div class="sidebar-proj-meta">
-          <span class="sidebar-code-pill">${escapeHtml(proj.code || 'P' + (idx + 1))}</span>
-          <span class="sidebar-proj-name" title="${escapeHtml(proj.title)}">${escapeHtml(proj.title)}</span>
+          <span class="sidebar-code-pill ${pillClass}">${escapeHtml(item.code || defaultCode)}</span>
+          <span class="sidebar-proj-name" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</span>
         </div>
         <span class="sidebar-q-count">${qCount}Q</span>
       </div>
     `;
-  }).join('');
+  }
+
+  careerListEl.innerHTML = careerItems.length > 0
+    ? careerItems.map(renderItemHtml).join('')
+    : '<div style="font-size:11px; color:#64748b; padding:8px 6px;">등록된 경력이 없습니다.</div>';
+
+  projectListEl.innerHTML = projectItems.length > 0
+    ? projectItems.map(renderItemHtml).join('')
+    : '<div style="font-size:11px; color:#64748b; padding:8px 6px;">등록된 프로젝트가 없습니다.</div>';
 }
 
 function selectProject(pIdx) {
@@ -2197,7 +2516,7 @@ function selectProject(pIdx) {
 // ================= MAIN WORKSPACE RENDERING =================
 function renderCurrentProject() {
   if (projectsData.length === 0) {
-    document.getElementById('questionsContainer').innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b;">등록된 프로젝트가 없습니다. 좌측 + 추가 버튼을 눌러주세요.</div>';
+    document.getElementById('questionsContainer').innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b;">항목이 없습니다. 좌측 + 추가 버튼을 눌러주세요.</div>';
     return;
   }
 
@@ -2205,8 +2524,21 @@ function renderCurrentProject() {
   const proj = projectsData[currentProjIndex];
   if (!activeQuestionIndex[currentProjIndex]) activeQuestionIndex[currentProjIndex] = 0;
 
+  // Category Toggle Badge
+  const catBadge = document.getElementById('categoryToggleBadge');
+  const catIcon = document.getElementById('catBadgeIcon');
+  const catText = document.getElementById('catBadgeText');
+  const isCareer = (proj.category === 'career');
+
+  if (catBadge) {
+    catBadge.classList.toggle('is-project', !isCareer);
+    if (catIcon) catIcon.textContent = isCareer ? '💼' : '🚀';
+    if (catText) catText.textContent = isCareer ? '1. 경력' : '2. 프로젝트';
+  }
+
   // Top Bar inputs
-  document.getElementById('currentProjCode').textContent = proj.code || `PROJECT 0${currentProjIndex + 1}`;
+  const defaultCode = isCareer ? `CAREER 0${currentProjIndex + 1}` : `PROJECT 0${currentProjIndex + 1}`;
+  document.getElementById('currentProjCode').textContent = proj.code || defaultCode;
   document.getElementById('currentProjTitleInput').value = proj.title || '';
 
   // Tech Tags
@@ -2219,6 +2551,24 @@ function renderCurrentProject() {
   renderQuestions(proj);
 }
 
+function cycleItemCategory() {
+  const proj = projectsData[currentProjIndex];
+  if (!proj) return;
+  const newCat = (proj.category === 'career') ? 'project' : 'career';
+  proj.category = newCat;
+
+  if (newCat === 'career' && proj.code && proj.code.startsWith('PROJECT')) {
+    proj.code = proj.code.replace('PROJECT', 'CAREER');
+  } else if (newCat === 'project' && proj.code && proj.code.startsWith('CAREER')) {
+    proj.code = proj.code.replace('CAREER', 'PROJECT');
+  }
+
+  triggerAutoSave();
+  renderSidebar();
+  renderCurrentProject();
+  showToast(`분류가 [${newCat === 'career' ? '💼 1. 경력' : '🚀 2. 프로젝트'}]로 변경되었습니다.`);
+}
+
 function handleProjTitleChange(val) {
   projectsData[currentProjIndex].title = val.trim();
   renderSidebar();
@@ -2228,24 +2578,24 @@ function handleProjTitleChange(val) {
 function renderTechTags(proj) {
   const bar = document.getElementById('techTagsBar');
   const tags = proj.tags || [];
-  let html = `<span class="tags-label">TECH STACK:</span>`;
+  let html = `<span class="tags-label">KEYWORD TAGS:</span>`;
   tags.forEach((t, tIdx) => {
     html += `
       <span class="tech-chip">
         <span contenteditable="true" onblur="updateTechTag(${tIdx}, this.textContent)">${escapeHtml(t)}</span>
-        <span class="tech-chip-del" onclick="deleteTechTag(${tIdx})">×</span>
+        <span class="chip-delete" onclick="deleteTechTag(${tIdx})">&times;</span>
       </span>
     `;
   });
-  html += `<button class="btn-add-tech" onclick="addTechTag()">+ 태그 추가</button>`;
+  html += `<button class="chip-add-btn" onclick="addTechTag()">+ 태그 추가</button>`;
   bar.innerHTML = html;
 }
 
 function addTechTag() {
-  const tag = prompt("추가할 기술 스택/키워드를 입력하세요:");
-  if (tag && tag.trim()) {
+  const newTag = prompt("추가할 키워드/기술 태그를 입력하세요 (예: Cpk 1.67, 웜기어, Python):");
+  if (newTag && newTag.trim()) {
     if (!projectsData[currentProjIndex].tags) projectsData[currentProjIndex].tags = [];
-    projectsData[currentProjIndex].tags.push(tag.trim());
+    projectsData[currentProjIndex].tags.push(newTag.trim());
     renderTechTags(projectsData[currentProjIndex]);
     triggerAutoSave();
   }
@@ -2273,7 +2623,6 @@ function renderQuestionStepper(proj) {
     html += `
       <button class="q-tab-btn ${isActive}" onclick="goToQuestion(${qIdx})">
         <span class="q-tab-num">Q${qIdx + 1}</span>
-        <span>${escapeHtml(q.type || '질문')}</span>
       </button>
     `;
   });
@@ -2295,7 +2644,7 @@ function toggleFocusView() {
   renderQuestions(projectsData[currentProjIndex]);
 }
 
-// ================= QUESTIONS RENDERING (STAR / PREP / MECE / FREE) =================
+// ================= QUESTIONS RENDERING (CLEAN HEADER & STAR TOGGLE) =================
 function renderQuestions(proj) {
   const container = document.getElementById('questionsContainer');
   const questions = proj.questions || [];
@@ -2303,8 +2652,8 @@ function renderQuestions(proj) {
   if (questions.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px; background: #0c182b; border: 1px dashed #1a345c; border-radius: 12px;">
-        <p style="color: #94a3b8; margin-bottom: 12px;">이 프로젝트에 등록된 면접 질문이 없습니다.</p>
-        <button class="btn btn-primary" onclick="addQuestionToCurrentProject()">➕ 첫 번째 면접 질문 추가</button>
+        <p style="color: #94a3b8; margin-bottom: 12px;">등록된 면접 질문이 없습니다.</p>
+        <button class="btn btn-primary" onclick="addQuestionToCurrentProject()">➕ 첫 번째 질문 추가</button>
       </div>
     `;
     return;
@@ -2314,9 +2663,7 @@ function renderQuestions(proj) {
 
   let html = '';
   questions.forEach((q, qIdx) => {
-    // In focus mode, only show active question
     if (isFocusViewMode && qIdx !== activeQ) return;
-
     html += renderSingleQuestionCard(q, qIdx, questions.length);
   });
 
@@ -2324,58 +2671,48 @@ function renderQuestions(proj) {
 }
 
 function renderSingleQuestionCard(q, qIdx, totalCount) {
-  const framework = q.framework || "STAR";
+  const isStar = (q.use_star === true);
 
   return `
     <div class="question-card" id="q-card-${qIdx}">
-      <!-- Question Card Header -->
+      <!-- Question Card Header (Simplified: No dropdowns) -->
       <div class="q-card-header">
-        <select class="q-type-select" onchange="updateQField(${qIdx}, 'type', this.value)">
-          <option value="경험 개요" ${q.type === '경험 개요' ? 'selected' : ''}>경험 개요</option>
-          <option value="어려웠던 점" ${q.type === '어려웠던 점' ? 'selected' : ''}>어려웠던 점</option>
-          <option value="압박 꼬리질문" ${q.type === '압박 꼬리질문' ? 'selected' : ''}>압박 꼬리질문</option>
-          <option value="개념/원리 설명" ${q.type === '개념/원리 설명' ? 'selected' : ''}>개념/원리 설명 (~설명해봐라)</option>
-          <option value="현대차 연계" ${q.type === '현대차 연계' ? 'selected' : ''}>현대차 연계</option>
-          <option value="기타 검증" ${q.type === '기타 검증' ? 'selected' : ''}>기타 검증</option>
-        </select>
-
-        <!-- Framework Choice Selector -->
-        <select class="framework-select" onchange="changeQuestionFramework(${qIdx}, this.value)" title="답변 로직 방식 선택">
-          <option value="STAR" ${framework === 'STAR' ? 'selected' : ''}>⭐ STAR 방식 (경험/행동형)</option>
-          <option value="PREP" ${framework === 'PREP' ? 'selected' : ''}>💡 PREP 방식 (~설명/개념/원리형)</option>
-          <option value="MECE" ${framework === 'MECE' ? 'selected' : ''}>📐 MECE 방식 (구조화/분류형)</option>
-          <option value="FREE" ${framework === 'FREE' ? 'selected' : ''}>📝 자유 서술형</option>
-        </select>
-
+        <span class="q-badge-num">Q${qIdx + 1}</span>
         <input type="text" class="q-title-input" value="${escapeHtml(q.question || '')}" placeholder="면접 질문을 입력하세요 (예: Q1. ~한 이유는 무엇인가요?)" oninput="updateQField(${qIdx}, 'question', this.value)">
-
         <button class="btn btn-danger-outline btn-sm" onclick="deleteQuestion(${qIdx})">삭제</button>
       </div>
 
       <!-- Question Card Body -->
       <div class="q-card-body">
-        <!-- Strategy Grid: Intent & Defense -->
-        <div class="strategy-grid">
-          <div>
-            <div class="strat-box-title strat-intent-title">🎯 면접관 공격 의도</div>
-            <textarea class="strat-input" rows="2" placeholder="면접관이 지원자의 진위 여부를 확인하려는 의도" oninput="updateQField(${qIdx}, 'intent', this.value)">${escapeHtml(q.intent || '')}</textarea>
-          </div>
-          <div>
-            <div class="strat-box-title strat-defense-title">🛡️ 방어 핵심 키워드</div>
-            <textarea class="strat-input" rows="2" placeholder="답변 시 반드시 언급해야 할 공학 수치/메커니즘" oninput="updateQField(${qIdx}, 'defense', this.value)">${escapeHtml(q.defense || '')}</textarea>
-          </div>
-        </div>
-
         <!-- Deductive One-line Summary -->
         <div class="summary-lead-box">
           <div class="summary-lead-badge">⚡ 두괄식 요약</div>
-          <input type="text" class="summary-lead-input" value="${escapeHtml(q.summary || '')}" placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요 (예: ~를 통해 수율 0.2% 및 Loss 18%를 개선한 경험입니다.)" oninput="updateQField(${qIdx}, 'summary', this.value)">
+          <input type="text" class="summary-lead-input" value="${escapeHtml(q.summary || '')}" placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요" oninput="updateQField(${qIdx}, 'summary', this.value)">
         </div>
 
-        <!-- Step Fields according to Framework -->
-        ${renderFrameworkSteps(q, qIdx, framework)}
+        <!-- Answer Section with STAR Toggle Switch -->
+        <div class="answer-section">
+          <div class="answer-header-row">
+            <div class="answer-title-wrap">
+              <span>💬 구술 답변</span>
+            </div>
 
-        <!-- Bottom Navigation Controls (Smooth Transition between questions!) -->
+            <!-- STAR Mode Toggle Switch -->
+            <div class="star-toggle-container">
+              <span class="star-toggle-label ${!isStar ? 'active' : ''}" onclick="toggleQuestionStarMode(${qIdx}, false)">📝 줄글 답변</span>
+              <label class="switch">
+                <input type="checkbox" ${isStar ? 'checked' : ''} onchange="toggleQuestionStarMode(${qIdx}, this.checked)">
+                <span class="slider"></span>
+              </label>
+              <span class="star-toggle-label ${isStar ? 'active' : ''}" onclick="toggleQuestionStarMode(${qIdx}, true)">⭐ STAR 방식</span>
+            </div>
+          </div>
+
+          <!-- Answer Content: Plain Text vs STAR Cards -->
+          ${isStar ? renderStarSteps(q, qIdx) : renderPlainAnswer(q, qIdx)}
+        </div>
+
+        <!-- Bottom Navigation Controls -->
         <div class="q-bottom-nav">
           <button class="btn btn-outline" ${qIdx === 0 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''} onclick="goToQuestion(${qIdx - 1})">
             ◀ 이전 질문 (Q${qIdx})
@@ -2405,208 +2742,45 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
   `;
 }
 
-// ================= RENDER STEPS PER FRAMEWORK =================
-function renderFrameworkSteps(q, qIdx, framework) {
-  if (framework === 'PREP') {
-    return `
-      <!-- P: Point -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-p">P</div>
-          <div class="step-title-desc">
-            <span>Point (두괄식 결론 & 핵심 정의)</span>
-            <span class="step-sub-hint">- 질문에 대한 핵심 결론/정의를 한 문장으로 명확히 제시</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.p1_kw || '')}" placeholder="면접관 앞에서 떠올릴 핵심 단어/수치 입력" oninput="updateQField(${qIdx}, 'p1_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'p1', this.textContent)">${escapeHtml(q.p1 || '')}</div>
-        </div>
-      </div>
+// ================= ANSWER MODES: PLAIN TEXT VS STAR =================
+function renderPlainAnswer(q, qIdx) {
+  const kw = (q.plain_kw !== undefined) ? q.plain_kw : ensurePlainKeywords(q);
+  const text = (q.plain_text !== undefined) ? q.plain_text : ensurePlainText(q);
 
-      <!-- R: Reason -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-reason">R</div>
-          <div class="step-title-desc">
-            <span>Reason (공학적 이유 & 물리적 배경)</span>
-            <span class="step-sub-hint">- 왜 그러한지, 공학적 원리와 물리적 메커니즘 설명</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="공학적 원리/이유 핵심 키워드 입력" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
-        </div>
+  return `
+    <div class="plain-answer-card">
+      <div class="plain-kw-row">
+        <span class="plain-kw-label">🔑 핵심 연상 키워드</span>
+        <input type="text" class="step-kw-input" value="${escapeHtml(kw)}" placeholder="면접장에서 떠올릴 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 'plain_kw', this.value)">
       </div>
-
-      <!-- E: Example -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-e">E</div>
-          <div class="step-title-desc">
-            <span>Example (공정 실무 사례 & 데이터 근거)</span>
-            <span class="step-sub-hint">- 실제 배터리/양산 현장에서 검증한 사례나 정량적 수치</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.e_kw || '')}" placeholder="구체적 공정 사례/데이터 키워드 입력" oninput="updateQField(${qIdx}, 'e_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'e', this.textContent)">${escapeHtml(q.e || '')}</div>
-        </div>
+      <div class="plain-text-row">
+        <div class="plain-text-label">💬 전체 구술 답변 (줄글)</div>
+        <div class="step-full-box plain-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText)">${escapeHtml(text)}</div>
       </div>
+    </div>
+  `;
+}
 
-      <!-- P: Point / Impact -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-p">P</div>
-          <div class="step-title-desc">
-            <span>Point (결론 재강조 & ${getActiveCompanyConfig().shortName} 직무 기여)</span>
-            <span class="step-sub-hint">- 핵심 시사점 재강조 및 ${getActiveCompanyConfig().prepHint}</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.p2_kw || '')}" placeholder="${getActiveCompanyConfig().prepPlaceholder}" oninput="updateQField(${qIdx}, 'p2_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'p2', this.textContent)">${escapeHtml(q.p2 || '')}</div>
-        </div>
-      </div>
-    `;
-  }
+function renderStarSteps(q, qIdx) {
+  const config = getActiveCompanyConfig();
 
-  if (framework === 'MECE') {
-    return `
-      <!-- Core -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-mece-c">C</div>
-          <div class="step-title-desc">
-            <span>Core Definition (본질적 정의 & 핵심 과제)</span>
-            <span class="step-sub-hint">- 문제/개념의 물리적 본질 한 줄 요약</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.c_kw || '')}" placeholder="핵심 정의 키워드 입력" oninput="updateQField(${qIdx}, 'c_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'c', this.textContent)">${escapeHtml(q.c || '')}</div>
-        </div>
-      </div>
-
-      <!-- Factor 1 -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-mece-1">M1</div>
-          <div class="step-title-desc">
-            <span>Factor 1 (기계/설비 또는 공정 측면 분석)</span>
-            <span class="step-sub-hint">- 1차 분석 축: 물리적/하드웨어적 메커니즘</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.m1_kw || '')}" placeholder="설비/공정 측면 키워드 입력" oninput="updateQField(${qIdx}, 'm1_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'm1', this.textContent)">${escapeHtml(q.m1 || '')}</div>
-        </div>
-      </div>
-
-      <!-- Factor 2 -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-mece-2">M2</div>
-          <div class="step-title-desc">
-            <span>Factor 2 (제어/소프트웨어 또는 품질 측면 분석)</span>
-            <span class="step-sub-hint">- 2차 분석 축: 제어/알고리즘 및 품질 변동 요인</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.m2_kw || '')}" placeholder="제어/품질 측면 키워드 입력" oninput="updateQField(${qIdx}, 'm2_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'm2', this.textContent)">${escapeHtml(q.m2 || '')}</div>
-        </div>
-      </div>
-
-      <!-- Solution -->
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-mece-s">S</div>
-          <div class="step-title-desc">
-            <span>Solution & SOP (종합 관리 기준 및 현장 대책)</span>
-            <span class="step-sub-hint">- 두 요인을 통합한 현장 관리 표준 및 결론</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="종합 대책 키워드 입력" oninput="updateQField(${qIdx}, 's_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  if (framework === 'FREE') {
-    return `
-      <div class="step-card">
-        <div class="step-header-row">
-          <div class="step-badge badge-p">F</div>
-          <div class="step-title-desc">
-            <span>자유 서술형 답변</span>
-            <span class="step-sub-hint">- 형식에 얽매이지 않고 자유롭게 답변 구성</span>
-          </div>
-        </div>
-        <div class="step-kw-container">
-          <span class="step-kw-label">🔑 연상 키워드</span>
-          <input type="text" class="step-kw-input" value="${escapeHtml(q.free_kw || '')}" placeholder="면접 답변 핵심 키워드 입력" oninput="updateQField(${qIdx}, 'free_kw', this.value)">
-        </div>
-        <div class="step-full-container">
-          <div class="step-full-label">💬 전체 답변 문장</div>
-          <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'free_text', this.textContent)">${escapeHtml(q.free_text || '')}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  // DEFAULT: STAR FRAMEWORK
   return `
     <!-- S: Situation -->
     <div class="step-card">
       <div class="step-header-row">
         <div class="step-badge badge-s">S</div>
         <div class="step-title-desc">
-          <span>Situation (상황 및 배경)</span>
-          <span class="step-sub-hint">- 문제 발생 당시의 구체적 공정 상황과 위기</span>
+          <span>Situation (문제 상황 & 배경)</span>
+          <span class="step-sub-hint">- 직면했던 위기, 불량 발생 배경, 설비 제약 조건</span>
         </div>
       </div>
       <div class="step-kw-container">
         <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="면접관 앞에서 떠올릴 핵심 키워드 (예: 46시리즈, 0.5% Burr, 72시간 내 100만장)" oninput="updateQField(${qIdx}, 's_kw', this.value)">
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="상황 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 's_kw', this.value)">
       </div>
       <div class="step-full-container">
         <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 상황 구술 내용..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
       </div>
     </div>
 
@@ -2615,17 +2789,17 @@ function renderFrameworkSteps(q, qIdx, framework) {
       <div class="step-header-row">
         <div class="step-badge badge-t">T</div>
         <div class="step-title-desc">
-          <span>Task (과제 및 핵심 목표)</span>
-          <span class="step-sub-hint">- 공정 엔지니어로서 본인이 부여받은 R&R과 달성 목표</span>
+          <span>Task (목표 & 해결 과제)</span>
+          <span class="step-sub-hint">- 본인이 달성해야 했던 목표 지표와 해결 과제</span>
         </div>
       </div>
       <div class="step-kw-container">
         <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.t_kw || '')}" placeholder="목표/과제 핵심 키워드 (예: 출하지연 0건, 미검률 0%, 12시간 내 개발)" oninput="updateQField(${qIdx}, 't_kw', this.value)">
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.t_kw || '')}" placeholder="목표 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 't_kw', this.value)">
       </div>
       <div class="step-full-container">
         <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 목표 구술 내용..." oninput="updateQField(${qIdx}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
       </div>
     </div>
 
@@ -2634,17 +2808,17 @@ function renderFrameworkSteps(q, qIdx, framework) {
       <div class="step-header-row">
         <div class="step-badge badge-a">A</div>
         <div class="step-title-desc">
-          <span>Action (공학적 행동 & 문제 해결 원리)</span>
-          <span class="step-sub-hint">- 문제를 해결하기 위해 적용한 물리적/수학적/공학적 솔루션 메커니즘</span>
+          <span>Action (공학적 조치 & 메커니즘)</span>
+          <span class="step-sub-hint">- 본인의 구체적인 공학적 행동, 물리적 해결 메커니즘</span>
         </div>
       </div>
       <div class="step-kw-container">
         <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.a_kw || '')}" placeholder="공학 솔루션 키워드 (예: 국소 음영 낙차, 이원화 Th(55), 1×7 수직 브릿지 커널)" oninput="updateQField(${qIdx}, 'a_kw', this.value)">
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.a_kw || '')}" placeholder="공학 조치 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 'a_kw', this.value)">
       </div>
       <div class="step-full-container">
         <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 공학적 조치 구술 내용..." oninput="updateQField(${qIdx}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
       </div>
     </div>
 
@@ -2653,83 +2827,78 @@ function renderFrameworkSteps(q, qIdx, framework) {
       <div class="step-header-row">
         <div class="step-badge badge-r">R</div>
         <div class="step-title-desc">
-          <span>Result (정량적 성과 & ${getActiveCompanyConfig().shortName} 직무 연계)</span>
-          <span class="step-sub-hint">- 정량적 개선 지표(수율, Loss, 시간)와 ${getActiveCompanyConfig().starHint}</span>
+          <span>Result (정량적 성과 & ${config.shortName} 직무 연계)</span>
+          <span class="step-sub-hint">- 정량적 개선 지표(수율, Loss, 시간)와 ${config.starHint}</span>
         </div>
       </div>
       <div class="step-kw-container">
         <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="${getActiveCompanyConfig().starPlaceholder}" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
+        <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="${config.starPlaceholder}" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
       </div>
       <div class="step-full-container">
         <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 풀 문장 입력..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
+        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 정량 성과 및 기업 기여 구술 내용..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
       </div>
     </div>
   `;
+}
+
+function toggleQuestionStarMode(qIdx, isChecked) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  const q = proj.questions[qIdx];
+  q.use_star = isChecked;
+
+  if (!isChecked && (!q.plain_text || q.plain_text.trim() === '')) {
+    q.plain_text = ensurePlainText(q);
+    q.plain_kw = ensurePlainKeywords(q);
+  }
+
+  triggerAutoSave();
+  renderQuestions(proj);
 }
 
 // ================= NAVIGATION BETWEEN QUESTIONS =================
 function goToQuestion(targetIdx) {
   const proj = projectsData[currentProjIndex];
   if (!proj || !proj.questions || targetIdx < 0 || targetIdx >= proj.questions.length) return;
-
   activeQuestionIndex[currentProjIndex] = targetIdx;
   renderQuestionStepper(proj);
   renderQuestions(proj);
 
-  // Smooth scroll into view
-  const targetCard = document.getElementById(`q-card-${targetIdx}`);
-  if (targetCard) {
-    targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  setTimeout(() => {
+    const card = document.getElementById(`q-card-${targetIdx}`);
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
 }
 
-function nextQuestion() {
+function updateQField(qIdx, field, val) {
   const proj = projectsData[currentProjIndex];
-  const currentQ = activeQuestionIndex[currentProjIndex] || 0;
-  if (proj && proj.questions && currentQ < proj.questions.length - 1) {
-    goToQuestion(currentQ + 1);
-  }
-}
-
-function prevQuestion() {
-  const currentQ = activeQuestionIndex[currentProjIndex] || 0;
-  if (currentQ > 0) {
-    goToQuestion(currentQ - 1);
-  }
-}
-
-// ================= QUESTION MUTATIONS =================
-function updateQField(qIdx, field, value) {
-  projectsData[currentProjIndex].questions[qIdx][field] = value;
-  triggerAutoSave();
-}
-
-function changeQuestionFramework(qIdx, newFramework) {
-  projectsData[currentProjIndex].questions[qIdx].framework = newFramework;
-  renderQuestions(projectsData[currentProjIndex]);
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  proj.questions[qIdx][field] = val;
   triggerAutoSave();
 }
 
 function addQuestionToCurrentProject() {
   const proj = projectsData[currentProjIndex];
-  const newNum = proj.questions.length + 1;
+  if (!proj) return;
+  if (!proj.questions) proj.questions = [];
+
+  const config = getActiveCompanyConfig();
   const newQ = {
-    type: "압박 꼬리질문",
-    framework: "STAR",
-    question: `Q${newNum}. 새로운 면접/검증 질문을 입력하세요`,
-    intent: "면접관이 지원자의 진위 여부를 확인하려는 의도",
-    defense: "답변 시 반드시 언급해야 할 공학 수치/메커니즘",
-    summary: "질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요",
+    question: `Q${proj.questions.length + 1}. 이 질문에 대한 내용을 입력하세요`,
+    summary: "두괄식 핵심 요약 한 문장을 입력하세요",
+    use_star: false,
+    plain_kw: "핵심 연상 키워드 입력",
+    plain_text: `질문에 대한 전체 구술 답변을 입력하세요. ${config.shortName}에서의 기여점과 연결하여 작성하면 좋습니다.`,
     s_kw: "문제 상황 핵심 키워드",
     s: "당시 구체적 문제 상황",
     t_kw: "달성 목표 핵심 키워드",
-    t: "달성해야 했던 목표와 R&R",
+    t: "달성해야 했던 목표와 역할",
     a_kw: "공학 조치 핵심 키워드",
-    a: "본인이 취한 공학적 액션 및 트러블슈팅 메커니즘",
+    a: "문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘",
     r_kw: "정량 성과 핵심 키워드",
-    r: `정량적 결과 및 ${getActiveCompanyConfig().shortName} 직무 연계`
+    r: `정량적 결과 및 ${config.shortName} 직무 기여점`
   };
 
   proj.questions.push(newQ);
@@ -2738,17 +2907,22 @@ function addQuestionToCurrentProject() {
   renderSidebar();
   renderQuestionStepper(proj);
   renderQuestions(proj);
-  showToast("새 꼬리질문이 추가되었습니다.");
+  showToast("새 질문이 추가되었습니다.");
 
   setTimeout(() => {
     const card = document.getElementById(`q-card-${proj.questions.length - 1}`);
-    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 100);
 }
 
 function deleteQuestion(qIdx) {
   const proj = projectsData[currentProjIndex];
-  if (confirm("이 질문 카드를 삭제하시겠습니까?")) {
+  if (!proj || !proj.questions || proj.questions.length <= 1) {
+    showToast("최소 1개의 질문은 유지되어야 합니다.");
+    return;
+  }
+
+  if (confirm(`Q${qIdx + 1} 질문을 삭제하시겠습니까?`)) {
     proj.questions.splice(qIdx, 1);
     if (activeQuestionIndex[currentProjIndex] >= proj.questions.length) {
       activeQuestionIndex[currentProjIndex] = Math.max(0, proj.questions.length - 1);
@@ -2761,22 +2935,27 @@ function deleteQuestion(qIdx) {
   }
 }
 
-// ================= PROJECT MUTATIONS =================
-function addNewProject() {
-  const newIdx = projectsData.length + 1;
+// ================= PROJECT MUTATIONS (1.경력 / 2.프로젝트) =================
+function addNewItem(category = 'project') {
+  const config = getActiveCompanyConfig();
+  const isCareer = (category === 'career');
+  const countInCat = projectsData.filter(p => p.category === category).length + 1;
+  const codePrefix = isCareer ? 'CAREER' : 'PROJECT';
+  const titlePrefix = isCareer ? '신규 경력' : '신규 프로젝트';
+
   const newProj = {
-    id: "P" + newIdx,
-    code: `PROJECT 0${newIdx}`,
-    title: `신규 프로젝트 ${newIdx}`,
-    tags: ["신규 공법", "공정 데이터", "품질 개선"],
+    id: (isCareer ? 'C' : 'P') + (projectsData.length + 1),
+    category: category,
+    code: `${codePrefix} 0${countInCat}`,
+    title: `${titlePrefix} ${countInCat}`,
+    tags: isCareer ? ["양산 운영", "품질 관리", "수율 개선"] : ["신규 공법", "공정 데이터", "알고리즘"],
     questions: [
       {
-        type: "경험 개요",
-        framework: "STAR",
         question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요?",
-        intent: "면접관의 의도를 입력하세요",
-        defense: "방어할 핵심 키워드를 입력하세요",
         summary: "두괄식 요약 한 문장을 입력하세요",
+        use_star: false,
+        plain_kw: "핵심 연상 키워드 입력",
+        plain_text: `이 경험에 대한 전체 구술 답변을 작성하세요. ${config.name} 직무와의 연계성을 강조하면 좋습니다.`,
         s_kw: "당시 배경 핵심 키워드",
         s: "[Situation] 당시 어떤 상황과 배경에서 문제가 발생했나요?",
         t_kw: "목표 핵심 키워드",
@@ -2784,7 +2963,7 @@ function addNewProject() {
         a_kw: "공학 조치 핵심 키워드",
         a: "[Action] 문제를 해결하기 위해 어떤 물리적/수학적/공학적 행동과 메커니즘을 적용했나요?",
         r_kw: "정량 성과 핵심 키워드",
-        r: `[Result] 정량적 성과(수율, Loss, 시간 등)와 ${getActiveCompanyConfig().lineDesc} 기여점은 무엇인가요?`
+        r: `[Result] 정량적 성과(수율, Loss, 시간 등)와 ${config.name} 기여점은 무엇인가요?`
       }
     ]
   };
@@ -2795,18 +2974,26 @@ function addNewProject() {
   saveProjectsData();
   renderSidebar();
   renderCurrentProject();
-  showToast("새 프로젝트가 생성되었습니다.");
+  showToast(`새 ${isCareer ? '경력' : '프로젝트'}가 추가되었습니다.`);
+}
+
+function addNewProject() {
+  addNewItem('project');
 }
 
 function deleteCurrentProject() {
   const proj = projectsData[currentProjIndex];
-  if (confirm(`'${proj.title}' 프로젝트를 삭제하시겠습니까?`)) {
+  if (!proj) return;
+  if (confirm(`'${proj.title}' 항목을 삭제하시겠습니까?`)) {
     projectsData.splice(currentProjIndex, 1);
     currentProjIndex = Math.max(0, currentProjIndex - 1);
+    if (projectsData.length > 0 && !activeQuestionIndex[currentProjIndex]) {
+      activeQuestionIndex[currentProjIndex] = 0;
+    }
     saveProjectsData();
     renderSidebar();
     renderCurrentProject();
-    showToast("프로젝트가 삭제되었습니다.");
+    showToast("항목이 삭제되었습니다.");
   }
 }
 
@@ -2819,10 +3006,10 @@ function toggleKeywordsOnlyMode() {
   if (btn) {
     if (isKeywordsOnlyMode) {
       btn.classList.add('active-mode');
-      showToast("🔑 키워드 연상 모드 활성화: 풀 문장이 가려집니다 (마우스 올리면 확인)");
+      showToast("🔑 키워드 연상 모드 활성화 (풀 답변 가림)");
     } else {
       btn.classList.remove('active-mode');
-      showToast("일반 모드로 복귀했습니다.");
+      showToast("키워드 모드 해제");
     }
   }
 }
@@ -2835,151 +3022,66 @@ function toggleBlindMode() {
   if (btn) {
     if (isBlindMode) {
       btn.classList.add('active-mode');
-      showToast("👁️ 모의면접 모드 활성화: 모든 답변이 가려집니다 (마우스 올리면 확인)");
+      showToast("🙈 블라인드 암기 모드 활성화 (마우스 호버 시 보임)");
     } else {
       btn.classList.remove('active-mode');
-      showToast("일반 모드로 복귀했습니다.");
+      showToast("블라인드 모드 해제");
     }
   }
-}
-
-function toggleReferencePane() {
-  const pane = document.getElementById('referencePane');
-  if (!pane) return;
-  pane.classList.toggle('collapsed');
-}
-
-// ================= REFERENCE VIEWER LOGIC =================
-function switchDocTab(docKey) {
-  activeDocKey = docKey;
-  document.getElementById('tab-hyundai').classList.toggle('active', docKey === 'hyundai');
-  document.getElementById('tab-skhynix').classList.toggle('active', docKey === 'skhynix');
-  renderReferenceDoc();
-}
-
-function getChunkCategory(tag) {
-  const t = tag.toLowerCase();
-  if (t.includes('자소서') || t.includes('자기소개서')) return 'essay';
-  if (t.includes('프로젝트') || t.includes('경험')) return 'project';
-  return 'career';
-}
-
-function getCategoryIcon(cat) {
-  if (cat === 'essay') return '✍️ [자기소개서]';
-  if (cat === 'project') return '🚀 [프로젝트]';
-  return '💼 [경력]';
-}
-
-function filterRefCategory(cat) {
-  activeRefCategory = cat;
-  document.querySelectorAll('.ref-cat-chip').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
-  });
-  renderReferenceDoc(document.getElementById('refSearchInput').value);
-}
-
-function renderReferenceDoc(searchKeyword = '') {
-  const container = document.getElementById('refContentArea');
-  const chunks = CONTEXT_DOCS[activeDocKey] || [];
-  container.innerHTML = '';
-
-  let matchCount = 0;
-  const kw = searchKeyword.trim().toLowerCase();
-
-  chunks.forEach((chunk, idx) => {
-    const isMatch = kw === '' || chunk.text.toLowerCase().includes(kw) || chunk.tag.toLowerCase().includes(kw);
-    if (!isMatch) return;
-
-    const cat = getChunkCategory(chunk.tag);
-    if (activeRefCategory !== 'all' && activeRefCategory !== cat) return;
-
-    matchCount++;
-
-    let displayText = escapeHtml(chunk.text);
-    if (kw !== '') {
-      const regex = new RegExp(`(${escapeRegex(kw)})`, 'gi');
-      displayText = displayText.replace(regex, '<span class="highlight">$1</span>');
-    }
-
-    const card = document.createElement('div');
-    card.className = `doc-chunk-card cat-${cat}`;
-    const catBadgeText = `${getCategoryIcon(cat)} ${escapeHtml(chunk.tag)}`;
-    card.innerHTML = `
-      <div class="chunk-header">
-        <span class="chunk-tag">${catBadgeText}</span>
-        <button class="chunk-copy-btn" onclick="copyChunkText(${idx})">📋 복사</button>
-      </div>
-      <div class="chunk-text">${displayText}</div>
-    `;
-    container.appendChild(card);
-  });
-
-  const countEl = document.getElementById('searchCount');
-  if (countEl) {
-    if (kw !== '') countEl.textContent = `${matchCount}개 검색됨`;
-    else countEl.textContent = `전체 ${chunks.length}개`;
-  }
-}
-
-function searchRefDoc() {
-  const query = document.getElementById('refSearchInput').value;
-  renderReferenceDoc(query);
-}
-
-function copyChunkText(idx) {
-  const chunk = CONTEXT_DOCS[activeDocKey][idx];
-  if (chunk) {
-    copyToClipboard(chunk.text);
-    showToast(`'${chunk.tag}' 복사 완료! 원하는 칸에 붙여넣기(Ctrl+V)하세요.`);
-  }
-}
-
-function copyActiveDocAll() {
-  const chunks = CONTEXT_DOCS[activeDocKey] || [];
-  const fullText = chunks.map(c => `[${c.tag}]\n${c.text}`).join('\n\n====================\n\n');
-  copyToClipboard(fullText);
-  showToast("원문 전체가 클립보드에 복사되었습니다!");
 }
 
 // ================= EXPORT & IMPORT =================
 function exportToMarkdown() {
   const config = getActiveCompanyConfig();
-  let md = `# [${config.name}] ${config.title} (키워드 & 압박 검증)\n\n`;
+  let md = `# [${config.name}] ${config.title} (면접 노트)\n\n`;
   md += `> 최종 내보내기 일시: ${new Date().toLocaleString('ko-KR')}\n\n---\n\n`;
 
-  projectsData.forEach(proj => {
-    md += `## [${proj.code}] ${proj.title}\n\n`;
-    md += `- **Tech Stack**: ${(proj.tags || []).join(', ')}\n\n`;
+  const careerItems = projectsData.filter(p => p.category === 'career');
+  const projectItems = projectsData.filter(p => p.category !== 'career');
 
-    (proj.questions || []).forEach((q, qIdx) => {
-      const framework = q.framework || 'STAR';
-      md += `### Q${qIdx + 1}. ${q.question} (${q.type}) [${framework}]\n\n`;
-      if (q.intent) md += `> **면접관 공격 의도**: ${q.intent}\n`;
-      if (q.defense) md += `> **방어 핵심 키워드**: ${q.defense}\n`;
-      if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
-
-      if (framework === 'PREP') {
-        md += `- **[P - 결론/핵심]**\n  - 🔑 키워드: ${q.p1_kw || ''}\n  - 💬 풀 답변: ${q.p1 || ''}\n`;
-        md += `- **[R - 공학 이유]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 풀 답변: ${q.r || ''}\n`;
-        md += `- **[E - 공정 사례]**\n  - 🔑 키워드: ${q.e_kw || ''}\n  - 💬 풀 답변: ${q.e || ''}\n`;
-        md += `- **[P - ${config.shortName} 기여]**\n  - 🔑 키워드: ${q.p2_kw || ''}\n  - 💬 풀 답변: ${q.p2 || ''}\n\n`;
-      } else if (framework === 'MECE') {
-        md += `- **[C - 본질 정의]**\n  - 🔑 키워드: ${q.c_kw || ''}\n  - 💬 풀 답변: ${q.c || ''}\n`;
-        md += `- **[M1 - 설비/공정]**\n  - 🔑 키워드: ${q.m1_kw || ''}\n  - 💬 풀 답변: ${q.m1 || ''}\n`;
-        md += `- **[M2 - 제어/품질]**\n  - 🔑 키워드: ${q.m2_kw || ''}\n  - 💬 풀 답변: ${q.m2 || ''}\n`;
-        md += `- **[S - 현장 대책]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 풀 답변: ${q.s || ''}\n\n`;
-      } else if (framework === 'FREE') {
-        md += `- **[F - 자유 서술]**\n  - 🔑 키워드: ${q.free_kw || ''}\n  - 💬 풀 답변: ${q.free_text || ''}\n\n`;
-      } else {
-        // STAR
-        md += `- **[S - Situation]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 풀 답변: ${q.s || ''}\n`;
-        md += `- **[T - Task]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 풀 답변: ${q.t || ''}\n`;
-        md += `- **[A - Action]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 풀 답변: ${q.a || ''}\n`;
-        md += `- **[R - Result]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 풀 답변: ${q.r || ''}\n\n`;
-      }
+  if (careerItems.length > 0) {
+    md += `# 1. 💼 경력 (Career)\n\n`;
+    careerItems.forEach(proj => {
+      md += `## [${proj.code}] ${proj.title}\n\n`;
+      md += `- **Keywords**: ${(proj.tags || []).join(', ')}\n\n`;
+      (proj.questions || []).forEach((q, qIdx) => {
+        md += `### Q${qIdx + 1}. ${q.question}\n\n`;
+        if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
+        if (q.use_star) {
+          md += `- **[Situation - 상황]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 답변: ${q.s || ''}\n`;
+          md += `- **[Task - 목표]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 답변: ${q.t || ''}\n`;
+          md += `- **[Action - 조치]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 답변: ${q.a || ''}\n`;
+          md += `- **[Result - 성과 & ${config.shortName} 기여]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 답변: ${q.r || ''}\n\n`;
+        } else {
+          md += `- 🔑 **핵심 키워드**: ${q.plain_kw || ensurePlainKeywords(q)}\n`;
+          md += `- 💬 **구술 답변**:\n${q.plain_text || ensurePlainText(q)}\n\n`;
+        }
+      });
+      md += `---\n\n`;
     });
-    md += `---\n\n`;
-  });
+  }
+
+  if (projectItems.length > 0) {
+    md += `# 2. 🚀 프로젝트 (Project)\n\n`;
+    projectItems.forEach(proj => {
+      md += `## [${proj.code}] ${proj.title}\n\n`;
+      md += `- **Keywords**: ${(proj.tags || []).join(', ')}\n\n`;
+      (proj.questions || []).forEach((q, qIdx) => {
+        md += `### Q${qIdx + 1}. ${q.question}\n\n`;
+        if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
+        if (q.use_star) {
+          md += `- **[Situation - 상황]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 답변: ${q.s || ''}\n`;
+          md += `- **[Task - 목표]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 답변: ${q.t || ''}\n`;
+          md += `- **[Action - 조치]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 답변: ${q.a || ''}\n`;
+          md += `- **[Result - 성과 & ${config.shortName} 기여]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 답변: ${q.r || ''}\n\n`;
+        } else {
+          md += `- 🔑 **핵심 키워드**: ${q.plain_kw || ensurePlainKeywords(q)}\n`;
+          md += `- 💬 **구술 답변**:\n${q.plain_text || ensurePlainText(q)}\n\n`;
+        }
+      });
+      md += `---\n\n`;
+    });
+  }
 
   downloadFile(`${config.exportPrefix}_notes.md`, md, "text/markdown;charset=utf-8;");
   showToast("Markdown 파일이 다운로드되었습니다.");
