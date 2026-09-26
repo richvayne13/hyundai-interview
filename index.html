@@ -969,31 +969,41 @@
     /* ================= TRAINING MODES ================= */
     /* 1. KEYWORDS ONLY TRAINING MODE (Blur full answer) */
     .keywords-only-mode .step-full-box,
-    .keywords-only-mode .plain-full-box {
+    .keywords-only-mode .plain-full-box,
+    .keywords-only-mode .unified-full-box {
       filter: blur(8px);
-      opacity: 0.3;
+      opacity: 0.25;
       user-select: none;
       transition: filter 0.2s, opacity 0.2s;
     }
     .keywords-only-mode .step-full-box:hover,
     .keywords-only-mode .step-full-box:focus,
     .keywords-only-mode .plain-full-box:hover,
-    .keywords-only-mode .plain-full-box:focus {
+    .keywords-only-mode .plain-full-box:focus,
+    .keywords-only-mode .unified-full-box:hover,
+    .keywords-only-mode .unified-full-box:focus {
       filter: blur(0);
       opacity: 1;
       user-select: auto;
     }
     .keywords-only-mode .step-kw-container,
-    .keywords-only-mode .plain-kw-row {
+    .keywords-only-mode .plain-kw-row,
+    .keywords-only-mode .star-kw-row {
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+    }
+    body.theme-skhynix .keywords-only-mode .star-kw-row {
+      border-color: #ff7a00;
+      box-shadow: 0 0 8px rgba(234, 0, 41, 0.25);
     }
 
     /* 2. BLIND SIMULATION MODE (Blur both keywords and answers) */
     .blind-mode .step-kw-container,
     .blind-mode .step-full-box,
     .blind-mode .plain-answer-card,
-    .blind-mode .summary-lead-box {
+    .blind-mode .summary-lead-box,
+    .blind-mode .star-kw-row,
+    .blind-mode .unified-full-box {
       filter: blur(9px);
       user-select: none;
       transition: filter 0.2s;
@@ -1001,7 +1011,9 @@
     .blind-mode .step-kw-container:hover,
     .blind-mode .step-full-box:hover,
     .blind-mode .plain-answer-card:hover,
-    .blind-mode .summary-lead-box:hover {
+    .blind-mode .summary-lead-box:hover,
+    .blind-mode .star-kw-row:hover,
+    .blind-mode .unified-full-box:hover {
       filter: blur(0);
       user-select: auto;
     }
@@ -1286,132 +1298,132 @@
       margin-top: 14px;
     }
 
-    .answer-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .answer-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #f1f5f9;
-    }
-
-    .star-toggle-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(3, 7, 18, 0.65);
-      border: 1px solid var(--card-border);
-      padding: 4px 10px;
-      border-radius: 20px;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
-
-    .star-toggle-label {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: #64748b;
-      transition: all 0.2s;
-      user-select: none;
-      cursor: pointer;
-    }
-
-    .star-toggle-label.active {
-      color: var(--accent-cyan);
-      font-weight: 800;
-    }
-    body.theme-skhynix .star-toggle-label.active {
-      color: #ff7a00;
-    }
-
-    /* Switch UI */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 36px;
-      height: 20px;
-    }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #1e293b;
-      transition: .22s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 20px;
-      border: 1px solid #334155;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 14px;
-      width: 14px;
-      left: 2px;
-      bottom: 2px;
-      background-color: #94a3b8;
-      transition: .22s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background: linear-gradient(135deg, #0052cc, #00c2ff);
-      border-color: #00e5ff;
-    }
-    body.theme-skhynix input:checked + .slider {
-      background: linear-gradient(135deg, #ea0029, #ff7a00);
-      border-color: #ff7a00;
-    }
-    input:checked + .slider:before {
-      transform: translateX(16px);
-      background-color: #ffffff;
-    }
-
-    /* Plain Answer Card */
-    .plain-answer-card {
+    /* ================= COMPACT STAR KEYWORDS STACK ================= */
+    .star-kw-block {
       background: #091322;
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      padding: 9px 12px 9px 12px;
+      margin-bottom: 12px;
     }
-    body.theme-skhynix .plain-answer-card {
-      background: #19090e;
+    body.theme-skhynix .star-kw-block {
+      background: #15080c;
       border-color: #3b1720;
     }
 
-    .plain-kw-row {
-      margin-bottom: 14px;
-    }
-    .plain-kw-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: #f59e0b;
-      margin-bottom: 6px;
-    }
-    .plain-text-label {
+    .star-kw-header-label,
+    .plain-answer-header-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-size: 12px;
       font-weight: 700;
       color: #94a3b8;
       margin-bottom: 6px;
     }
-    .plain-full-box {
-      min-height: 130px;
+    .star-kw-sub-hint {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .star-kw-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #070d19;
+      border: 1px solid #182c49;
+      border-radius: 6px;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      transition: all 0.15s ease;
+    }
+    .star-kw-row:last-child {
+      margin-bottom: 0;
+    }
+    .star-kw-row:hover,
+    .star-kw-row:focus-within {
+      border-color: #294c7a;
+      background: #0c1729;
+    }
+    body.theme-skhynix .star-kw-row {
+      background: #0e0508;
+      border-color: #2e1118;
+    }
+    body.theme-skhynix .star-kw-row:hover,
+    body.theme-skhynix .star-kw-row:focus-within {
+      border-color: #5c202e;
+      background: #17090e;
+    }
+
+    .star-kw-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      flex-shrink: 0;
+    }
+    .star-kw-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      white-space: nowrap;
+      width: 24px;
+    }
+
+    .star-kw-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      font-family: 'Pretendard', sans-serif;
+      height: 22px;
+      line-height: 22px;
+    }
+    .star-kw-input::placeholder {
+      color: #475569;
+      font-size: 11.5px;
+      font-weight: 400;
+    }
+
+    /* Full Spoken Plain Answer Box */
+    .plain-answer-wrap {
+      margin-top: 4px;
+    }
+    .unified-full-box {
+      background: #091322;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      min-height: 120px;
       line-height: 1.75;
       font-size: 14px;
       color: #f1f5f9;
       white-space: pre-wrap;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .unified-full-box:focus {
+      background: #0d1a2f;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+    body.theme-skhynix .unified-full-box {
+      background: #15080c;
+      border-color: #3b1720;
+    }
+    body.theme-skhynix .unified-full-box:focus {
+      background: #1f0b12;
+      border-color: #ff7a00;
+      box-shadow: 0 0 10px rgba(234, 0, 41, 0.2);
     }
 
     /* ================= SIDEBAR CATEGORY GROUPING ================= */
@@ -3156,11 +3168,13 @@ function renderQuestions(proj) {
 }
 
 function renderSingleQuestionCard(q, qIdx, totalCount) {
-  const isStar = (q.use_star === true);
+  const text = (q.plain_text !== undefined && q.plain_text !== null && q.plain_text.trim() !== '')
+    ? q.plain_text
+    : ensurePlainText(q);
 
   return `
     <div class="question-card" id="q-card-${qIdx}">
-      <!-- Question Card Header (Simplified: No dropdowns) -->
+      <!-- Question Card Header -->
       <div class="q-card-header">
         <span class="q-badge-num">Q${qIdx + 1}</span>
         <input type="text" class="q-title-input" value="${escapeHtml(q.question || '')}" placeholder="면접 질문을 입력하세요 (예: Q1. ~한 이유는 무엇인가요?)" oninput="updateQField(${qIdx}, 'question', this.value)">
@@ -3169,32 +3183,55 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
 
       <!-- Question Card Body -->
       <div class="q-card-body">
-        <!-- Deductive One-line Summary -->
+        <!-- 1. 두괄식 한문장 요약 -->
         <div class="summary-lead-box">
           <div class="summary-lead-badge">⚡ 두괄식 요약</div>
           <input type="text" class="summary-lead-input" value="${escapeHtml(q.summary || '')}" placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요" oninput="updateQField(${qIdx}, 'summary', this.value)">
         </div>
 
-        <!-- Answer Section with STAR Toggle Switch -->
-        <div class="answer-section">
-          <div class="answer-header-row">
-            <div class="answer-title-wrap">
-              <span>💬 구술 답변</span>
-            </div>
-
-            <!-- STAR Mode Toggle Switch -->
-            <div class="star-toggle-container">
-              <span class="star-toggle-label ${!isStar ? 'active' : ''}" onclick="toggleQuestionStarMode(${qIdx}, false)">📝 줄글 답변</span>
-              <label class="switch">
-                <input type="checkbox" ${isStar ? 'checked' : ''} onchange="toggleQuestionStarMode(${qIdx}, this.checked)">
-                <span class="slider"></span>
-              </label>
-              <span class="star-toggle-label ${isStar ? 'active' : ''}" onclick="toggleQuestionStarMode(${qIdx}, true)">⭐ STAR 방식</span>
-            </div>
+        <!-- 2. STAR 한줄 핵심 키워드 영역 (S, T, A, R 4줄) -->
+        <div class="star-kw-block">
+          <div class="star-kw-header-label">
+            <span>🔑 STAR 핵심 키워드</span>
+            <span class="star-kw-sub-hint">답변 전 머릿속으로 떠올릴 4대 프레임 한줄 키워드</span>
           </div>
 
-          <!-- Answer Content: Plain Text vs STAR Cards -->
-          ${isStar ? renderStarSteps(q, qIdx) : renderPlainAnswer(q, qIdx)}
+          <!-- S -->
+          <div class="star-kw-row">
+            <span class="star-kw-badge badge-s">S</span>
+            <span class="star-kw-tag">상황</span>
+            <input type="text" class="star-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="상황 핵심 키워드 (직면했던 위기, 배경 조건, 제약 상황)" oninput="updateQField(${qIdx}, 's_kw', this.value)">
+          </div>
+
+          <!-- T -->
+          <div class="star-kw-row">
+            <span class="star-kw-badge badge-t">T</span>
+            <span class="star-kw-tag">목표</span>
+            <input type="text" class="star-kw-input" value="${escapeHtml(q.t_kw || '')}" placeholder="목표 핵심 키워드 (해결해야 했던 과제, 사수 지표)" oninput="updateQField(${qIdx}, 't_kw', this.value)">
+          </div>
+
+          <!-- A -->
+          <div class="star-kw-row">
+            <span class="star-kw-badge badge-a">A</span>
+            <span class="star-kw-tag">행동</span>
+            <input type="text" class="star-kw-input" value="${escapeHtml(q.a_kw || '')}" placeholder="행동 핵심 키워드 (원인 규명, 구체적 공학 조치 & 메커니즘)" oninput="updateQField(${qIdx}, 'a_kw', this.value)">
+          </div>
+
+          <!-- R -->
+          <div class="star-kw-row">
+            <span class="star-kw-badge badge-r">R</span>
+            <span class="star-kw-tag">성과</span>
+            <input type="text" class="star-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="성과 핵심 키워드 (정량 성과 수치, 기업 기여점)" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
+          </div>
+        </div>
+
+        <!-- 3. 전체 구술 답변 줄글 영역 -->
+        <div class="plain-answer-wrap">
+          <div class="plain-answer-header-label">
+            <span>💬 전체 구술 답변 (줄글)</span>
+            <span class="star-kw-sub-hint">STAR 키워드를 바탕으로 면접관에게 말할 완성형 구술 스크립트</span>
+          </div>
+          <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText)">${escapeHtml(text)}</div>
         </div>
 
         <!-- Bottom Navigation Controls -->
@@ -3225,122 +3262,6 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
       </div>
     </div>
   `;
-}
-
-// ================= ANSWER MODES: PLAIN TEXT VS STAR =================
-function renderPlainAnswer(q, qIdx) {
-  const kw = (q.plain_kw !== undefined) ? q.plain_kw : ensurePlainKeywords(q);
-  const text = (q.plain_text !== undefined) ? q.plain_text : ensurePlainText(q);
-
-  return `
-    <div class="plain-answer-card">
-      <div class="plain-kw-row">
-        <span class="plain-kw-label">🔑 핵심 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(kw)}" placeholder="면접장에서 떠올릴 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 'plain_kw', this.value)">
-      </div>
-      <div class="plain-text-row">
-        <div class="plain-text-label">💬 전체 구술 답변 (줄글)</div>
-        <div class="step-full-box plain-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText)">${escapeHtml(text)}</div>
-      </div>
-    </div>
-  `;
-}
-
-function renderStarSteps(q, qIdx) {
-  const config = getActiveCompanyConfig();
-
-  return `
-    <!-- S: Situation -->
-    <div class="step-card">
-      <div class="step-header-row">
-        <div class="step-badge badge-s">S</div>
-        <div class="step-title-desc">
-          <span>Situation (문제 상황 & 배경)</span>
-          <span class="step-sub-hint">- 직면했던 위기, 불량 발생 배경, 설비 제약 조건</span>
-        </div>
-      </div>
-      <div class="step-kw-container">
-        <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.s_kw || '')}" placeholder="상황 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 's_kw', this.value)">
-      </div>
-      <div class="step-full-container">
-        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 상황 구술 내용..." oninput="updateQField(${qIdx}, 's', this.textContent)">${escapeHtml(q.s || '')}</div>
-      </div>
-    </div>
-
-    <!-- T: Task -->
-    <div class="step-card">
-      <div class="step-header-row">
-        <div class="step-badge badge-t">T</div>
-        <div class="step-title-desc">
-          <span>Task (목표 & 해결 과제)</span>
-          <span class="step-sub-hint">- 본인이 달성해야 했던 목표 지표와 해결 과제</span>
-        </div>
-      </div>
-      <div class="step-kw-container">
-        <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.t_kw || '')}" placeholder="목표 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 't_kw', this.value)">
-      </div>
-      <div class="step-full-container">
-        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 목표 구술 내용..." oninput="updateQField(${qIdx}, 't', this.textContent)">${escapeHtml(q.t || '')}</div>
-      </div>
-    </div>
-
-    <!-- A: Action -->
-    <div class="step-card">
-      <div class="step-header-row">
-        <div class="step-badge badge-a">A</div>
-        <div class="step-title-desc">
-          <span>Action (공학적 조치 & 메커니즘)</span>
-          <span class="step-sub-hint">- 본인의 구체적인 공학적 행동, 물리적 해결 메커니즘</span>
-        </div>
-      </div>
-      <div class="step-kw-container">
-        <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.a_kw || '')}" placeholder="공학 조치 핵심 키워드 입력..." oninput="updateQField(${qIdx}, 'a_kw', this.value)">
-      </div>
-      <div class="step-full-container">
-        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 공학적 조치 구술 내용..." oninput="updateQField(${qIdx}, 'a', this.textContent)">${escapeHtml(q.a || '')}</div>
-      </div>
-    </div>
-
-    <!-- R: Result -->
-    <div class="step-card">
-      <div class="step-header-row">
-        <div class="step-badge badge-r">R</div>
-        <div class="step-title-desc">
-          <span>Result (정량적 성과 & ${config.shortName} 직무 연계)</span>
-          <span class="step-sub-hint">- 정량적 개선 지표(수율, Loss, 시간)와 ${config.starHint}</span>
-        </div>
-      </div>
-      <div class="step-kw-container">
-        <span class="step-kw-label">🔑 연상 키워드</span>
-        <input type="text" class="step-kw-input" value="${escapeHtml(q.r_kw || '')}" placeholder="${config.starPlaceholder}" oninput="updateQField(${qIdx}, 'r_kw', this.value)">
-      </div>
-      <div class="step-full-container">
-        <div class="step-full-label">💬 전체 답변 문장 (상세 구술 스크립트)</div>
-        <div class="step-full-box" contenteditable="true" placeholder="면접관에게 말할 정량 성과 및 기업 기여 구술 내용..." oninput="updateQField(${qIdx}, 'r', this.textContent)">${escapeHtml(q.r || '')}</div>
-      </div>
-    </div>
-  `;
-}
-
-function toggleQuestionStarMode(qIdx, isChecked) {
-  const proj = projectsData[currentProjIndex];
-  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
-  const q = proj.questions[qIdx];
-  q.use_star = isChecked;
-
-  if (!isChecked && (!q.plain_text || q.plain_text.trim() === '')) {
-    q.plain_text = ensurePlainText(q);
-    q.plain_kw = ensurePlainKeywords(q);
-  }
-
-  triggerAutoSave();
-  renderQuestions(proj);
 }
 
 // ================= NAVIGATION BETWEEN QUESTIONS =================
@@ -3647,15 +3568,11 @@ function exportToMarkdown() {
       (proj.questions || []).forEach((q, qIdx) => {
         md += `### Q${qIdx + 1}. ${q.question}\n\n`;
         if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
-        if (q.use_star) {
-          md += `- **[Situation - 상황]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 답변: ${q.s || ''}\n`;
-          md += `- **[Task - 목표]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 답변: ${q.t || ''}\n`;
-          md += `- **[Action - 조치]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 답변: ${q.a || ''}\n`;
-          md += `- **[Result - 성과 & ${config.shortName} 기여]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 답변: ${q.r || ''}\n\n`;
-        } else {
-          md += `- 🔑 **핵심 키워드**: ${q.plain_kw || ensurePlainKeywords(q)}\n`;
-          md += `- 💬 **구술 답변**:\n${q.plain_text || ensurePlainText(q)}\n\n`;
-        }
+        md += `- **[S - 상황]**: ${q.s_kw || ''}\n`;
+        md += `- **[T - 목표]**: ${q.t_kw || ''}\n`;
+        md += `- **[A - 행동]**: ${q.a_kw || ''}\n`;
+        md += `- **[R - 성과]**: ${q.r_kw || ''}\n\n`;
+        md += `- 💬 **구술 답변 (줄글)**:\n${q.plain_text || ensurePlainText(q)}\n\n`;
       });
       md += `---\n\n`;
     });
