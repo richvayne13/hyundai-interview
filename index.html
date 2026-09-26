@@ -1496,6 +1496,58 @@
       color: #60a5fa;
       border: 1px solid rgba(59, 130, 246, 0.35);
     }
+    
+    /* ================= DYNAMIC CATEGORIES & SIDEBAR ================= */
+    .sidebar-categories-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 10px 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 12px;
+    }
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+    .cat-edit-pencil {
+      font-size: 10px;
+      opacity: 0.35;
+      margin-left: 3px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .sidebar-cat-title:hover .cat-edit-pencil {
+      opacity: 1;
+    }
+    .category-select-dropdown {
+      background: #0d1e38;
+      color: #38bdf8;
+      border: 1px solid #1e3a63;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      max-width: 200px;
+    }
+    body.theme-skhynix .category-select-dropdown {
+      background: #1f0c13;
+      color: #ff7a00;
+      border-color: #4a1523;
+    }
+    .category-select-dropdown:hover {
+      border-color: var(--accent-cyan);
+    }
+    body.theme-skhynix .category-select-dropdown:hover {
+      border-color: #ff7a00;
+    }
+
     body.theme-skhynix .category-toggle-badge.is-project {
       background: rgba(234, 0, 41, 0.15);
       color: #ff7a00;
@@ -1552,35 +1604,14 @@
       </div>
     </div>
 
-    <div class="sidebar-body">
-      <!-- 1. 경력 Section -->
-      <div class="sidebar-category-section">
-        <div class="sidebar-cat-header">
-          <div class="sidebar-cat-title">
-            <span class="cat-num-pill">1</span>
-            <span>💼 경력</span>
-            <span class="cat-count-badge" id="careerCountBadge">0</span>
-          </div>
-          <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('career')">+ 추가</button>
-        </div>
-        <div class="sidebar-proj-list" id="sidebarCareerList">
-          <!-- Dynamically rendered -->
-        </div>
+    <div class="sidebar-body" id="sidebarBody">
+      <div class="sidebar-categories-header">
+        <span class="sidebar-section-label">면접 질문 분류</span>
+        <button class="btn btn-outline btn-xs" style="padding: 2px 7px; font-size: 10.5px;" onclick="addNewCategoryPrompt()" title="새로운 분류 카테고리 추가">+ 분류 추가</button>
       </div>
 
-      <!-- 2. 프로젝트 Section -->
-      <div class="sidebar-category-section">
-        <div class="sidebar-cat-header">
-          <div class="sidebar-cat-title">
-            <span class="cat-num-pill">2</span>
-            <span>🚀 프로젝트</span>
-            <span class="cat-count-badge" id="projectCountBadge">0</span>
-          </div>
-          <button class="btn btn-outline btn-sm" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('project')">+ 추가</button>
-        </div>
-        <div class="sidebar-proj-list" id="sidebarProjectList">
-          <!-- Dynamically rendered -->
-        </div>
+      <div id="sidebarCategoriesContainer">
+        <!-- Dynamically rendered for each category -->
       </div>
     </div>
 
@@ -1616,11 +1647,9 @@
     <div class="workspace-top-bar">
       <div class="top-bar-left">
         <div class="proj-title-input-wrap">
-          <div class="category-toggle-badge" id="categoryToggleBadge" onclick="cycleItemCategory()" title="클릭하여 경력/프로젝트 분류 전환">
-            <span id="catBadgeIcon">💼</span>
-            <span id="catBadgeText">1. 경력</span>
-            <span style="opacity: 0.6; font-size: 10px;">▾</span>
-          </div>
+          <select class="category-select-dropdown" id="categorySelectDropdown" onchange="handleCategorySelectChange(this.value)" title="분류 변경">
+            <!-- Dynamically populated in renderCurrentProject -->
+          </select>
           <span class="proj-code-tag" id="currentProjCode">CAREER 01</span>
           <input type="text" class="proj-title-input" id="currentProjTitleInput" placeholder="간단한 명칭 입력 (예: 룰기반 비전 선별 엔진)" oninput="handleProjTitleChange(this.value)">
         </div>
@@ -2239,6 +2268,10 @@ function switchCompanyMode(mode, userInitiated = true) {
 
 // ================= APP STATE =================
 let projectsData = [];
+let categoriesData = [
+  { id: 'career', name: '경력', icon: '💼' },
+  { id: 'project', name: '프로젝트', icon: '🚀' }
+];
 let currentProjIndex = 0;
 let activeQuestionIndex = {}; // pIndex -> qIndex
 let isFocusViewMode = true; // true: 1 question at a time, false: all stacked
@@ -2280,7 +2313,6 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 // ================= DATA PERSISTENCE & MIGRATION =================
 function getActiveCompanyConfig() {
   return COMPANY_CONFIGS[currentCompanyMode] || COMPANY_CONFIGS.hyundai;
@@ -2288,6 +2320,35 @@ function getActiveCompanyConfig() {
 
 function getActiveDefaultProjects() {
   return (currentCompanyMode === 'skhynix') ? DEFAULT_PROJECTS_SKHYNIX : DEFAULT_PROJECTS_HYUNDAI;
+}
+
+function loadCategoriesData() {
+  const config = getActiveCompanyConfig();
+  const catKey = 'INTERVIEW_DASH_CATEGORIES_' + config.key.toUpperCase();
+  try {
+    const savedCats = localStorage.getItem(catKey);
+    if (savedCats) {
+      const parsed = JSON.parse(savedCats);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        categoriesData = parsed;
+        return;
+      }
+    }
+  } catch (e) {}
+
+  // Default categories
+  categoriesData = [
+    { id: 'career', name: '경력', icon: '💼' },
+    { id: 'project', name: '프로젝트', icon: '🚀' }
+  ];
+}
+
+function saveCategoriesData() {
+  const config = getActiveCompanyConfig();
+  const catKey = 'INTERVIEW_DASH_CATEGORIES_' + config.key.toUpperCase();
+  try {
+    localStorage.setItem(catKey, JSON.stringify(categoriesData));
+  } catch (e) {}
 }
 
 function ensurePlainText(q) {
@@ -2317,6 +2378,8 @@ function loadProjectsData() {
   const config = getActiveCompanyConfig();
   const defaultList = getActiveDefaultProjects();
 
+  loadCategoriesData();
+
   let saved = localStorage.getItem(config.storageKey);
 
   // Seamless backward-compatibility migration for Hyundai data
@@ -2329,24 +2392,36 @@ function loadProjectsData() {
 
   if (saved) {
     try {
-      projectsData = JSON.parse(saved);
-      // Migrate / ensure category & questions integrity
-      projectsData.forEach((proj, pIdx) => {
-        if (!proj.category) {
-          if (proj.id === 'P5' || (proj.code && proj.code.startsWith('C')) || (proj.title && (proj.title.includes('셋업') || proj.title.includes('운영')))) {
-            proj.category = 'career';
-            if (!proj.code || proj.code.startsWith('PROJECT 05')) proj.code = 'CAREER 02';
-          } else {
-            proj.category = 'project';
+      const parsed = JSON.parse(saved);
+      // Ensure it's a non-empty array
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        projectsData = parsed;
+        // Migrate / ensure category & questions integrity
+        projectsData.forEach((proj, pIdx) => {
+          if (!proj.category) {
+            if (proj.id === 'C1' || proj.id === 'C2' || proj.id === 'P5' || (proj.code && proj.code.startsWith('C')) || (proj.title && (proj.title.includes('셋업') || proj.title.includes('운영')))) {
+              proj.category = 'career';
+              if (!proj.code || proj.code.startsWith('PROJECT 05')) proj.code = 'CAREER 02';
+            } else {
+              proj.category = 'project';
+            }
           }
-        }
-        if (!proj.questions) proj.questions = [];
-        proj.questions.forEach((q) => {
-          if (q.use_star === undefined) q.use_star = false; // Default clean plain text
-          if (!q.plain_text) ensurePlainText(q);
-          if (!q.plain_kw) ensurePlainKeywords(q);
+
+          // Ensure category exists in categoriesData
+          if (!categoriesData.some(c => c.id === proj.category)) {
+            categoriesData.push({ id: proj.category, name: proj.category, icon: '📁' });
+          }
+
+          if (!proj.questions) proj.questions = [];
+          proj.questions.forEach((q) => {
+            if (q.use_star === undefined) q.use_star = false; // Default clean plain text
+            if (!q.plain_text) ensurePlainText(q);
+            if (!q.plain_kw) ensurePlainKeywords(q);
+          });
         });
-      });
+      } else {
+        projectsData = JSON.parse(JSON.stringify(defaultList));
+      }
     } catch (e) {
       console.error("Failed to parse saved data, fallback to default", e);
       projectsData = JSON.parse(JSON.stringify(defaultList));
@@ -2355,9 +2430,14 @@ function loadProjectsData() {
     projectsData = JSON.parse(JSON.stringify(defaultList));
   }
 
+  // Double check: if projectsData is somehow empty, fill with defaultList
+  if (!projectsData || projectsData.length === 0) {
+    projectsData = JSON.parse(JSON.stringify(defaultList));
+  }
+
   // Initialize active question index
   projectsData.forEach((_, idx) => {
-    activeQuestionIndex[idx] = 0;
+    if (activeQuestionIndex[idx] === undefined) activeQuestionIndex[idx] = 0;
   });
 }
 
@@ -2381,6 +2461,7 @@ function triggerAutoSave() {
   setSaveStatus("수정 중...", true);
   saveTimeout = setTimeout(() => {
     saveProjectsData();
+    saveCategoriesData();
   }, 400);
 }
 
@@ -2394,7 +2475,12 @@ function setSaveStatus(text, isSaving) {
 
 function resetToDefault() {
   const config = getActiveCompanyConfig();
-  if (confirm(`정말 [${config.name}] 기본 데이터로 초기화하시겠습니까? (수정한 모든 내용이 기본값으로 덮어씌워집니다)`)) {
+  if (confirm(`정말 [${config.name}] 기본 데이터로 초기화하시겠습니까?\n(수정한 모든 내용과 분류가 기본값으로 복원됩니다)`)) {
+    categoriesData = [
+      { id: 'career', name: '경력', icon: '💼' },
+      { id: 'project', name: '프로젝트', icon: '🚀' }
+    ];
+    saveCategoriesData();
     projectsData = JSON.parse(JSON.stringify(getActiveDefaultProjects()));
     currentProjIndex = 0;
     projectsData.forEach((_, idx) => { activeQuestionIndex[idx] = 0; });
@@ -2405,39 +2491,91 @@ function resetToDefault() {
   }
 }
 
-// ================= SIDEBAR RENDERING (1.경력 / 2.프로젝트) =================
+// ================= CATEGORY MANAGEMENT =================
+function addNewCategoryPrompt() {
+  const name = prompt("새로 추가할 분류(카테고리) 이름을 입력하세요:\n(예: 직무 역량, 인성 면접, 연구 활동, 지원 동기)");
+  if (!name || !name.trim()) return;
+  const cleanName = name.trim();
+  const icon = prompt(`'${cleanName}'에 어울리는 이모지를 입력하세요 (기본: 📁):`, "📁") || "📁";
+  const catId = 'cat_' + Date.now();
+
+  categoriesData.push({ id: catId, name: cleanName, icon: icon.trim() });
+  saveCategoriesData();
+  renderSidebar();
+  renderCurrentProject();
+  showToast(`'${cleanName}' 분류가 추가되었습니다.`);
+}
+
+function editCategoryPrompt(catId) {
+  const cat = categoriesData.find(c => c.id === catId);
+  if (!cat) return;
+  const newName = prompt(`'${cat.name}' 분류 이름을 수정하세요:`, cat.name);
+  if (newName && newName.trim()) {
+    cat.name = newName.trim();
+    const newIcon = prompt(`이모지를 수정하세요 (기존: ${cat.icon}):`, cat.icon);
+    if (newIcon && newIcon.trim()) cat.icon = newIcon.trim();
+    saveCategoriesData();
+    renderSidebar();
+    renderCurrentProject();
+    showToast(`분류가 '${cat.name}'(으)로 수정되었습니다.`);
+  }
+}
+
+function deleteCategoryPrompt(catId) {
+  if (categoriesData.length <= 1) {
+    showToast("최소 1개의 분류는 유지되어야 합니다.");
+    return;
+  }
+  const cat = categoriesData.find(c => c.id === catId);
+  if (!cat) return;
+
+  const itemsInCat = projectsData.filter(p => p.category === catId);
+  if (itemsInCat.length > 0) {
+    const targetCat = categoriesData.find(c => c.id !== catId) || categoriesData[0];
+    const confirmDel = confirm(`'${cat.name}' 분류에 ${itemsInCat.length}개의 항목이 있습니다.\n이 분류를 삭제하고 항목들을 '${targetCat.name}' 분류로 이동하시겠습니까?`);
+    if (!confirmDel) return;
+    itemsInCat.forEach(p => { p.category = targetCat.id; });
+  } else {
+    if (!confirm(`'${cat.name}' 분류를 삭제하시겠습니까?`)) return;
+  }
+
+  categoriesData = categoriesData.filter(c => c.id !== catId);
+  saveCategoriesData();
+  saveProjectsData();
+  renderSidebar();
+  renderCurrentProject();
+  showToast(`'${cat.name}' 분류가 삭제되었습니다.`);
+}
+
+function handleCategorySelectChange(catId) {
+  if (catId === '__NEW_CATEGORY__') {
+    addNewCategoryPrompt();
+    return;
+  }
+  const proj = projectsData[currentProjIndex];
+  if (!proj) return;
+  proj.category = catId;
+  const cat = categoriesData.find(c => c.id === catId);
+  triggerAutoSave();
+  renderSidebar();
+  renderCurrentProject();
+  if (cat) showToast(`분류가 '${cat.name}'(으)로 변경되었습니다.`);
+}
+
+// ================= SIDEBAR RENDERING (ALL DYNAMIC CATEGORIES) =================
 function renderSidebar() {
-  const careerListEl = document.getElementById('sidebarCareerList');
-  const projectListEl = document.getElementById('sidebarProjectList');
-  if (!careerListEl || !projectListEl) return;
-
-  const careerItems = [];
-  const projectItems = [];
-
-  projectsData.forEach((proj, idx) => {
-    if (!proj.category) proj.category = 'project';
-    if (proj.category === 'career') {
-      careerItems.push({ ...proj, originalIndex: idx });
-    } else {
-      projectItems.push({ ...proj, originalIndex: idx });
-    }
-  });
+  const container = document.getElementById('sidebarCategoriesContainer');
+  if (!container) return;
 
   const countBadge = document.getElementById('projCountBadge');
   if (countBadge) countBadge.textContent = `${projectsData.length} 항목`;
-
-  const careerBadge = document.getElementById('careerCountBadge');
-  if (careerBadge) careerBadge.textContent = careerItems.length;
-
-  const projectBadge = document.getElementById('projectCountBadge');
-  if (projectBadge) projectBadge.textContent = projectItems.length;
 
   function renderItemHtml(item) {
     const isActive = (item.originalIndex === currentProjIndex) ? 'active' : '';
     const qCount = item.questions ? item.questions.length : 0;
     const isCareer = item.category === 'career';
     const pillClass = isCareer ? 'code-career' : 'code-project';
-    const defaultCode = isCareer ? `C${item.originalIndex + 1}` : `P${item.originalIndex + 1}`;
+    const defaultCode = `ITEM ${item.originalIndex + 1}`;
 
     return `
       <div class="sidebar-proj-item ${isActive}" onclick="selectProject(${item.originalIndex})">
@@ -2450,13 +2588,34 @@ function renderSidebar() {
     `;
   }
 
-  careerListEl.innerHTML = careerItems.length > 0
-    ? careerItems.map(renderItemHtml).join('')
-    : '<div style="font-size:11px; color:#64748b; padding:8px 6px;">등록된 경력이 없습니다.</div>';
+  let html = '';
+  categoriesData.forEach((cat, catIdx) => {
+    const items = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
 
-  projectListEl.innerHTML = projectItems.length > 0
-    ? projectItems.map(renderItemHtml).join('')
-    : '<div style="font-size:11px; color:#64748b; padding:8px 6px;">등록된 프로젝트가 없습니다.</div>';
+    html += `
+      <div class="sidebar-category-section" data-cat-id="${cat.id}">
+        <div class="sidebar-cat-header">
+          <div class="sidebar-cat-title" onclick="editCategoryPrompt('${cat.id}')" title="클릭하여 분류 이름 수정">
+            <span class="cat-num-pill">${catIdx + 1}</span>
+            <span>${cat.icon || '📁'} ${escapeHtml(cat.name)}</span>
+            <span class="cat-count-badge">${items.length}</span>
+            <span class="cat-edit-pencil" title="이름 수정">✏️</span>
+          </div>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            <button class="btn btn-outline btn-xs" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('${cat.id}')" title="${cat.name}에 새 항목 추가">+ 추가</button>
+            ${categoriesData.length > 1 ? `
+              <button class="btn btn-danger-outline btn-xs" style="padding: 2px 5px; font-size: 10px;" onclick="deleteCategoryPrompt('${cat.id}')" title="분류 삭제">🗑️</button>
+            ` : ''}
+          </div>
+        </div>
+        <div class="sidebar-proj-list">
+          ${items.length > 0 ? items.map(renderItemHtml).join('') : `<div style="font-size:11px; color:#64748b; padding:6px 8px;">항목이 없습니다. (+ 추가)</div>`}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
 }
 
 function selectProject(pIdx) {
@@ -2469,7 +2628,7 @@ function selectProject(pIdx) {
 
 // ================= MAIN WORKSPACE RENDERING =================
 function renderCurrentProject() {
-  if (projectsData.length === 0) {
+  if (!projectsData || projectsData.length === 0) {
     document.getElementById('questionsContainer').innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b;">항목이 없습니다. 좌측 + 추가 버튼을 눌러주세요.</div>';
     return;
   }
@@ -2478,20 +2637,19 @@ function renderCurrentProject() {
   const proj = projectsData[currentProjIndex];
   if (!activeQuestionIndex[currentProjIndex]) activeQuestionIndex[currentProjIndex] = 0;
 
-  // Category Toggle Badge
-  const catBadge = document.getElementById('categoryToggleBadge');
-  const catIcon = document.getElementById('catBadgeIcon');
-  const catText = document.getElementById('catBadgeText');
-  const isCareer = (proj.category === 'career');
-
-  if (catBadge) {
-    catBadge.classList.toggle('is-project', !isCareer);
-    if (catIcon) catIcon.textContent = isCareer ? '💼' : '🚀';
-    if (catText) catText.textContent = isCareer ? '1. 경력' : '2. 프로젝트';
+  // Category Dropdown
+  const catDropdown = document.getElementById('categorySelectDropdown');
+  if (catDropdown) {
+    catDropdown.innerHTML = categoriesData.map((c, i) => `
+      <option value="${c.id}" ${proj.category === c.id ? 'selected' : ''}>
+        ${c.icon} ${i + 1}. ${c.name}
+      </option>
+    `).join('') + `<option value="__NEW_CATEGORY__">➕ 새 분류 만들기...</option>`;
   }
 
   // Top Bar inputs
-  const defaultCode = isCareer ? `CAREER 0${currentProjIndex + 1}` : `PROJECT 0${currentProjIndex + 1}`;
+  const currentCat = categoriesData.find(c => c.id === proj.category);
+  const defaultCode = (proj.category === 'career') ? `CAREER 0${currentProjIndex + 1}` : (proj.category === 'project') ? `PROJECT 0${currentProjIndex + 1}` : `ITEM 0${currentProjIndex + 1}`;
   document.getElementById('currentProjCode').textContent = proj.code || defaultCode;
   document.getElementById('currentProjTitleInput').value = proj.title || '';
 
@@ -2503,24 +2661,6 @@ function renderCurrentProject() {
 
   // Questions
   renderQuestions(proj);
-}
-
-function cycleItemCategory() {
-  const proj = projectsData[currentProjIndex];
-  if (!proj) return;
-  const newCat = (proj.category === 'career') ? 'project' : 'career';
-  proj.category = newCat;
-
-  if (newCat === 'career' && proj.code && proj.code.startsWith('PROJECT')) {
-    proj.code = proj.code.replace('PROJECT', 'CAREER');
-  } else if (newCat === 'project' && proj.code && proj.code.startsWith('CAREER')) {
-    proj.code = proj.code.replace('CAREER', 'PROJECT');
-  }
-
-  triggerAutoSave();
-  renderSidebar();
-  renderCurrentProject();
-  showToast(`분류가 [${newCat === 'career' ? '💼 1. 경력' : '🚀 2. 프로젝트'}]로 변경되었습니다.`);
 }
 
 function handleProjTitleChange(val) {
@@ -2826,6 +2966,22 @@ function goToQuestion(targetIdx) {
   }, 50);
 }
 
+function nextQuestion() {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions) return;
+  const cur = activeQuestionIndex[currentProjIndex] || 0;
+  if (cur < proj.questions.length - 1) {
+    goToQuestion(cur + 1);
+  }
+}
+
+function prevQuestion() {
+  const cur = activeQuestionIndex[currentProjIndex] || 0;
+  if (cur > 0) {
+    goToQuestion(cur - 1);
+  }
+}
+
 function updateQField(qIdx, field, val) {
   const proj = projectsData[currentProjIndex];
   if (!proj || !proj.questions || !proj.questions[qIdx]) return;
@@ -2889,20 +3045,19 @@ function deleteQuestion(qIdx) {
   }
 }
 
-// ================= PROJECT MUTATIONS (1.경력 / 2.프로젝트) =================
+// ================= PROJECT MUTATIONS (CUSTOM CATEGORIES SUPPORT) =================
 function addNewItem(category = 'project') {
   const config = getActiveCompanyConfig();
-  const isCareer = (category === 'career');
-  const countInCat = projectsData.filter(p => p.category === category).length + 1;
-  const codePrefix = isCareer ? 'CAREER' : 'PROJECT';
-  const titlePrefix = isCareer ? '신규 경력' : '신규 프로젝트';
+  const cat = categoriesData.find(c => c.id === category) || categoriesData[0];
+  const countInCat = projectsData.filter(p => p.category === cat.id).length + 1;
+  const prefix = (cat.id === 'career') ? 'CAREER' : (cat.id === 'project') ? 'PROJECT' : 'ITEM';
 
   const newProj = {
-    id: (isCareer ? 'C' : 'P') + (projectsData.length + 1),
-    category: category,
-    code: `${codePrefix} 0${countInCat}`,
-    title: `${titlePrefix} ${countInCat}`,
-    tags: isCareer ? ["양산 운영", "품질 관리", "수율 개선"] : ["신규 공법", "공정 데이터", "알고리즘"],
+    id: `${cat.id.substring(0, 2).toUpperCase()}${projectsData.length + 1}`,
+    category: cat.id,
+    code: `${prefix} 0${countInCat}`,
+    title: `신규 ${cat.name} ${countInCat}`,
+    tags: (cat.id === 'career') ? ["양산 운영", "품질 관리", "수율 개선"] : ["신규 공법", "공정 데이터", "알고리즘"],
     questions: [
       {
         question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요?",
@@ -2928,7 +3083,7 @@ function addNewItem(category = 'project') {
   saveProjectsData();
   renderSidebar();
   renderCurrentProject();
-  showToast(`새 ${isCareer ? '경력' : '프로젝트'}가 추가되었습니다.`);
+  showToast(`새 ${cat.name} 항목이 추가되었습니다.`);
 }
 
 function addNewProject() {
@@ -2984,18 +3139,118 @@ function toggleBlindMode() {
   }
 }
 
+// ================= REFERENCE VIEWER LOGIC =================
+function toggleReferencePane() {
+  const pane = document.getElementById('referencePane');
+  if (!pane) return;
+  pane.classList.toggle('collapsed');
+}
+
+function switchDocTab(docKey) {
+  activeDocKey = docKey;
+  const tabH = document.getElementById('tab-hyundai');
+  const tabS = document.getElementById('tab-skhynix');
+  if (tabH) tabH.classList.toggle('active', docKey === 'hyundai');
+  if (tabS) tabS.classList.toggle('active', docKey === 'skhynix');
+  renderReferenceDoc();
+}
+
+function getChunkCategory(tag) {
+  const t = (tag || '').toLowerCase();
+  if (t.includes('자소서') || t.includes('자기소개서')) return 'essay';
+  if (t.includes('프로젝트') || t.includes('경험')) return 'project';
+  return 'career';
+}
+
+function getCategoryIcon(cat) {
+  if (cat === 'essay') return '✍️ [자기소개서]';
+  if (cat === 'project') return '🚀 [프로젝트]';
+  return '💼 [경력]';
+}
+
+function filterRefCategory(cat) {
+  activeRefCategory = cat;
+  document.querySelectorAll('.ref-cat-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+  });
+  const searchInput = document.getElementById('refSearchInput');
+  renderReferenceDoc(searchInput ? searchInput.value : '');
+}
+
+function renderReferenceDoc(searchKeyword = '') {
+  const container = document.getElementById('refContentArea');
+  if (!container) return;
+  const chunks = CONTEXT_DOCS[activeDocKey] || [];
+  container.innerHTML = '';
+
+  let matchCount = 0;
+  const kw = searchKeyword.trim().toLowerCase();
+
+  chunks.forEach((chunk, idx) => {
+    const isMatch = kw === '' || chunk.text.toLowerCase().includes(kw) || (chunk.tag && chunk.tag.toLowerCase().includes(kw));
+    if (!isMatch) return;
+
+    const cat = getChunkCategory(chunk.tag);
+    if (activeRefCategory !== 'all' && activeRefCategory !== cat) return;
+
+    matchCount++;
+
+    let displayText = escapeHtml(chunk.text);
+    if (kw !== '') {
+      const regex = new RegExp(`(${escapeRegex(kw)})`, 'gi');
+      displayText = displayText.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    const card = document.createElement('div');
+    card.className = `doc-chunk-card cat-${cat}`;
+    const catBadgeText = `${getCategoryIcon(cat)} ${escapeHtml(chunk.tag)}`;
+    card.innerHTML = `
+      <div class="chunk-header">
+        <span class="chunk-tag">${catBadgeText}</span>
+        <button class="btn btn-outline btn-xs" onclick="copyChunkText(${idx})" style="padding: 2px 7px; font-size: 10.5px;">📋 복사</button>
+      </div>
+      <div class="chunk-text">${displayText}</div>
+    `;
+    container.appendChild(card);
+  });
+
+  const countEl = document.getElementById('searchCount');
+  if (countEl) {
+    countEl.textContent = kw ? `${matchCount}건 검색됨` : `${chunks.length}개 항목`;
+  }
+}
+
+function searchRefDoc() {
+  const input = document.getElementById('refSearchInput');
+  renderReferenceDoc(input ? input.value : '');
+}
+
+function copyChunkText(idx) {
+  const chunks = CONTEXT_DOCS[activeDocKey] || [];
+  if (!chunks[idx]) return;
+  copyToClipboard(chunks[idx].text);
+  showToast("해당 원문이 클립보드에 복사되었습니다!");
+}
+
+function copyActiveDocAll() {
+  const chunks = CONTEXT_DOCS[activeDocKey] || [];
+  const fullText = chunks.map(c => `### [${c.tag}]\n${c.text}`).join('\n\n---\n\n');
+  copyToClipboard(fullText);
+  showToast("원문 전체가 클립보드에 복사되었습니다!");
+}
+
 // ================= EXPORT & IMPORT =================
 function exportToMarkdown() {
   const config = getActiveCompanyConfig();
   let md = `# [${config.name}] ${config.title} (면접 노트)\n\n`;
   md += `> 최종 내보내기 일시: ${new Date().toLocaleString('ko-KR')}\n\n---\n\n`;
 
-  const careerItems = projectsData.filter(p => p.category === 'career');
-  const projectItems = projectsData.filter(p => p.category !== 'career');
+  categoriesData.forEach((cat, catIdx) => {
+    const items = projectsData.filter(p => p.category === cat.id);
+    if (items.length === 0) return;
 
-  if (careerItems.length > 0) {
-    md += `# 1. 💼 경력 (Career)\n\n`;
-    careerItems.forEach(proj => {
+    md += `# ${catIdx + 1}. ${cat.icon} ${cat.name}\n\n`;
+    items.forEach(proj => {
       md += `## [${proj.code}] ${proj.title}\n\n`;
       md += `- **Keywords**: ${(proj.tags || []).join(', ')}\n\n`;
       (proj.questions || []).forEach((q, qIdx) => {
@@ -3013,29 +3268,7 @@ function exportToMarkdown() {
       });
       md += `---\n\n`;
     });
-  }
-
-  if (projectItems.length > 0) {
-    md += `# 2. 🚀 프로젝트 (Project)\n\n`;
-    projectItems.forEach(proj => {
-      md += `## [${proj.code}] ${proj.title}\n\n`;
-      md += `- **Keywords**: ${(proj.tags || []).join(', ')}\n\n`;
-      (proj.questions || []).forEach((q, qIdx) => {
-        md += `### Q${qIdx + 1}. ${q.question}\n\n`;
-        if (q.summary) md += `> ⚡ **두괄식 요약**: ${q.summary}\n\n`;
-        if (q.use_star) {
-          md += `- **[Situation - 상황]**\n  - 🔑 키워드: ${q.s_kw || ''}\n  - 💬 답변: ${q.s || ''}\n`;
-          md += `- **[Task - 목표]**\n  - 🔑 키워드: ${q.t_kw || ''}\n  - 💬 답변: ${q.t || ''}\n`;
-          md += `- **[Action - 조치]**\n  - 🔑 키워드: ${q.a_kw || ''}\n  - 💬 답변: ${q.a || ''}\n`;
-          md += `- **[Result - 성과 & ${config.shortName} 기여]**\n  - 🔑 키워드: ${q.r_kw || ''}\n  - 💬 답변: ${q.r || ''}\n\n`;
-        } else {
-          md += `- 🔑 **핵심 키워드**: ${q.plain_kw || ensurePlainKeywords(q)}\n`;
-          md += `- 💬 **구술 답변**:\n${q.plain_text || ensurePlainText(q)}\n\n`;
-        }
-      });
-      md += `---\n\n`;
-    });
-  }
+  });
 
   downloadFile(`${config.exportPrefix}_notes.md`, md, "text/markdown;charset=utf-8;");
   showToast("Markdown 파일이 다운로드되었습니다.");
@@ -3056,26 +3289,37 @@ function downloadFile(filename, content, mimeType) {
   a.download = filename;
   document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
 }
 
-// ================= UTILITIES =================
 function copyToClipboard(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).catch(err => {
+      fallbackCopy(text);
+    });
   } else {
     fallbackCopy(text);
   }
 }
 
 function fallbackCopy(text) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-999999px";
+  textArea.style.top = "-999999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('Fallback: Oops, unable to copy', err);
+  }
+  document.body.removeChild(textArea);
 }
 
 function showToast(msg) {
@@ -3085,17 +3329,23 @@ function showToast(msg) {
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 2300);
+  }, 2200);
 }
 
 function escapeHtml(str) {
   if (!str) return '';
-  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
 
 // ================= SECURITY AUTHENTICATION LOGIC =================
 const DEFAULT_ACCESS_PASS = "1312";
