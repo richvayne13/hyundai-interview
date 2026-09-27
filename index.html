@@ -2958,6 +2958,353 @@
       color: #f87171;
     }
 
+  
+    /* ================= 꼬리질문 아코디언 드로어 (방안 A) ================= */
+    .tail-q-section {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .tail-q-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tail-q-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tail-q-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      letter-spacing: 0.3px;
+    }
+    body.theme-skhynix .tail-q-badge {
+      background: rgba(255, 122, 0, 0.18);
+      color: #ff9838;
+    }
+    .tail-q-count-pill {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+    }
+    .tail-q-sub-hint {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .tail-q-add-btn {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      border-color: rgba(0, 229, 255, 0.35);
+      background: rgba(0, 229, 255, 0.06);
+    }
+    body.theme-skhynix .tail-q-add-btn {
+      color: #ff7a00;
+      border-color: rgba(255, 122, 0, 0.35);
+      background: rgba(255, 122, 0, 0.06);
+    }
+    .tail-q-add-btn:hover {
+      background: rgba(0, 229, 255, 0.15);
+    }
+    body.theme-skhynix .tail-q-add-btn:hover {
+      background: rgba(255, 122, 0, 0.15);
+    }
+
+    .tail-q-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tail-q-empty {
+      padding: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tail-q-empty:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Accordion Item */
+    .tail-q-item {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .tail-q-item:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+    body.theme-skhynix .tail-q-item:hover {
+      border-color: rgba(255, 122, 0, 0.3);
+    }
+    .tail-q-item.is-expanded {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    body.theme-skhynix .tail-q-item.is-expanded {
+      border-color: rgba(255, 122, 0, 0.45);
+    }
+
+    /* Summary Bar */
+    .tail-q-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      cursor: pointer;
+      gap: 10px;
+      user-select: none;
+    }
+    .tail-q-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .tail-q-num-pill {
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: rgba(56, 189, 248, 0.18);
+      color: #38bdf8;
+      font-family: monospace;
+      flex-shrink: 0;
+    }
+    body.theme-skhynix .tail-q-num-pill {
+      background: rgba(255, 122, 0, 0.2);
+      color: #ff9838;
+    }
+    .tail-q-question-input {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #f1f5f9;
+      font-size: 13px;
+      font-weight: 700;
+      width: 100%;
+      border-radius: 4px;
+      padding: 2px 6px;
+      transition: all 0.15s;
+    }
+    .tail-q-question-input:focus {
+      background: rgba(0, 0, 0, 0.35);
+      border-color: rgba(56, 189, 248, 0.45);
+      outline: none;
+    }
+    body.theme-skhynix .tail-q-question-input:focus {
+      border-color: rgba(255, 122, 0, 0.45);
+    }
+
+    .tail-q-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .tail-q-kw-box {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 2px 7px;
+      max-width: 280px;
+    }
+    .tail-q-shield-icon {
+      font-size: 11px;
+    }
+    .tail-q-kw-input {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      font-size: 11.5px;
+      font-weight: 600;
+      width: 100%;
+      min-width: 120px;
+    }
+    .tail-q-kw-input:focus {
+      outline: none;
+      color: #ffffff;
+    }
+    .tail-q-toggle-btn {
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tail-q-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+    .tail-q-item.is-expanded .tail-q-toggle-btn {
+      background: rgba(56, 189, 248, 0.18);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    body.theme-skhynix .tail-q-item.is-expanded .tail-q-toggle-btn {
+      background: rgba(255, 122, 0, 0.18);
+      color: #ff9838;
+      border-color: rgba(255, 122, 0, 0.35);
+    }
+    .tail-q-del-btn {
+      padding: 3px 6px;
+      font-size: 10px;
+      color: #ef4444;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      opacity: 0.55;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+    .tail-q-del-btn:hover {
+      opacity: 1;
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* Expanded Drawer */
+    .tail-q-drawer {
+      padding: 8px 12px 12px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.18);
+    }
+    .tail-q-drawer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tail-q-drawer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tail-q-script-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .tail-q-char-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .tail-q-char-badge.optimal {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+    }
+    .tail-q-char-badge.short {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+    }
+    .tail-q-char-badge.long {
+      background: rgba(239, 68, 68, 0.18);
+      color: #f87171;
+    }
+    .tail-q-textarea {
+      width: 100%;
+      background: #070d18;
+      border: 1px solid #1a345c;
+      border-radius: 6px;
+      color: #f1f5f9;
+      font-size: 13.5px;
+      line-height: 1.6;
+      padding: 8px 10px;
+      resize: vertical;
+      min-height: 64px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .tail-q-textarea:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+    }
+    body.theme-skhynix .tail-q-textarea:focus {
+      border-color: #ff7a00;
+      box-shadow: 0 0 8px rgba(255, 122, 0, 0.2);
+    }
+
+    /* Training mode blurs */
+    .blind-mode .tail-q-kw-box,
+    .blind-mode .tail-q-drawer {
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.2s;
+    }
+    .blind-mode .tail-q-kw-box:hover,
+    .blind-mode .tail-q-drawer:hover {
+      filter: blur(0);
+      user-select: auto;
+    }
+    .keywords-only-mode .tail-q-drawer {
+      filter: blur(8px);
+      opacity: 0.25;
+      user-select: none;
+      transition: filter 0.2s, opacity 0.2s;
+    }
+    .keywords-only-mode .tail-q-drawer:hover,
+    .keywords-only-mode .tail-q-drawer:focus-within {
+      filter: blur(0);
+      opacity: 1;
+      user-select: auto;
+    }
+
+    /* Mobile overrides */
+    @media (max-width: 900px) {
+      .tail-q-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 8px;
+      }
+      .tail-q-bar-right {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 6px;
+      }
+      .tail-q-kw-box {
+        max-width: none;
+        flex: 1;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -3079,7 +3426,7 @@
       </div>
 
       <div class="top-bar-right">
-        <button class="btn btn-primary btn-sm" onclick="addQuestionToCurrentProject()">➕ 꼬리질문 추가</button>
+        <button class="btn btn-primary btn-sm" onclick="addQuestionToCurrentProject()">➕ 메인 질문 추가</button>
         <button class="btn btn-danger-outline btn-sm" onclick="deleteCurrentProject()">프로젝트 삭제</button>
         <button class="btn btn-outline btn-sm" onclick="toggleReferencePane()" id="refToggleTopBtn">📑 원문 보기</button>
       </div>
@@ -4370,6 +4717,120 @@ function ensurePlainKeywords(q) {
   return res;
 }
 
+
+function seedDefaultTailQuestions(proj, q) {
+  if (!q.tail_questions) q.tail_questions = [];
+  if (q.tail_questions.length > 0) return;
+
+  const qText = (q.question || '') + ' ' + (proj.title || '');
+  if (qText.includes('1분 자기소개') || proj.category === 'intro') {
+    q.tail_questions = [
+      {
+        id: 'tq_intro_1',
+        question: '이직을 결심하게 된 가장 결정적인 계기는 무엇인가요?',
+        keyword: '양산 안정화 성공 경험 ➔ 차세대 팩토리 골든 수율 확장 기여',
+        answer: 'LG에너지솔루션에서 46시리즈 개발부터 양산 수율 안정화까지 성공적으로 완수했습니다. 이제 이 성공 경험을 바탕으로 차세대 모빌리티/FAB 양산 라인의 스마트 팩토리 수율 혁신을 주도하고자 지원했습니다.',
+        is_expanded: false
+      },
+      {
+        id: 'tq_intro_2',
+        question: '생산기술 엔지니어로서 본인의 가장 큰 강점 한 가지만 꼽는다면?',
+        keyword: '현장 하드웨어 이해와 소프트웨어(AX) 자동화 역량의 결합',
+        answer: '설비 기구부를 직접 뜯어보며 하드웨어 병목을 해결하는 현장 실행력과, 이를 파이썬 알고리즘으로 자동화하여 팀 공수를 줄이는 AX 문제해결력을 동시에 갖춘 점입니다.',
+        is_expanded: false
+      }
+    ];
+  } else if (qText.includes('웹게이지') || qText.includes('미세라인') || qText.includes('EMA')) {
+    q.tail_questions = [
+      {
+        id: 'tq_web_1',
+        question: '왜 비전 검사기 대신 웹게이지 데이터를 활용했나요?',
+        keyword: '음영 차이 없는 미세 결함의 중량(로딩량) 시프트 포착',
+        answer: '미세라인은 표면 색상 차이가 없어 비전 카메라로는 단순 먼지 노이즈와 구분이 불가능했습니다. 하지만 국부적인 코팅 두께와 중량 변동은 1% 미만이라도 웹게이지 방사능 계측치에 선명히 기록된다는 점에 착안했습니다.',
+        is_expanded: false
+      },
+      {
+        id: 'tq_web_2',
+        question: '오검출(과검)과 미검 사이의 트레이드오프는 어떻게 조정했나요?',
+        keyword: 'MD 진행방향 N회 스윙 & TD 폭방향 연속 포인트 다중 트리거',
+        answer: '단일 포인트 이탈로 알람을 울리면 일반 산포 노이즈로 인한 과검이 발생합니다. 이를 막기 위해 진행 방향(MD) 스윙 변동과 폭 방향(TD) 연속 포인트를 결합하여 두 조건을 모두 만족할 때만 결함으로 판정하도록 설계했습니다.',
+        is_expanded: false
+      }
+    ];
+  } else if (qText.includes('Shim') || qText.includes('전동화')) {
+    q.tail_questions = [
+      {
+        id: 'tq_shim_1',
+        question: '수동 조작을 전동화할 때 가장 중요하게 고려한 기계 메커니즘은 무엇인가요?',
+        keyword: '고감속 웜기어의 역구동 방지(Self-locking) & LVDT 초정밀 피드백',
+        answer: '코팅 압력에 의해 모터 위치가 밀리는 현상을 막기 위해 역구동 방지 기능의 고감속 웜기어를 채택했고, 고분해능 LVDT 센서로 서브마이크론 단위 위치를 실시간 피드백 제어했습니다.',
+        is_expanded: false
+      },
+      {
+        id: 'tq_shim_2',
+        question: '전동화 적용 후 작업자들의 반응이나 운영상 주의점은 무엇이었나요?',
+        keyword: '수동 다이얼 회귀 방지 SOP 표준화 및 모터 영점 캘리브레이션',
+        answer: '기존 작업 습관으로 수동 레버를 만지려던 혼선을 막기 위해 HMI 조작 매뉴얼을 표준화했고, 정기 PM 시 모터 엔코더와 LVDT 센서 간 영점 캘리브레이션 루틴을 수립했습니다.',
+        is_expanded: false
+      }
+    ];
+  } else if (qText.includes('비전') || qText.includes('100만') || qText.includes('Bridge Kernel')) {
+    q.tail_questions = [
+      {
+        id: 'tq_vis_1',
+        question: '1×7 수직 Bridge Kernel에서 왜 하필 7픽셀이었나요?',
+        keyword: '500장 실측 기반 점선 결함 최대 간격 측정 및 가로 노이즈 차단',
+        answer: '현장 샘플 이미지 500장을 실측 분석한 결과, 점선 결함의 끊긴 간격이 최대 6픽셀 이내였습니다. 7픽셀로 잡아야 결함을 실선으로 연결하면서도 주변 무관한 노이즈와의 병합을 원천 차단할 수 있었습니다.',
+        is_expanded: false
+      },
+      {
+        id: 'tq_vis_2',
+        question: '장당 5ms 초고속 연산 속도는 어떻게 달성했나요?',
+        keyword: 'ROI 국부 영역 한정 & 1차원 분리 커널 및 비트 연산 최적화',
+        answer: '전체 풀 프레임을 검사하지 않고 결함 발생 가능성이 높은 ROI 영역으로 한정했으며, 무거운 2차원 컨볼루션 대신 1차원 수직 분리 커널과 비트 연산을 적용하여 연산량을 90% 이상 줄였습니다.',
+        is_expanded: false
+      }
+    ];
+  } else if (qText.includes('IPQC') || qText.includes('자동화') || qText.includes('대신맨') || qText.includes('환각')) {
+    q.tail_questions = [
+      {
+        id: 'tq_ipqc_1',
+        question: '사내 폐쇄망 환경에서 파이썬 프로그램을 어떻게 배포했나요?',
+        keyword: '독립 실행 파일(PyInstaller) 패키징 및 직관적 GUI 배포',
+        answer: '외부 라이브러리 설치가 제한된 폐쇄망을 고려해 독립 실행 파일(exe)로 빌드했고, 코딩을 모르는 오퍼레이터도 원클릭으로 쓸 수 있도록 직관적인 버튼 기반 GUI로 배포했습니다.',
+        is_expanded: false
+      },
+      {
+        id: 'tq_ipqc_2',
+        question: 'AI 에이전트 도입 시 팀원들의 신뢰도는 어떻게 확보했나요?',
+        keyword: '기존 엔지니어 검토 기준을 반영한 PRD 작성 및 결과 100% 교차 검증',
+        answer: '기존 수작업 검토 매뉴얼을 PRD로 정밀화하여 AI 가드레일을 고정했고, 과거 1개월 치 데이터로 기존 수작업 결과와 100% 일치함을 교차 검증하여 팀의 신뢰를 확보했습니다.',
+        is_expanded: false
+      }
+    ];
+  } else if (qText.includes('방사능') || qText.includes('7개 조직')) {
+    q.tail_questions = [
+      {
+        id: 'tq_c2_1',
+        question: '원자력안전법 등 안전 기준과 생산 일정 간의 균형은 어떻게 맞췄나요?',
+        keyword: '사전 치구 리허설(Dry-run) 3회로 노출 시간을 법정 기준 1/10로 단축',
+        answer: '안전 기준을 타협하지 않기 위해 사전 치구 리허설을 3회 실시하여 실제 방사선원 탈부착 본작업 시간을 3시간으로 압축했고, 안전팀과 생산팀 모두를 만족시켰습니다.',
+        is_expanded: false
+      }
+    ];
+  } else {
+    q.tail_questions = [
+      {
+        id: 'tq_def_1',
+        question: '이 성과를 달성하는 과정에서 가장 어려웠던 기술적 난관은 무엇이었나요?',
+        keyword: '근본 원인 분석(Root Cause) 및 데이터 기반 솔루션 수립',
+        answer: '초기에는 원인이 복합적이어서 시행착오가 있었으나, 계측 데이터를 세분화하여 핵심 인자를 좁혀낸 끝에 최적의 솔루션을 도출할 수 있었습니다.',
+        is_expanded: false
+      }
+    ];
+  }
+}
+
 function loadProjectsData() {
   const config = getActiveCompanyConfig();
   const defaultList = getActiveDefaultProjects();
@@ -4427,6 +4888,95 @@ function loadProjectsData() {
 
           if (!proj.questions) proj.questions = [];
           resequenceQuestions(proj);
+
+          // Ensure tail_questions array exists on each question
+          proj.questions.forEach((q) => {
+            if (!q.tail_questions) q.tail_questions = [];
+            // Seed high-value default tail questions if empty
+            if (q.tail_questions.length === 0) {
+              const qText = (q.question || '') + ' ' + (proj.title || '');
+              if (qText.includes('1분 자기소개') || proj.category === 'intro') {
+                q.tail_questions = [
+                  {
+                    id: 'tq_intro_1',
+                    question: '이직을 결심하게 된 가장 결정적인 계기는 무엇인가요?',
+                    keyword: '양산 안정화 성공 경험 ➔ 차세대 팩토리 골든 수율 확장 기여',
+                    answer: 'LG에너지솔루션에서 46시리즈 개발부터 양산 수율 안정화까지 성공적으로 완수했습니다. 이제 이 성공 경험을 바탕으로 차세대 모빌리티/FAB 양산 라인의 스마트 팩토리 수율 혁신을 주도하고자 지원했습니다.',
+                    is_expanded: false
+                  },
+                  {
+                    id: 'tq_intro_2',
+                    question: '생산기술 엔지니어로서 본인의 가장 큰 강점 한 가지만 꼽는다면?',
+                    keyword: '현장 하드웨어 이해와 소프트웨어(AX) 자동화 역량의 결합',
+                    answer: '설비 기구부를 직접 뜯어보며 하드웨어 병목을 해결하는 현장 실행력과, 이를 파이썬 알고리즘으로 자동화하여 팀 공수를 줄이는 AX 문제해결력을 동시에 갖춘 점입니다.',
+                    is_expanded: false
+                  }
+                ];
+              } else if (qText.includes('웹게이지') || qText.includes('미세라인')) {
+                q.tail_questions = [
+                  {
+                    id: 'tq_web_1',
+                    question: '왜 비전 검사기 대신 웹게이지 데이터를 활용했나요?',
+                    keyword: '음영 차이 없는 미세 결함의 중량(로딩량) 시프트 포착',
+                    answer: '미세라인은 표면 색상 차이가 없어 비전 카메라로는 단순 먼지 노이즈와 구분이 불가능했습니다. 하지만 국부적인 코팅 두께와 중량 변동은 1% 미만이라도 웹게이지 방사능 계측치에 선명히 기록된다는 점에 착안했습니다.',
+                    is_expanded: false
+                  },
+                  {
+                    id: 'tq_web_2',
+                    question: '오검출(과검)과 미검 사이의 트레이드오프는 어떻게 조정했나요?',
+                    keyword: 'MD 진행방향 N회 스윙 & TD 폭방향 연속 포인트 다중 트리거',
+                    answer: '단일 포인트 이탈로 알람을 울리면 일반 산포 노이즈로 인한 과검이 발생합니다. 이를 막기 위해 진행 방향(MD) 스윙 변동과 폭 방향(TD) 연속 포인트를 결합하여 두 조건을 모두 만족할 때만 결함으로 판정하도록 설계했습니다.',
+                    is_expanded: false
+                  }
+                ];
+              } else if (qText.includes('Shim') || qText.includes('전동화')) {
+                q.tail_questions = [
+                  {
+                    id: 'tq_shim_1',
+                    question: '수동 조작을 전동화할 때 가장 중요하게 고려한 기계 메커니즘은 무엇인가요?',
+                    keyword: '고감속 웜기어의 역구동 방지(Self-locking) & LVDT 초정밀 피드백',
+                    answer: '코팅 압력에 의해 모터 위치가 밀리는 현상을 막기 위해 역구동 방지 기능의 고감속 웜기어를 채택했고, 고분해능 LVDT 센서로 서브마이크론 단위 위치를 실시간 피드백 제어했습니다.',
+                    is_expanded: false
+                  }
+                ];
+              } else if (qText.includes('비전') || qText.includes('100만')) {
+                q.tail_questions = [
+                  {
+                    id: 'tq_vis_1',
+                    question: '1×7 수직 Bridge Kernel에서 왜 하필 7픽셀이었나요?',
+                    keyword: '500장 실측 기반 점선 결함 최대 간격 측정 및 가로 노이즈 차단',
+                    answer: '현장 샘플 이미지 500장을 실측 분석한 결과, 점선 결함의 끊긴 간격이 최대 6픽셀 이내였습니다. 7픽셀로 잡아야 결함을 실선으로 연결하면서도 주변 무관한 노이즈와의 병합을 원천 차단할 수 있었습니다.',
+                    is_expanded: false
+                  },
+                  {
+                    id: 'tq_vis_2',
+                    question: '장당 5ms 초고속 연산 속도는 어떻게 달성했나요?',
+                    keyword: 'ROI 국부 영역 한정 & 1차원 분리 커널 및 비트 연산 최적화',
+                    answer: '전체 풀 프레임을 검사하지 않고 결함 발생 가능성이 높은 ROI 영역으로 한정했으며, 무거운 2차원 컨볼루션 대신 1차원 수직 분리 커널과 비트 연산을 적용하여 연산량을 90% 이상 줄였습니다.',
+                    is_expanded: false
+                  }
+                ];
+              } else if (qText.includes('IPQC') || qText.includes('자동화') || qText.includes('대신맨')) {
+                q.tail_questions = [
+                  {
+                    id: 'tq_ipqc_1',
+                    question: '사내 폐쇄망 환경에서 파이썬 프로그램을 어떻게 배포했나요?',
+                    keyword: '독립 실행 파일(PyInstaller) 패키징 및 직관적 GUI 배포',
+                    answer: '외부 라이브러리 설치가 제한된 폐쇄망을 고려해 독립 실행 파일(exe)로 빌드했고, 코딩을 모르는 오퍼레이터도 원클릭으로 쓸 수 있도록 직관적인 버튼 기반 GUI로 배포했습니다.',
+                    is_expanded: false
+                  },
+                  {
+                    id: 'tq_ipqc_2',
+                    question: 'AI 에이전트 도입 시 팀원들의 신뢰도는 어떻게 확보했나요?',
+                    keyword: '기존 엔지니어 검토 기준을 반영한 PRD 작성 및 결과 100% 교차 검증',
+                    answer: '기존 수작업 검토 매뉴얼을 PRD로 정밀화하여 AI 가드레일을 고정했고, 과거 1개월 치 데이터로 기존 수작업 결과와 100% 일치함을 교차 검증하여 팀의 신뢰를 확보했습니다.',
+                    is_expanded: false
+                  }
+                ];
+              }
+            }
+          });
+
           proj.questions.forEach((q) => {
             if (q.use_star === undefined) q.use_star = false; // Default clean plain text
             if (!q.plain_text) ensurePlainText(q);
@@ -4543,6 +5093,14 @@ function loadProjectsData() {
   if (!projectsData || projectsData.length === 0) {
     projectsData = JSON.parse(JSON.stringify(defaultList));
   }
+
+  // Ensure all projects and questions have tail_questions initialized & seeded
+  projectsData.forEach((proj) => {
+    if (!proj.questions) proj.questions = [];
+    proj.questions.forEach((q) => {
+      seedDefaultTailQuestions(proj, q);
+    });
+  });
 
   // Initialize active question index
   projectsData.forEach((_, idx) => {
@@ -5610,7 +6168,7 @@ function renderQuestionStepper(proj) {
     `;
   });
 
-  html += `<button class="btn btn-outline btn-sm q-add-sub-btn" style="padding: 5px 10px; font-size: 11px; flex-shrink: 0;" onclick="addQuestionToCurrentProject()">+ 꼬리질문</button>`;
+  html += `<button class="btn btn-outline btn-sm q-add-sub-btn" style="padding: 5px 10px; font-size: 11px; flex-shrink: 0;" onclick="addQuestionToCurrentProject()">+ 메인 Q</button>`;
   stepper.innerHTML = html;
 
   // View toggle button text
@@ -5929,6 +6487,28 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
           <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText); updateCharCounterLive(this.innerText);">${escapeHtml(text)}</div>
         </div>
 
+
+        <!-- 4. 컴팩트 꼬리질문 아코디언 드로어 섹션 (방안 A) -->
+        <div class="tail-q-section" id="tailQSection_${qIdx}">
+          <div class="tail-q-header">
+            <div class="tail-q-header-left">
+              <span class="tail-q-badge">🎯 압박 대비 꼬리질문</span>
+              <span class="tail-q-count-pill" id="tailQCountPill_${qIdx}">${(q.tail_questions || []).length}</span>
+              <span class="tail-q-sub-hint">메인 답변 후 면접관이 파고들 핵심 검증 질문과 30초 컷 방어 논리</span>
+            </div>
+            <button type="button" class="btn btn-outline btn-xs tail-q-add-btn" onclick="addTailQuestion(${qIdx})">
+              + 꼬리질문 추가
+            </button>
+          </div>
+          <div class="tail-q-list" id="tailQList_${qIdx}">
+            ${(!q.tail_questions || q.tail_questions.length === 0) ? `
+              <div class="tail-q-empty" onclick="addTailQuestion(${qIdx})">
+                <span>+ 면접관의 예상 꼬리질문과 30초 방어 답변을 추가해보세요</span>
+              </div>
+            ` : q.tail_questions.map((tq, tIdx) => renderTailQuestionItem(qIdx, tq, tIdx)).join('')}
+          </div>
+        </div>
+
         <!-- Bottom Navigation Controls -->
         <div class="q-bottom-nav">
           <button class="btn btn-outline" ${qIdx === 0 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''} onclick="goToQuestion(${qIdx - 1})">
@@ -6035,6 +6615,118 @@ function updateQField(qIdx, field, val) {
       sidebarTitleEl.title = `Q${qIdx + 1}: ${cleanTitle}`;
     }
   }
+}
+
+
+// ================= 꼬리질문 & 30초 압박 방어 관리 로직 (방안 A) =================
+function renderTailQuestionItem(qIdx, tq, tIdx) {
+  const isExpanded = !!tq.is_expanded;
+  const analysis = getSpeechCharAnalysis(tq.answer || '');
+  const tqNumber = `Q${qIdx + 1}-${tIdx + 1}`;
+
+  return `
+    <div class="tail-q-item ${isExpanded ? 'is-expanded' : ''}" id="tail-q-item-${qIdx}-${tIdx}">
+      <div class="tail-q-bar" onclick="toggleTailQuestion(${qIdx}, ${tIdx})">
+        <div class="tail-q-bar-left">
+          <span class="tail-q-num-pill">${tqNumber}</span>
+          <input type="text"
+                 class="tail-q-question-input"
+                 value="${escapeHtml(tq.question || '')}"
+                 placeholder="예상 꼬리질문을 입력하세요 (예: 왜 SMA 대신 EMA를 썼나요?)"
+                 title="꼬리질문 수정"
+                 onclick="event.stopPropagation()"
+                 oninput="updateTailQField(${qIdx}, ${tIdx}, 'question', this.value)">
+        </div>
+        <div class="tail-q-bar-right" onclick="event.stopPropagation()">
+          <div class="tail-q-kw-box" title="1줄 핵심 방어 키워드">
+            <span class="tail-q-shield-icon">🛡️</span>
+            <input type="text"
+                   class="tail-q-kw-input"
+                   value="${escapeHtml(tq.keyword || '')}"
+                   placeholder="핵심 방어 키워드 (예: 지연 최소화·최근 가중치)"
+                   oninput="updateTailQField(${qIdx}, ${tIdx}, 'keyword', this.value)">
+          </div>
+          <button type="button" class="tail-q-toggle-btn" onclick="toggleTailQuestion(${qIdx}, ${tIdx})" title="30초 방어 스크립트 펼치기/접기">
+            ${isExpanded ? '▲ 접기' : '▼ 30초 답변'}
+          </button>
+          <button type="button" class="tail-q-del-btn" onclick="deleteTailQuestion(${qIdx}, ${tIdx})" title="이 꼬리질문 삭제">
+            ✕
+          </button>
+        </div>
+      </div>
+      <div class="tail-q-drawer" style="display: ${isExpanded ? 'block' : 'none'};">
+        <div class="tail-q-drawer-inner">
+          <div class="tail-q-drawer-meta">
+            <span class="tail-q-script-title">💬 30초 압박 방어 구술 스크립트 (2~3문장 팩트 중심)</span>
+            <span class="tail-q-char-badge ${analysis.status}" id="tailCharBadge_${qIdx}_${tIdx}">
+              ${analysis.noSpaceChars}자 · ${analysis.statusText}
+            </span>
+          </div>
+          <textarea class="tail-q-textarea"
+                    rows="3"
+                    placeholder="면접관의 꼬리질문에 즉시 대응할 2~3문장의 30초 컷 방어 답변을 입력하세요..."
+                    oninput="updateTailQField(${qIdx}, ${tIdx}, 'answer', this.value); autoResizeTextarea(this); updateTailCharBadge(${qIdx}, ${tIdx}, this.value);">${escapeHtml(tq.answer || '')}</textarea>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function addTailQuestion(qIdx) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  const q = proj.questions[qIdx];
+  if (!q.tail_questions) q.tail_questions = [];
+  const nextNum = q.tail_questions.length + 1;
+  const newTq = {
+    id: 'tq_' + Date.now(),
+    question: `Q${qIdx + 1}-${nextNum}. 예상 꼬리질문을 입력하세요`,
+    keyword: '핵심 방어 키워드',
+    answer: '면접관의 꼬리질문에 즉시 대응할 2~3문장의 30초 컷 방어 답변을 입력하세요.',
+    is_expanded: true
+  };
+  q.tail_questions.push(newTq);
+  triggerAutoSave();
+  renderQuestions(proj);
+  showToast(`꼬리질문 Q${qIdx + 1}-${nextNum}이(가) 추가되었습니다.`);
+}
+
+function toggleTailQuestion(qIdx, tIdx) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  const q = proj.questions[qIdx];
+  if (!q.tail_questions || !q.tail_questions[tIdx]) return;
+  q.tail_questions[tIdx].is_expanded = !q.tail_questions[tIdx].is_expanded;
+  renderQuestions(proj);
+}
+
+function deleteTailQuestion(qIdx, tIdx) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  const q = proj.questions[qIdx];
+  if (!q.tail_questions || !q.tail_questions[tIdx]) return;
+  if (!confirm(`꼬리질문 Q${qIdx + 1}-${tIdx + 1}을(를) 삭제하시겠습니까?`)) return;
+  q.tail_questions.splice(tIdx, 1);
+  triggerAutoSave();
+  renderQuestions(proj);
+  showToast(`꼬리질문이 삭제되었습니다.`);
+}
+
+function updateTailQField(qIdx, tIdx, field, val) {
+  const proj = projectsData[currentProjIndex];
+  if (!proj || !proj.questions || !proj.questions[qIdx]) return;
+  const q = proj.questions[qIdx];
+  if (!q.tail_questions || !q.tail_questions[tIdx]) return;
+  q.tail_questions[tIdx][field] = val;
+  triggerAutoSave();
+}
+
+function updateTailCharBadge(qIdx, tIdx, val) {
+  const badge = document.getElementById(`tailCharBadge_${qIdx}_${tIdx}`);
+  if (!badge) return;
+  const analysis = getSpeechCharAnalysis(val);
+  badge.className = `tail-q-char-badge ${analysis.status}`;
+  badge.textContent = `${analysis.noSpaceChars}자 · ${analysis.statusText}`;
 }
 
 function addQuestionToCurrentProject() {
