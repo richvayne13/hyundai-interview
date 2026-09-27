@@ -1610,6 +1610,15 @@
       font-weight: 800;
       color: #cbd5e1;
       letter-spacing: 0.3px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: background 0.15s ease, color 0.15s ease;
+      user-select: none;
+    }
+    .sidebar-cat-title:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
     }
     .cat-num-pill {
       display: inline-flex;
@@ -1690,14 +1699,161 @@
       text-transform: uppercase;
     }
     .cat-edit-pencil {
-      font-size: 10px;
-      opacity: 0.35;
-      margin-left: 3px;
+      font-size: 11px;
+      opacity: 0.55;
+      margin-left: 2px;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.18s ease;
+      padding: 1px 3px;
+      border-radius: 4px;
     }
     .sidebar-cat-title:hover .cat-edit-pencil {
       opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.12);
+    }
+    .sidebar-cat-header.is-editing {
+      padding: 3px 4px 6px 4px;
+      background: rgba(0, 229, 255, 0.05);
+      border-radius: 6px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+    }
+    body.theme-skhynix .sidebar-cat-header.is-editing {
+      background: rgba(255, 122, 0, 0.05);
+      border-bottom-color: rgba(255, 122, 0, 0.35);
+    }
+    .sidebar-cat-inline-edit {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: 100%;
+    }
+    .cat-inline-icon-input {
+      width: 28px;
+      height: 25px;
+      background: #08111f;
+      border: 1px solid #1e3a63;
+      border-radius: 5px;
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+      padding: 0;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .cat-inline-icon-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+    }
+    body.theme-skhynix .cat-inline-icon-input:focus {
+      border-color: #ff7a00;
+      box-shadow: 0 0 5px rgba(255, 122, 0, 0.3);
+    }
+    .cat-inline-name-input {
+      flex: 1;
+      min-width: 0;
+      height: 25px;
+      background: #08111f;
+      border: 1px solid #1e3a63;
+      border-radius: 5px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 7px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .cat-inline-name-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 6px rgba(0, 229, 255, 0.35);
+      background: #0c1a2e;
+    }
+    body.theme-skhynix .cat-inline-name-input:focus {
+      border-color: #ff7a00;
+      box-shadow: 0 0 6px rgba(255, 122, 0, 0.35);
+      background: #1a0a10;
+    }
+    .cat-inline-actions {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .cat-inline-btn {
+      width: 24px;
+      height: 25px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      border: none;
+      transition: all 0.15s ease;
+    }
+    .cat-inline-save-btn {
+      background: #10b981;
+      color: #fff;
+      font-weight: 800;
+    }
+    .cat-inline-save-btn:hover {
+      background: #059669;
+      transform: scale(1.06);
+    }
+    .cat-inline-cancel-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 11px;
+    }
+    .cat-inline-cancel-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+    .cat-dropdown-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .cat-quick-rename-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .cat-quick-rename-btn:hover {
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.1);
+      transform: translateY(-1px);
+    }
+    body.theme-skhynix .cat-quick-rename-btn:hover {
+      color: #ff7a00;
+      border-color: #ff7a00;
+      background: rgba(255, 122, 0, 0.1);
+    }
+    .cat-title-text-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+    .cat-name-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 105px;
     }
     .category-select-dropdown {
       background: #0d1e38;
@@ -1921,9 +2077,12 @@
     <div class="workspace-top-bar">
       <div class="top-bar-left">
         <div class="proj-title-input-wrap">
-          <select class="category-select-dropdown" id="categorySelectDropdown" onchange="handleCategorySelectChange(this.value)" title="분류 변경">
-            <!-- Dynamically populated in renderCurrentProject -->
-          </select>
+          <div class="cat-dropdown-wrap">
+            <select class="category-select-dropdown" id="categorySelectDropdown" onchange="handleCategorySelectChange(this.value)" title="분류 변경">
+              <!-- Dynamically populated in renderCurrentProject -->
+            </select>
+            <button type="button" class="cat-quick-rename-btn" onclick="startEditCurrentCategoryFromTop(event)" title="현재 선택된 분류 소제목 수정 (클릭)">✏️ 소제목 수정</button>
+          </div>
           <span class="proj-code-tag" id="currentProjCode">01</span>
           <input type="text" class="proj-title-input" id="currentProjTitleInput" placeholder="간단한 명칭 입력 (예: 룰기반 비전 선별 엔진)" oninput="handleProjTitleChange(this.value)">
         </div>
@@ -2965,34 +3124,156 @@ function resetToDefault() {
   }
 }
 
-// ================= CATEGORY MANAGEMENT =================
-function addNewCategoryPrompt() {
-  const name = prompt("새로 추가할 분류(카테고리) 이름을 입력하세요:\n(예: 직무 역량, 인성 면접, 연구 활동, 지원 동기)");
-  if (!name || !name.trim()) return;
-  const cleanName = name.trim();
-  const icon = prompt(`'${cleanName}'에 어울리는 이모지를 입력하세요 (기본: 📁):`, "📁") || "📁";
-  const catId = 'cat_' + Date.now();
+// ================= CATEGORY MANAGEMENT & INLINE EDITING =================
+let editingCategoryId = null;
+let isNewlyAddedCatId = null;
+let catBlurTimeout = null;
 
-  categoriesData.push({ id: catId, name: cleanName, icon: icon.trim() });
+function startEditCategory(catId, event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  editingCategoryId = catId;
+  renderSidebar();
+  setTimeout(() => {
+    const input = document.getElementById(`inlineCatName_${catId}`);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }, 40);
+}
+
+function startEditCurrentCategoryFromTop(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  const proj = projectsData[currentProjIndex];
+  if (!proj) return;
+  startEditCategory(proj.category);
+  setTimeout(() => {
+    const el = document.getElementById(`inlineCatName_${proj.category}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.focus();
+      el.select();
+    }
+  }, 50);
+  showToast("분류 소제목을 입력한 뒤 Enter를 누르거나 ✓를 클릭하세요.");
+}
+
+function addNewCategoryInline() {
+  const catId = 'cat_' + Date.now();
+  const count = categoriesData.length + 1;
+  const newCat = {
+    id: catId,
+    name: '신규 분류 ' + count,
+    icon: '📁'
+  };
+  categoriesData.push(newCat);
   saveCategoriesData();
+  editingCategoryId = catId;
+  isNewlyAddedCatId = catId;
   renderSidebar();
   renderCurrentProject();
-  showToast(`'${cleanName}' 분류가 추가되었습니다.`);
+  showToast("새 분류 소제목을 입력해주세요. (예: 신규인성외)");
+  setTimeout(() => {
+    const input = document.getElementById(`inlineCatName_${catId}`);
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input.focus();
+      input.select();
+    }
+  }, 50);
+}
+
+function addNewCategoryPrompt() {
+  addNewCategoryInline();
 }
 
 function editCategoryPrompt(catId) {
+  startEditCategory(catId);
+}
+
+function saveCategoryInline(catId) {
+  clearTimeout(catBlurTimeout);
   const cat = categoriesData.find(c => c.id === catId);
-  if (!cat) return;
-  const newName = prompt(`'${cat.name}' 분류 이름을 수정하세요:`, cat.name);
-  if (newName && newName.trim()) {
-    cat.name = newName.trim();
-    const newIcon = prompt(`이모지를 수정하세요 (기존: ${cat.icon}):`, cat.icon);
-    if (newIcon && newIcon.trim()) cat.icon = newIcon.trim();
-    saveCategoriesData();
+  if (!cat) {
+    editingCategoryId = null;
+    isNewlyAddedCatId = null;
     renderSidebar();
-    renderCurrentProject();
-    showToast(`분류가 '${cat.name}'(으)로 수정되었습니다.`);
+    return;
   }
+
+  const nameInput = document.getElementById(`inlineCatName_${catId}`);
+  const iconInput = document.getElementById(`inlineCatIcon_${catId}`);
+  let newName = nameInput ? nameInput.value.trim() : cat.name;
+  let newIcon = iconInput ? iconInput.value.trim() : cat.icon;
+
+  if (!newName) {
+    newName = cat.name || '신규 분류';
+  }
+
+  // Smart emoji extraction: if user typed emoji directly into the title (e.g. "🌟 신규인성외")
+  const emojiRegex = /^(\p{Extended_Pictographic}|\p{Emoji_Presentation})\s*/u;
+  const match = newName.match(emojiRegex);
+  if (match) {
+    newIcon = match[1];
+    newName = newName.replace(emojiRegex, '').trim();
+  }
+
+  cat.name = newName;
+  if (newIcon) cat.icon = newIcon;
+
+  editingCategoryId = null;
+  isNewlyAddedCatId = null;
+
+  saveCategoriesData();
+  renderSidebar();
+  renderCurrentProject();
+  showToast(`분류 소제목이 '${cat.icon} ${cat.name}'(으)로 저장되었습니다.`);
+}
+
+function cancelCategoryInline(catId) {
+  clearTimeout(catBlurTimeout);
+  if (isNewlyAddedCatId === catId) {
+    const hasItems = projectsData.some(p => p.category === catId);
+    if (!hasItems) {
+      categoriesData = categoriesData.filter(c => c.id !== catId);
+      saveCategoriesData();
+    }
+  }
+  editingCategoryId = null;
+  isNewlyAddedCatId = null;
+  renderSidebar();
+  renderCurrentProject();
+}
+
+function handleCatInlineKeyDown(event, catId) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    saveCategoryInline(catId);
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+    cancelCategoryInline(catId);
+  }
+}
+
+function handleCatInputBlur(catId) {
+  clearTimeout(catBlurTimeout);
+  catBlurTimeout = setTimeout(() => {
+    if (editingCategoryId === catId) {
+      const activeEl = document.activeElement;
+      if (activeEl && (
+          activeEl.id === `inlineCatName_${catId}` ||
+          activeEl.id === `inlineCatIcon_${catId}` ||
+          activeEl.closest('.sidebar-cat-inline-edit')
+      )) {
+        return;
+      }
+      saveCategoryInline(catId);
+    }
+  }, 220);
 }
 
 function deleteCategoryPrompt(catId) {
@@ -3023,7 +3304,7 @@ function deleteCategoryPrompt(catId) {
 
 function handleCategorySelectChange(catId) {
   if (catId === '__NEW_CATEGORY__') {
-    addNewCategoryPrompt();
+    addNewCategoryInline();
     return;
   }
   const proj = projectsData[currentProjIndex];
@@ -3351,6 +3632,7 @@ function renderSidebar() {
   let html = '';
   categoriesData.forEach((cat, catIdx) => {
     const items = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
+    const isEditing = (editingCategoryId === cat.id);
 
     html += `
       <div class="sidebar-category-section"
@@ -3359,23 +3641,53 @@ function renderSidebar() {
            ondragover="handleCatDragOver(event, ${catIdx}, '${cat.id}')"
            ondragleave="handleCatDragLeave(event)"
            ondrop="handleCatDrop(event, ${catIdx}, '${cat.id}')">
-        <div class="sidebar-cat-header"
-             draggable="true"
-             ondragstart="handleCatDragStart(event, ${catIdx}, '${cat.id}')"
+        <div class="sidebar-cat-header ${isEditing ? 'is-editing' : ''}"
+             draggable="${isEditing ? 'false' : 'true'}"
+             ondragstart="${isEditing ? 'return false;' : `handleCatDragStart(event, ${catIdx}, '${cat.id}')`}"
              ondragend="handleDragEnd(event)">
-          <div class="sidebar-cat-title" onclick="editCategoryPrompt('${cat.id}')" title="클릭하여 분류 이름 수정">
-            <span class="cat-drag-handle" title="드래그하여 분류 순서 변경">⠿</span>
-            <span class="cat-num-pill">${catIdx + 1}</span>
-            <span>${cat.icon || '📁'} ${escapeHtml(cat.name)}</span>
-            <span class="cat-count-badge">${items.length}</span>
-            <span class="cat-edit-pencil" title="이름 수정" onmousedown="event.stopPropagation()">✏️</span>
-          </div>
-          <div style="display: flex; gap: 4px; align-items: center;" onmousedown="event.stopPropagation()">
-            <button class="btn btn-outline btn-xs" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('${cat.id}')" title="${cat.name}에 새 항목 추가">+ 추가</button>
-            ${categoriesData.length > 1 ? `
-              <button class="btn btn-danger-outline btn-xs" style="padding: 2px 5px; font-size: 10px;" onclick="deleteCategoryPrompt('${cat.id}')" title="분류 삭제">🗑️</button>
-            ` : ''}
-          </div>
+          ${isEditing ? `
+            <div class="sidebar-cat-inline-edit" onclick="event.stopPropagation()">
+              <span class="cat-num-pill">${catIdx + 1}</span>
+              <input type="text"
+                     id="inlineCatIcon_${cat.id}"
+                     class="cat-inline-icon-input"
+                     value="${escapeHtml(cat.icon || '📁')}"
+                     title="이모지 수정"
+                     maxlength="4"
+                     onkeydown="handleCatInlineKeyDown(event, '${cat.id}')"
+                     onmousedown="event.stopPropagation()" />
+              <input type="text"
+                     id="inlineCatName_${cat.id}"
+                     class="cat-inline-name-input"
+                     value="${escapeHtml(cat.name)}"
+                     placeholder="소제목 입력 (예: 신규인성외)"
+                     title="분류 이름 입력 후 Enter (예: 신규인성외)"
+                     onkeydown="handleCatInlineKeyDown(event, '${cat.id}')"
+                     onblur="handleCatInputBlur('${cat.id}')"
+                     onmousedown="event.stopPropagation()" />
+              <div class="cat-inline-actions">
+                <button type="button" class="cat-inline-btn cat-save-btn" onmousedown="event.preventDefault()" onclick="saveCategoryInline('${cat.id}')" title="저장 (Enter)">✓</button>
+                <button type="button" class="cat-inline-btn cat-cancel-btn" onmousedown="event.preventDefault()" onclick="cancelCategoryInline('${cat.id}')" title="취소 (Esc)">✕</button>
+              </div>
+            </div>
+          ` : `
+            <div class="sidebar-cat-title" onclick="startEditCategory('${cat.id}', event)" title="클릭하여 분류 소제목 수정 (예: 신규인성외)">
+              <span class="cat-drag-handle" title="드래그하여 분류 순서 변경" onmousedown="event.stopPropagation()">⠿</span>
+              <span class="cat-num-pill">${catIdx + 1}</span>
+              <span class="cat-title-text-wrap">
+                <span class="cat-icon-text">${cat.icon || '📁'}</span>
+                <span class="cat-name-text">${escapeHtml(cat.name)}</span>
+              </span>
+              <span class="cat-count-badge">${items.length}</span>
+              <span class="cat-edit-pencil" title="소제목 수정 (클릭)" onclick="startEditCategory('${cat.id}', event)" onmousedown="event.stopPropagation()">✏️</span>
+            </div>
+            <div style="display: flex; gap: 4px; align-items: center;" onmousedown="event.stopPropagation()">
+              <button class="btn btn-outline btn-xs" style="padding: 2px 6px; font-size: 10.5px;" onclick="addNewItem('${cat.id}')" title="${cat.name}에 새 항목 추가">+ 추가</button>
+              ${categoriesData.length > 1 ? `
+                <button class="btn btn-danger-outline btn-xs" style="padding: 2px 5px; font-size: 10px;" onclick="deleteCategoryPrompt('${cat.id}')" title="분류 삭제">🗑️</button>
+              ` : ''}
+            </div>
+          `}
         </div>
         <div class="sidebar-proj-list"
              data-cat-id="${cat.id}"
@@ -3389,6 +3701,14 @@ function renderSidebar() {
   });
 
   container.innerHTML = html;
+
+  if (editingCategoryId) {
+    const input = document.getElementById(`inlineCatName_${editingCategoryId}`);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
 }
 
 function selectProject(pIdx) {
