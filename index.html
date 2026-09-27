@@ -2,7 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#070d19">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1202,6 +1205,7 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+      display: none !important;
     }
     .lock-card {
       background: #0d1a2d;
@@ -1987,7 +1991,519 @@
       border-color: rgba(168, 85, 247, 0.3);
     }
 
-    
+    /* ==========================================================================
+       MOBILE RESPONSIVE SYSTEM (WEB vs MOBILE ADAPTIVE UI)
+       ========================================================================== */
+    /* Desktop Default: Hide Mobile Elements */
+    .mobile-header-bar,
+    .mobile-bottom-nav,
+    .mobile-drawer-backdrop,
+    .mobile-sidebar-close-btn {
+      display: none !important;
+    }
+
+    /* Mobile Breakpoint (Phones & Tablets <= 900px) */
+    @media (max-width: 900px) {
+      body {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        width: 100vw !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+
+      .app-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100vw !important;
+        height: 100% !important;
+        flex: 1 !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+
+      /* 1. Mobile Drawer Backdrop */
+      .mobile-drawer-backdrop {
+        display: block !important;
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(4, 9, 18, 0.78) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+        z-index: 950 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.25s ease !important;
+      }
+      .mobile-drawer-backdrop.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      /* 2. Mobile Top Header Bar */
+      .mobile-header-bar {
+        display: flex !important;
+        height: 52px !important;
+        background: #091322 !important;
+        border-bottom: 1px solid var(--card-border) !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0 10px !important;
+        z-index: 100 !important;
+        flex-shrink: 0 !important;
+        user-select: none !important;
+        gap: 8px !important;
+      }
+      body.theme-skhynix .mobile-header-bar {
+        background: #14070a !important;
+        border-bottom-color: #3b141d !important;
+      }
+
+      .mobile-hdr-btn {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+        transition: all 0.15s ease !important;
+      }
+      .mobile-hdr-btn:active {
+        transform: scale(0.94) !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+      }
+      .mobile-hdr-badge {
+        position: absolute !important;
+        top: -3px !important;
+        right: -3px !important;
+        background: var(--accent-cyan) !important;
+        color: #031326 !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        border-radius: 10px !important;
+        padding: 1px 4px !important;
+        min-width: 14px !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+      }
+      body.theme-skhynix .mobile-hdr-badge {
+        background: #ff7a00 !important;
+        color: #fff !important;
+      }
+
+      .mobile-hdr-center {
+        flex: 1 !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 4px !important;
+      }
+      .mobile-hdr-badge-tag {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        color: var(--accent-cyan) !important;
+        letter-spacing: 0.3px !important;
+        line-height: 1.1 !important;
+      }
+      body.theme-skhynix .mobile-hdr-badge-tag {
+        color: #ff7a00 !important;
+      }
+      .mobile-hdr-proj-title {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+        line-height: 1.3 !important;
+      }
+
+      .mobile-hdr-actions {
+        display: flex !important;
+        gap: 6px !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* 3. Left Sidebar Drawer */
+      .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: 86% !important;
+        max-width: 320px !important;
+        z-index: 1000 !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 6px 0 28px rgba(0, 0, 0, 0.8) !important;
+        border-right: 1px solid var(--card-border) !important;
+        background: var(--sidebar-bg) !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0) !important;
+      }
+      .mobile-sidebar-close-btn {
+        display: flex !important;
+        position: absolute !important;
+        top: 14px !important;
+        right: 14px !important;
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 6px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #cbd5e1 !important;
+        font-size: 13px !important;
+        cursor: pointer !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 20 !important;
+      }
+      .mobile-sidebar-close-btn:active {
+        background: rgba(239, 68, 68, 0.3) !important;
+        color: #ef4444 !important;
+      }
+
+      /* 4. Right Reference Pane Drawer */
+      .reference-pane {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        max-width: 440px !important;
+        z-index: 1000 !important;
+        transform: translateX(100%) !important;
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: -6px 0 28px rgba(0, 0, 0, 0.8) !important;
+        border-left: 1px solid var(--card-border) !important;
+        background: #091322 !important;
+        height: 100% !important;
+        height: 100dvh !important;
+      }
+      .reference-pane.mobile-open {
+        transform: translateX(0) !important;
+        width: 100% !important;
+      }
+
+      /* 5. Center Main Workspace */
+      .main-workspace {
+        width: 100% !important;
+        flex: 1 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 68px) !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      /* Workspace Top Bar adjustments */
+      .workspace-top-bar {
+        padding: 10px 12px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+      .top-bar-left {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        width: 100% !important;
+      }
+      .proj-title-input-wrap {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: none !important;
+        gap: 6px !important;
+      }
+      .proj-title-input-wrap > .cat-dropdown-wrap {
+        width: 100% !important;
+        display: flex !important;
+        gap: 6px !important;
+      }
+      .category-select-dropdown {
+        flex: 1 !important;
+        max-width: none !important;
+        font-size: 14px !important;
+        padding: 7px 10px !important;
+      }
+      .cat-quick-rename-btn {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+      }
+      .proj-title-input {
+        width: 100% !important;
+        font-size: 15px !important;
+        padding: 8px 12px !important;
+      }
+      .top-bar-right {
+        display: flex !important;
+        gap: 6px !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        padding-bottom: 2px !important;
+      }
+      .top-bar-right .btn {
+        flex: 1 !important;
+        min-width: 90px !important;
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+
+      /* Tech tags */
+      .tech-tags-bar {
+        padding: 8px 12px !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .tags-label {
+        font-size: 10.5px !important;
+      }
+
+      /* Question Stepper & Mode Switcher */
+      .q-stepper-container {
+        padding: 6px 10px !important;
+        margin-bottom: 12px !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+      }
+      .q-stepper-left {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        padding-bottom: 2px !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .q-tab-btn {
+        padding: 6px 11px !important;
+        font-size: 12px !important;
+        flex-shrink: 0 !important;
+      }
+      .view-toggle-btn {
+        font-size: 11px !important;
+        padding: 5px 8px !important;
+        white-space: nowrap !important;
+      }
+
+      /* Content Area & Cards */
+      .workspace-content {
+        padding: 8px 10px !important;
+      }
+      .question-card {
+        border-radius: 10px !important;
+        margin-bottom: 14px !important;
+      }
+      .q-card-header {
+        padding: 10px 12px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+      .q-title-input {
+        min-width: 0 !important;
+        width: 100% !important;
+        font-size: 15px !important;
+        padding: 8px 10px !important;
+      }
+      .q-card-header > div:last-child {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 6px !important;
+      }
+
+      .q-framework-bar {
+        padding: 8px 12px !important;
+        gap: 6px !important;
+      }
+      .q-framework-pills {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        padding-bottom: 3px !important;
+        width: 100% !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .q-frame-pill {
+        padding: 5px 11px !important;
+        font-size: 12px !important;
+        flex-shrink: 0 !important;
+      }
+
+      .q-card-body {
+        padding: 12px 10px !important;
+      }
+
+      /* Summary Lead Box */
+      .summary-lead-box {
+        padding: 10px 10px !important;
+        margin-bottom: 12px !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+      }
+      .summary-lead-badge {
+        align-self: flex-start !important;
+        font-size: 10px !important;
+        padding: 2px 6px !important;
+      }
+      .summary-lead-input {
+        font-size: 14.5px !important;
+        width: 100% !important;
+      }
+
+      /* Keywords containers */
+      .step-kw-container {
+        padding: 6px 8px !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+      }
+      .star-keyword-input {
+        min-width: 0 !important;
+        flex: 1 !important;
+        font-size: 14px !important;
+      }
+
+      /* Speech script */
+      .plain-speech-box textarea {
+        font-size: 14.5px !important;
+        line-height: 1.68 !important;
+        min-height: 160px !important;
+      }
+
+      /* 6. Mobile Bottom Navigation Bar */
+      .mobile-bottom-nav {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 56px !important;
+        background: rgba(8, 16, 29, 0.96) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border-top: 1px solid var(--card-border) !important;
+        z-index: 850 !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        padding: 0 4px calc(env(safe-area-inset-bottom, 0px) + 2px) !important;
+        box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.4) !important;
+        user-select: none !important;
+      }
+      body.theme-skhynix .mobile-bottom-nav {
+        background: rgba(18, 6, 10, 0.96) !important;
+        border-top-color: #3b141d !important;
+      }
+
+      .mobile-nav-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        padding: 4px 8px !important;
+        cursor: pointer !important;
+        font-family: inherit !important;
+        min-width: 52px !important;
+        height: 48px !important;
+        border-radius: 8px !important;
+        transition: all 0.15s ease !important;
+      }
+      .mobile-nav-btn:active {
+        transform: scale(0.92) !important;
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
+      .mobile-nav-btn.active {
+        color: var(--accent-cyan) !important;
+      }
+      body.theme-skhynix .mobile-nav-btn.active {
+        color: #ff7a00 !important;
+      }
+      .nav-btn-icon {
+        font-size: 15px !important;
+        line-height: 1 !important;
+        margin-bottom: 2px !important;
+      }
+      .nav-btn-label {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.2px !important;
+      }
+      .mobile-nav-btn.nav-btn-step {
+        color: #38bdf8 !important;
+      }
+      body.theme-skhynix .mobile-nav-btn.nav-btn-step {
+        color: #ff9838 !important;
+      }
+
+      .mobile-nav-indicator {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(0, 114, 206, 0.2) !important;
+        border: 1px solid rgba(0, 229, 255, 0.4) !important;
+        padding: 3px 10px !important;
+        border-radius: 20px !important;
+        cursor: pointer !important;
+        min-width: 62px !important;
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.2) !important;
+      }
+      body.theme-skhynix .mobile-nav-indicator {
+        background: rgba(234, 0, 41, 0.2) !important;
+        border-color: rgba(255, 122, 0, 0.5) !important;
+        box-shadow: 0 0 10px rgba(255, 122, 0, 0.2) !important;
+      }
+      .nav-q-badge {
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        line-height: 1.1 !important;
+      }
+      .nav-q-type {
+        font-size: 8.5px !important;
+        font-weight: 800 !important;
+        color: var(--accent-cyan) !important;
+        line-height: 1.1 !important;
+        text-transform: uppercase !important;
+      }
+      body.theme-skhynix .nav-q-type {
+        color: #ff7a00 !important;
+      }
+
+      /* 7. Security Lock Screen Mobile Optimization */
+      .lock-card {
+        width: 90% !important;
+        max-width: 360px !important;
+        padding: 24px 18px !important;
+      }
+      .lock-input {
+        font-size: 16px !important; /* Prevents iOS Safari auto-zoom */
+      }
+    }
   </style>
 </head>
 <body>
@@ -2005,12 +2521,32 @@
   </div>
 </div>
 
+<!-- Mobile Drawer Backdrop -->
+<div class="mobile-drawer-backdrop" id="mobileBackdrop" onclick="closeAllMobileDrawers()"></div>
+
 <!-- 3-Pane App Layout -->
 <div class="app-layout">
+
+  <!-- Mobile Top Header Bar -->
+  <header class="mobile-header-bar" id="mobileHeaderBar">
+    <button type="button" class="mobile-hdr-btn" onclick="toggleMobileSidebar()" aria-label="질문 목록 열기" title="질문 목록 열기">
+      <span class="mobile-hdr-icon">☰</span>
+      <span class="mobile-hdr-badge" id="mobileProjCount">6</span>
+    </button>
+    <div class="mobile-hdr-center" onclick="toggleMobileSidebar()">
+      <div class="mobile-hdr-badge-tag" id="mobileCompanyBadge">🚗 현대자동차</div>
+      <div class="mobile-hdr-proj-title" id="mobileCurrentProjName">01. 항목 로딩 중...</div>
+    </div>
+    <div class="mobile-hdr-actions">
+      <button type="button" class="mobile-hdr-btn" onclick="toggleCompanyModeMobile()" title="현대/SK 전환">🔄</button>
+      <button type="button" class="mobile-hdr-btn" onclick="toggleReferencePane()" title="자소서/원문 보기">📑</button>
+    </div>
+  </header>
 
   <!-- ================= 1. LEFT COMPACT SIDEBAR ================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
+      <button type="button" class="mobile-sidebar-close-btn" onclick="closeAllMobileDrawers()" title="사이드바 닫기">✕</button>
       <!-- Company Mode Toggle (Segmented Control) -->
       <div class="company-toggle-container">
         <button class="company-toggle-btn active mode-hyundai" id="modeBtnHyundai" onclick="switchCompanyMode('hyundai')">
@@ -2162,6 +2698,30 @@
   </aside>
 
 </div>
+
+<!-- Mobile Bottom Sticky Navigation Bar -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <button type="button" class="mobile-nav-btn" onclick="toggleMobileSidebar()" title="전체 질문 목록">
+    <span class="nav-btn-icon">☰</span>
+    <span class="nav-btn-label">질문목록</span>
+  </button>
+  <button type="button" class="mobile-nav-btn nav-btn-step" onclick="prevQuestion()" title="이전 질문">
+    <span class="nav-btn-icon">◀</span>
+    <span class="nav-btn-label">이전 Q</span>
+  </button>
+  <div class="mobile-nav-indicator" id="mobileNavQIndicator" onclick="toggleFocusView()" title="클릭하여 집중뷰 토글">
+    <span class="nav-q-badge" id="mobileNavQBadge">Q1/4</span>
+    <span class="nav-q-type" id="mobileNavFrameworkBadge">STAR-C</span>
+  </div>
+  <button type="button" class="mobile-nav-btn nav-btn-step" onclick="nextQuestion()" title="다음 질문">
+    <span class="nav-btn-icon">▶</span>
+    <span class="nav-btn-label">다음 Q</span>
+  </button>
+  <button type="button" class="mobile-nav-btn" onclick="toggleBlindMode()" id="mobileNavBlindBtn" title="모의면접 모드 (답변 가리기)">
+    <span class="nav-btn-icon">👁️</span>
+    <span class="nav-btn-label">모의면접</span>
+  </button>
+</nav>
 
 <!-- Toast Popup -->
 <div id="toast">알림</div>
@@ -3718,6 +4278,9 @@ function selectProject(pIdx) {
   if (activeQuestionIndex[pIdx] === undefined) activeQuestionIndex[pIdx] = 0;
   renderSidebar();
   renderCurrentProject();
+  if (window.innerWidth <= 900) {
+    closeAllMobileDrawers();
+  }
 }
 
 // ================= MAIN WORKSPACE RENDERING =================
@@ -3754,6 +4317,9 @@ function renderCurrentProject() {
 
   // Questions
   renderQuestions(proj);
+
+  // Update mobile navigation state
+  updateMobileNavState(proj);
 }
 
 function handleProjTitleChange(val) {
@@ -4093,6 +4659,8 @@ function goToQuestion(targetIdx) {
   renderQuestionStepper(proj);
   renderQuestions(proj);
 
+  updateMobileNavState(proj);
+
   setTimeout(() => {
     const card = document.getElementById(`q-card-${targetIdx}`);
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -4105,6 +4673,12 @@ function nextQuestion() {
   const cur = activeQuestionIndex[currentProjIndex] || 0;
   if (cur < proj.questions.length - 1) {
     goToQuestion(cur + 1);
+  } else if (currentProjIndex < projectsData.length - 1) {
+    selectProject(currentProjIndex + 1);
+    goToQuestion(0);
+    showToast(`다음 항목 [${projectsData[currentProjIndex].title}]으로 이동`);
+  } else {
+    showToast("마지막 질문입니다.");
   }
 }
 
@@ -4112,6 +4686,14 @@ function prevQuestion() {
   const cur = activeQuestionIndex[currentProjIndex] || 0;
   if (cur > 0) {
     goToQuestion(cur - 1);
+  } else if (currentProjIndex > 0) {
+    selectProject(currentProjIndex - 1);
+    const prevProj = projectsData[currentProjIndex];
+    const lastQ = (prevProj && prevProj.questions) ? prevProj.questions.length - 1 : 0;
+    goToQuestion(Math.max(0, lastQ));
+    showToast(`이전 항목 [${projectsData[currentProjIndex].title}]으로 이동`);
+  } else {
+    showToast("첫 번째 질문입니다.");
   }
 }
 
@@ -4298,13 +4880,17 @@ function toggleBlindMode() {
 
   const btn = document.getElementById('blindModeBtn');
   if (btn) {
-    if (isBlindMode) {
-      btn.classList.add('active-mode');
-      showToast("🙈 블라인드 암기 모드 활성화 (마우스 호버 시 보임)");
-    } else {
-      btn.classList.remove('active-mode');
-      showToast("블라인드 모드 해제");
-    }
+    btn.classList.toggle('active-mode', isBlindMode);
+  }
+  const mobileBlindBtn = document.getElementById('mobileNavBlindBtn');
+  if (mobileBlindBtn) {
+    mobileBlindBtn.classList.toggle('active', isBlindMode);
+  }
+
+  if (isBlindMode) {
+    showToast("🙈 모의면접 모드 (답변 숨김, 터치 시 확인)");
+  } else {
+    showToast("모의면접 모드 해제 (답변 표시)");
   }
 }
 
@@ -4312,7 +4898,82 @@ function toggleBlindMode() {
 function toggleReferencePane() {
   const pane = document.getElementById('referencePane');
   if (!pane) return;
-  pane.classList.toggle('collapsed');
+  if (window.innerWidth <= 900) {
+    toggleMobileReference();
+  } else {
+    pane.classList.toggle('collapsed');
+  }
+}
+
+// ================= MOBILE NAVIGATION & RESPONSIVE CONTROLS =================
+function updateMobileNavState(proj) {
+  if (!proj) return;
+  const mobileNameEl = document.getElementById('mobileCurrentProjName');
+  if (mobileNameEl) {
+    mobileNameEl.textContent = `${getItemNumberInCategory(proj)}. ${proj.title || '새 항목'}`;
+  }
+  const mobileCompanyEl = document.getElementById('mobileCompanyBadge');
+  if (mobileCompanyEl) {
+    mobileCompanyEl.textContent = (currentCompanyMode === 'skhynix') ? '🔴 SK하이닉스' : '🚗 현대자동차';
+  }
+  const mobileCountEl = document.getElementById('mobileProjCount');
+  if (mobileCountEl) {
+    mobileCountEl.textContent = `${projectsData.length}`;
+  }
+
+  const curQIdx = activeQuestionIndex[currentProjIndex] || 0;
+  const totalQ = (proj.questions && proj.questions.length > 0) ? proj.questions.length : 1;
+  const curQ = (proj.questions && proj.questions[curQIdx]) ? proj.questions[curQIdx] : null;
+  const fw = curQ ? (curQ.framework || 'starc').toUpperCase() : 'STAR-C';
+
+  const navQBadge = document.getElementById('mobileNavQBadge');
+  if (navQBadge) navQBadge.textContent = `Q${curQIdx + 1}/${totalQ}`;
+  const navFwBadge = document.getElementById('mobileNavFrameworkBadge');
+  if (navFwBadge) navFwBadge.textContent = fw;
+}
+
+function toggleMobileSidebar(force) {
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('mobileBackdrop');
+  const pane = document.getElementById('referencePane');
+  if (!sidebar) return;
+
+  if (pane && pane.classList.contains('mobile-open')) {
+    pane.classList.remove('mobile-open');
+  }
+
+  const isOpen = (force !== undefined) ? force : !sidebar.classList.contains('mobile-open');
+  sidebar.classList.toggle('mobile-open', isOpen);
+  if (backdrop) backdrop.classList.toggle('active', isOpen);
+}
+
+function toggleMobileReference(force) {
+  const pane = document.getElementById('referencePane');
+  const backdrop = document.getElementById('mobileBackdrop');
+  const sidebar = document.getElementById('sidebar');
+  if (!pane) return;
+
+  if (sidebar && sidebar.classList.contains('mobile-open')) {
+    sidebar.classList.remove('mobile-open');
+  }
+
+  const isOpen = (force !== undefined) ? force : !pane.classList.contains('mobile-open');
+  pane.classList.toggle('mobile-open', isOpen);
+  if (backdrop) backdrop.classList.toggle('active', isOpen);
+}
+
+function closeAllMobileDrawers() {
+  const sidebar = document.getElementById('sidebar');
+  const pane = document.getElementById('referencePane');
+  const backdrop = document.getElementById('mobileBackdrop');
+  if (sidebar) sidebar.classList.remove('mobile-open');
+  if (pane) pane.classList.remove('mobile-open');
+  if (backdrop) backdrop.classList.remove('active');
+}
+
+function toggleCompanyModeMobile() {
+  const nextMode = (currentCompanyMode === 'skhynix') ? 'hyundai' : 'skhynix';
+  switchCompanyMode(nextMode, true);
 }
 
 function switchDocTab(docKey) {
