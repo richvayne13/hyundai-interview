@@ -1749,6 +1749,16 @@
       padding: 1px 6px;
       border-radius: 10px;
     }
+    .sidebar-code-pill.code-intro {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+    .sidebar-category-section[data-cat-id="intro"] .cat-num-pill {
+      background: rgba(245, 158, 11, 0.25) !important;
+      color: #fbbf24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.45) !important;
+    }
     .sidebar-code-pill.code-career {
       background: rgba(16, 185, 129, 0.15);
       color: #10b981;
@@ -2759,6 +2769,195 @@
         font-size: 16px !important; /* Prevents iOS Safari auto-zoom */
       }
     }
+  
+    /* 1분 자기소개 60초 스피치 타이머 위젯 */
+    .speech-timer-widget {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.88) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 12px;
+      padding: 13px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    body.theme-skhynix .speech-timer-widget {
+      border-color: rgba(255, 122, 0, 0.45);
+    }
+    .timer-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .timer-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .timer-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+    body.theme-skhynix .timer-badge {
+      background: rgba(255, 122, 0, 0.2);
+      color: #ff9838;
+    }
+    .timer-clock-display {
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+    .timer-clock-display.warning {
+      color: #f59e0b;
+    }
+    .timer-clock-display.danger {
+      color: #ef4444;
+      animation: pulseDanger 0.8s infinite alternate;
+    }
+    @keyframes pulseDanger {
+      from { transform: scale(1); text-shadow: 0 0 4px rgba(239, 68, 68, 0.4); }
+      to { transform: scale(1.04); text-shadow: 0 0 14px rgba(239, 68, 68, 0.9); }
+    }
+    .timer-ctrl-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timer-btn {
+      padding: 6px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .timer-btn-start {
+      background: #10b981;
+      color: #ffffff;
+      border-color: #059669;
+    }
+    .timer-btn-start:hover {
+      background: #059669;
+    }
+    .timer-btn-pause {
+      background: #f59e0b;
+      color: #ffffff;
+      border-color: #d97706;
+    }
+    .timer-btn-pause:hover {
+      background: #d97706;
+    }
+    .timer-btn-reset {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .timer-btn-reset:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    .timer-progress-wrap {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .timer-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981 0%, #38bdf8 65%, #f59e0b 88%, #ef4444 100%);
+      border-radius: 4px;
+      transition: width 0.1s linear;
+    }
+    .timer-milestones-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 6px;
+    }
+    .timer-milestone {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+    .timer-milestone.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+    body.theme-skhynix .timer-milestone.active {
+      background: rgba(255, 122, 0, 0.15);
+      border-color: rgba(255, 122, 0, 0.4);
+      color: #ff9838;
+    }
+    .timer-ms-time {
+      font-weight: 800;
+      font-size: 10px;
+      opacity: 0.85;
+    }
+    .timer-ms-label {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .char-counter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 12px;
+      color: #94a3b8;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .char-count-badge {
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .char-time-estimate {
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .char-time-estimate.optimal {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+    }
+    .char-time-estimate.short {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+    }
+    .char-time-estimate.long {
+      background: rgba(239, 68, 68, 0.18);
+      color: #f87171;
+    }
+
   </style>
 </head>
 <body>
@@ -2984,6 +3183,79 @@
 <script>
 // ================= DEFAULT INTERVIEW DATA (WITH 1.경력 / 2.프로젝트 & STAR/줄글) =================
 const DEFAULT_PROJECTS_HYUNDAI = [
+  {
+    "id": "I1",
+    "category": "intro",
+    "code": "01",
+    "title": "1분 자기소개 & 지원동기 (현대자동차 배터리)",
+    "tags": [
+      "1분 스피치",
+      "양산 수율 최적화",
+      "설비 트러블슈팅",
+      "현장 AX 에이전트",
+      "Cpk 1.45",
+      "RPA 자동화"
+    ],
+    "questions": [
+      {
+        "question": "Q1. 🎙️ [표준 1분 자기소개] 양산 수율 최적화와 현장 AX(AI 전환) 융합형",
+        "summary": "46시리즈 양산 라인 수율 안정화와 독자적 알고리즘·AX 자동화를 이끌어온 '양산 수율 최적화 엔지니어'입니다.",
+        "framework": "prep",
+        "prep_p1_kw": "양산수율·AX최적화엔지니어",
+        "prep_r_kw": "데이터·알고리즘설비돌파",
+        "prep_e_kw": "수율0.2%개선·공수100%자동화",
+        "prep_p2_kw": "현대차배터리조기안정화",
+        "core_c_kw": "양산수율최적화",
+        "core_o_kw": "46시리즈개발양산",
+        "core_r_kw": "설비알고리즘·RPA",
+        "core_e_kw": "수율0.2%·공수100%절감",
+        "s_kw": "양산수율최적화",
+        "t_kw": "설비한계돌파",
+        "a_kw": "알고리즘·RPA구축",
+        "r_kw": "수율0.2%개선",
+        "c_kw": "현대차배터리안정화",
+        "plain_text": "[P - 핵심주장]\n안녕하십니까, 데이터와 현장 알고리즘으로 양산 한계를 돌파해 온 현대자동차 배터리 생산운영 지원자 OOO입니다.\n\n[R - 이유/논거]\n저는 LG에너지솔루션에서 4년 8개월간 46시리즈 New-form factor 양산 라인 셋업부터 수율 안정화까지 전 공정을 리딩하며, 두 가지 핵심 엔지니어링 무기를 구축했습니다.\n\n[E - 구체사례]\n첫째, '설비 트러블슈팅과 공정 최적화 역량'입니다. 코팅폭 누적 공차 문제를 해결하기 위해 고감속 웜기어와 LVDT 센서 기반의 'Shim 미세조절장치 전동화'를 개발하여 조건조정 Loss를 18% 개선하고 수율 0.2%를 향상시켰습니다. 또한 방사능 웹게이지 계측 신뢰도 150% 달성과 미세라인 결함 50% 개선을 이끌었습니다.\n\n둘째, '현장 AX 및 자동화 엔지니어링 역량'입니다. 반복 수작업을 근절하기 위해 사내 보안망을 고려한 Python RPA와 AI 에이전트 워크플로우를 직접 구축하여, 인라인 검사 데이터 검토 공수를 월 40시간 이상 완전 무인화했습니다.\n\n[P - 재강조/포부]\n이러한 현장 설비 엔지니어링과 AX 자동화 역량을 결합하여, 현대자동차 차세대 배터리 양산 라인의 조기 셋업 손실을 제로화하고 스마트 팩토리 수율 혁신을 이끄는 주역이 되겠습니다."
+      },
+      {
+        "question": "Q2. ⚙️ [설비/공정 중심] 하드웨어 트러블슈팅 & 수율 개선 강점형",
+        "summary": "46시리즈 양산 셋업과 Shim 전동화 및 웹게이지 시계열 로직으로 공정 Loss 18% 개선과 수율 0.2%를 향상시킨 엔지니어입니다.",
+        "framework": "starc",
+        "s_kw": "46시리즈양산셋업",
+        "t_kw": "초기조건Loss최소화",
+        "a_kw": "Shim전동화·EMA로직",
+        "r_kw": "Loss18%·수율0.2%개선",
+        "c_kw": "현대차라인조기안정화",
+        "core_c_kw": "설비트러블슈팅",
+        "core_o_kw": "작업자편차·공차한계",
+        "core_r_kw": "기계전동화·시계열로직",
+        "core_e_kw": "Cpk1.45·수율0.2%UP",
+        "prep_p1_kw": "설비수율트러블슈터",
+        "prep_r_kw": "하드웨어기구이해",
+        "prep_e_kw": "Shim전동화·EMA로직",
+        "prep_p2_kw": "현대차공정무중단셋업",
+        "plain_text": "[S] 안녕하십니까, 현장 설비 메커니즘에 대한 집요한 분석으로 양산 수율을 극대화하는 생산운영 지원자 OOO입니다. 46시리즈 양산 라인에서 작업자 편차와 장비 한계로 발생하는 미세 손실을 기술적으로 극복해 왔습니다.\n\n[T] 공정 Cpk 1.45 확보와 돌발 정지 없는 안정적인 가동률을 사수하는 것이 엔지니어로서의 목표였습니다.\n\n[A] 작업자의 감에 의존하던 수동 조작을 전동화하기 위해 BLDC 모터와 고감속 웜기어를 결합한 'Shim 오프셋 미세조절장치'를 직접 개발했습니다. 또한 1% 미만 미세 시프트를 포착하는 웹게이지 EMA 감지 로직을 설계하여 비전 미검 불량을 사전에 차단했습니다.\n\n[R] 이를 통해 조건조정 Loss 18% 개선, 수율 0.2% 향상, 그리고 Cpk 1.45를 달성했습니다.\n\n[C] 현대자동차 배터리 양산 라인 증설 시 설비와 공정 간의 병목을 선제적으로 해결하여 가동률 100%와 골든 수율 달성에 기여하겠습니다."
+      },
+      {
+        "question": "Q3. 💡 [AX/소프트웨어 중심] 파이썬 RPA 및 AI 에이전트 워크플로우형",
+        "summary": "사내 보안망을 고려한 rules.md 가드레일과 '본기함구' 코딩 체계로 인라인 데이터 검토를 100% 무인화한 AX 엔지니어입니다.",
+        "framework": "prep",
+        "prep_p1_kw": "현장AX실천엔지니어",
+        "prep_r_kw": "단순반복완전무인화",
+        "prep_e_kw": "RPA대시보드·본기함구",
+        "prep_p2_kw": "현대차스마트팩토리AX",
+        "core_c_kw": "현장AX워크플로우",
+        "core_o_kw": "보안망제약·수작업과다",
+        "core_r_kw": "가드레일·본기함구빌드업",
+        "core_e_kw": "공수월40시간100%절감",
+        "s_kw": "수작업공수과다",
+        "t_kw": "데이터검토100%무인화",
+        "a_kw": "RPA·AI에이전트개발",
+        "r_kw": "공수100%절감",
+        "c_kw": "스마트팩토리AX주역",
+        "plain_text": "[P - 핵심주장]\n안녕하십니까, 제조 현장의 도메인 지식에 AI와 소프트웨어를 접목하여 생산성을 극대화하는 AX 엔지니어 OOO입니다.\n\n[R - 이유/논거]\n최고의 생산성은 엔지니어가 단순 반복 업무에서 벗어나 설비 고도화와 품질 개선에 집중할 때 나온다고 믿기 때문입니다.\n\n[E - 구체사례]\n매일 2시간씩 소요되던 인라인 검사 데이터 수작업 문제를 해결하기 위해, rules.md 가드레일과 '본기함구' 4단계 점진적 파이썬 빌드업 체계를 적용했습니다. 사내 보안망 제약을 극복하며 헌팅 노이즈 제거 알고리즘과 HTML 대시보드를 직접 구현하여, 월 40시간의 공수를 100% 무인 자동화하고 동료들이 원클릭으로 쓸 수 있도록 배포했습니다.\n\n[P - 재강조/포부]\n현대자동차 입사 후에도 현장 데이터와 AI 에이전트 기술을 결합하여, 지능형 자율제조 및 스마트 팩토리 AX를 선도하는 차세대 생산운영 엔지니어가 되겠습니다."
+      }
+    ]
+  },
   {
     "id": "C1",
     "category": "career",
@@ -3288,6 +3560,79 @@ const DEFAULT_PROJECTS_HYUNDAI = [
 ];
 
 const DEFAULT_PROJECTS_SKHYNIX = [
+  {
+    "id": "I1",
+    "category": "intro",
+    "code": "01",
+    "title": "1분 자기소개 & 지원동기 (SK하이닉스 양산기술)",
+    "tags": [
+      "1분 스피치",
+      "FAB 양산기술",
+      "초미세 산포 제어",
+      "Bridge Kernel 비전",
+      "EMA 시계열 로직",
+      "현장 AX 자동화"
+    ],
+    "questions": [
+      {
+        "question": "Q1. 🎙️ [표준 1분 자기소개] FAB 양산기술 수율 최적화와 현장 AX 융합형",
+        "summary": "초미세 공정의 산포와 설비 노이즈를 데이터 알고리즘과 AX 자동화로 선제 통제해 온 '수율 최적화 엔지니어'입니다.",
+        "framework": "prep",
+        "prep_p1_kw": "FAB양산수율엔지니어",
+        "prep_r_kw": "알고리즘으로산포제어",
+        "prep_e_kw": "미검0%·수율0.2%·AX자동화",
+        "prep_p2_kw": "SK하이닉스골든수율기여",
+        "core_c_kw": "FAB수율최적화",
+        "core_o_kw": "양산산포·노이즈극복",
+        "core_r_kw": "수학적모델링·AX구축",
+        "core_e_kw": "미검0%·공수100%절감",
+        "s_kw": "양산산포제어",
+        "t_kw": "수율및신뢰도극대화",
+        "a_kw": "비전엔진·EMA·RPA",
+        "r_kw": "미검0%·수율0.2%UP",
+        "c_kw": "SK하이닉스수율기여",
+        "plain_text": "[P - 핵심주장]\n안녕하십니까, 초미세 공정의 산포와 설비 노이즈를 데이터 알고리즘으로 선제 통제해 온 SK하이닉스 양산기술 지원자 OOO입니다.\n\n[R - 이유/논거]\n반도체 FAB 양산의 핵심은 수많은 공정 변수 속에서 미세 이상 징후를 조기에 감지하고, 표준화된 SOP와 자동화로 편차를 원천 차단하는 데 있다고 확신합니다.\n\n[E - 구체사례]\n첫째, '수학적 모델링 기반의 불량 제어 역량'입니다. 100만 이미지 긴급 선별 시 1×7 수직 Bridge Kernel 비전 엔진을 단독 개발해 미검률 0%를 달성했고, 웹게이지 국부 데이터에서 1% 미만 시프트를 잡는 EMA 시계열 로직으로 미세라인 불량을 50% 개선하여 수율 0.12% 향상에 기여했습니다.\n\n둘째, '현장 AX 및 데이터 파이프라인 구축 역량'입니다. rules.md 가드레일과 '본기함구' 파이썬 빌드업 체계로 인라인 데이터 모니터링 시스템을 구축해 월 40시간의 단순 반복 업무를 100% 무인화했습니다.\n\n[P - 재강조/포부]\n이러한 알고리즘 설계 역량과 현장 AX 경험을 바탕으로, SK하이닉스 첨단 FAB 라인의 신규 장비 셋업 시 초기 산포를 제어하고 골든 수율을 조기에 달성하는 핵심 엔지니어가 되겠습니다."
+      },
+      {
+        "question": "Q2. ⚙️ [공정/알고리즘 중심] 컴퓨터 비전 & 시계열 데이터 분석 강점형",
+        "summary": "1×7 Bridge Kernel 비전 알고리즘과 EMA 시계열 필터링으로 미검률 0%와 수율 0.2% 향상을 이끌어낸 엔지니어입니다.",
+        "framework": "starc",
+        "s_kw": "100만전수미검위기",
+        "t_kw": "장당5ms·미검0%사수",
+        "a_kw": "1x7BridgeKernel개발",
+        "r_kw": "미검0%·출하지연0건",
+        "c_kw": "FAB검사기알고리즘기여",
+        "core_c_kw": "비전·시계열알고리즘",
+        "core_o_kw": "점선노이즈오인미검",
+        "core_r_kw": "수직커널·EMA동적임계",
+        "core_e_kw": "미검률0%·72시간완수",
+        "prep_p1_kw": "공정알고리즘스페셜리스트",
+        "prep_r_kw": "도메인데이터수학적해석",
+        "prep_e_kw": "1x7커널·EMA시계열",
+        "prep_p2_kw": "SK하이닉스초미세검증",
+        "plain_text": "[S] 안녕하십니까, 복잡한 공정 데이터 속에서 노이즈와 실제 결함을 분리해내는 알고리즘 스페셜리스트 OOO입니다. 100만 장의 검사 이미지 중 미세 결함을 72시간 내에 선별해야 하는 위기 상황을 맞이했습니다.\n\n[T] 장당 5ms 이하의 초고속 연산 처리와 미검률 0%를 동시에 사수하는 것이 핵심 과제였습니다.\n\n[A] 결함이 세로로 뻗는 도메인 특성에 착안하여 1×7 수직 Bridge Kernel을 직접 설계해 점선 형태의 결함을 실선으로 복원했습니다. 또한 검사기 데이터의 응답 지연을 방지하기 위해 EMA(지수이동평균)와 Dynamic Th를 적용했습니다.\n\n[R] 그 결과 100만 장 전수 선별을 72시간 내에 무결점으로 완수하고 미검률 0%를 달성했습니다.\n\n[C] SK하이닉스 FAB 공정의 수많은 센서 및 검사 데이터에서 이상 징후를 선제 감지하는 독자 로직을 구현하여 라인 무중단 양산에 기여하겠습니다."
+      },
+      {
+        "question": "Q3. 💡 [AX/소프트웨어 중심] 파이썬 RPA 및 AI 에이전트 워크플로우형",
+        "summary": "rules.md 대전제와 '본기함구' 4단계 점진적 코딩 빌드업으로 데이터 검토를 100% 무인화한 AX 엔지니어입니다.",
+        "framework": "prep",
+        "prep_p1_kw": "반도체FAB현장AX주역",
+        "prep_r_kw": "환각제어에이전트워크플로우",
+        "prep_e_kw": "ContextTool분리·본기함구",
+        "prep_p2_kw": "SK하이닉스스마트팩토리기여",
+        "core_c_kw": "에이전트워크플로우",
+        "core_o_kw": "챗봇환각한계극복",
+        "core_r_kw": "가드레일·본기함구빌드업",
+        "core_e_kw": "공수100%절감·HTML대시보드",
+        "s_kw": "단순반복수작업과다",
+        "t_kw": "데이터검토100%무인화",
+        "a_kw": "본기함구·가드레일구축",
+        "r_kw": "공수100%절감",
+        "c_kw": "현장AX주역",
+        "plain_text": "[P - 핵심주장]\n안녕하십니까, AI 에이전트와 파이썬 워크플로우를 직접 구축하여 현장의 생산성을 혁신하는 양산기술 지원자 OOO입니다.\n\n[R - 이유/논거]\n사내 보안망 환경에서도 데이터 오염과 환각 없이 신뢰할 수 있는 개발 워크플로우를 정립해야 실무 AX를 달성할 수 있기 때문입니다.\n\n[E - 구체사례]\n사내 보안망에서 rules.md로 대전제를 통제하고 Context, Tool, Result 폴더를 분리했습니다. 그리고 사용자-개발자-PM의 PRD 작성 후 본·기·함·구의 4단계 점진적 빌드업으로 코드를 모듈화했습니다. 그 결과 헌팅 노이즈 제거와 HTML 대시보드를 완성하여 월 40시간의 반복 업무를 100% 자동화했습니다.\n\n[P - 재강조/포부]\nSK하이닉스 입사 후에도 현장 도메인 지식에 AI 에이전트 기술을 결합하여, 차세대 FAB 공정의 자동화와 스마트 팩토리 AX를 이끄는 핵심 인재가 되겠습니다."
+      }
+    ]
+  },
   {
     "id": "C1",
     "category": "career",
@@ -3770,6 +4115,7 @@ function formatCodeBadge(code, fallbackIdx) {
 // ================= APP STATE =================
 let projectsData = [];
 let categoriesData = [
+  { id: 'intro', name: '1분 자기소개', icon: '🎙️' },
   { id: 'career', name: '경력', icon: '💼' },
   { id: 'project', name: '프로젝트', icon: '🚀' }
 ];
@@ -3837,6 +4183,10 @@ function loadCategoriesData() {
       const parsed = JSON.parse(savedCats);
       if (Array.isArray(parsed) && parsed.length > 0) {
         categoriesData = parsed;
+        if (!categoriesData.some(c => c.id === 'intro')) {
+          categoriesData.unshift({ id: 'intro', name: '1분 자기소개', icon: '🎙️' });
+          saveCategoriesData();
+        }
         return;
       }
     }
@@ -3844,6 +4194,7 @@ function loadCategoriesData() {
 
   // Default categories
   categoriesData = [
+    { id: 'intro', name: '1분 자기소개', icon: '🎙️' },
     { id: 'career', name: '경력', icon: '💼' },
     { id: 'project', name: '프로젝트', icon: '🚀' }
   ];
@@ -4050,6 +4401,14 @@ function loadProjectsData() {
       // Ensure it's a non-empty array
       if (Array.isArray(parsed) && parsed.length > 0) {
         projectsData = parsed;
+        // Auto-migrate: ensure 1-min intro item exists
+        if (!projectsData.some(p => p.category === 'intro')) {
+          const defaultList = getActiveDefaultProjects();
+          const defIntro = defaultList.find(p => p.category === 'intro');
+          if (defIntro) {
+            projectsData.unshift(JSON.parse(JSON.stringify(defIntro)));
+          }
+        }
         // Migrate / ensure category & questions integrity
         projectsData.forEach((proj, pIdx) => {
           if (!proj.category) {
@@ -4227,6 +4586,7 @@ function resetToDefault() {
   const config = getActiveCompanyConfig();
   if (confirm(`정말 [${config.name}] 기본 데이터로 초기화하시겠습니까?\n(수정한 모든 내용과 분류가 기본값으로 복원됩니다)`)) {
     categoriesData = [
+      { id: 'intro', name: '1분 자기소개', icon: '🎙️' },
       { id: 'career', name: '경력', icon: '💼' },
       { id: 'project', name: '프로젝트', icon: '🚀' }
     ];
@@ -4842,9 +5202,10 @@ function renderSidebar() {
   function renderItemHtml(item, itemIdxInCat) {
     const isActive = (item.originalIndex === currentProjIndex);
     const qCount = item.questions ? item.questions.length : 0;
+    const isIntro = item.category === 'intro';
     const isCareer = item.category === 'career';
     const isProject = item.category === 'project';
-    const pillClass = isCareer ? 'code-career' : (isProject ? 'code-project' : 'code-custom');
+    const pillClass = isIntro ? 'code-intro' : (isCareer ? 'code-career' : (isProject ? 'code-project' : 'code-custom'));
     const activeQ = activeQuestionIndex[item.originalIndex] || 0;
 
     let subQHtml = '';
@@ -4914,6 +5275,8 @@ function renderSidebar() {
   categoriesData.forEach((cat, catIdx) => {
     const items = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
     const isEditing = (editingCategoryId === cat.id);
+    const isIntroCat = (cat.id === 'intro');
+    const catNumDisplay = isIntroCat ? '0' : String(categoriesData.filter(c => c.id !== 'intro').indexOf(cat) + 1);
 
     html += `
       <div class="sidebar-category-section"
@@ -4928,7 +5291,7 @@ function renderSidebar() {
              ondragend="handleDragEnd(event)">
           ${isEditing ? `
             <div class="sidebar-cat-inline-edit" onclick="event.stopPropagation()">
-              <span class="cat-num-pill">${catIdx + 1}</span>
+              <span class="cat-num-pill">${catNumDisplay}</span>
               <input type="text"
                      id="inlineCatIcon_${cat.id}"
                      class="cat-inline-icon-input"
@@ -4954,7 +5317,7 @@ function renderSidebar() {
           ` : `
             <div class="sidebar-cat-title" onclick="startEditCategory('${cat.id}', event)" title="클릭하여 분류 소제목 수정 (예: 신규인성외)">
               <span class="cat-drag-handle" title="드래그하여 분류 순서 변경" onmousedown="event.stopPropagation()">⠿</span>
-              <span class="cat-num-pill">${catIdx + 1}</span>
+              <span class="cat-num-pill">${catNumDisplay}</span>
               <span class="cat-title-text-wrap">
                 <span class="cat-icon-text">${cat.icon || '📁'}</span>
                 <span class="cat-name-text">${escapeHtml(cat.name)}</span>
@@ -4992,9 +5355,126 @@ function renderSidebar() {
   }
 }
 
+
+// ================= 1분 자기소개 60초 실전 타이머 & 글자수 계산기 =================
+let speechTimer = {
+  interval: null,
+  secondsElapsed: 0,
+  isRunning: false,
+  totalLimit: 60
+};
+
+function toggleSpeechTimer() {
+  if (speechTimer.isRunning) {
+    pauseSpeechTimer();
+  } else {
+    startSpeechTimer();
+  }
+}
+
+function startSpeechTimer() {
+  if (speechTimer.isRunning) return;
+  speechTimer.isRunning = true;
+  updateTimerUI();
+  speechTimer.interval = setInterval(() => {
+    speechTimer.secondsElapsed++;
+    updateTimerUI();
+  }, 1000);
+}
+
+function pauseSpeechTimer() {
+  if (!speechTimer.isRunning) return;
+  speechTimer.isRunning = false;
+  if (speechTimer.interval) clearInterval(speechTimer.interval);
+  speechTimer.interval = null;
+  updateTimerUI();
+}
+
+function resetSpeechTimer() {
+  pauseSpeechTimer();
+  speechTimer.secondsElapsed = 0;
+  updateTimerUI();
+}
+
+function updateTimerUI() {
+  const display = document.getElementById('timerClockDisplay');
+  const btn = document.getElementById('timerToggleBtn');
+  const bar = document.getElementById('timerProgressBar');
+  const ms1 = document.getElementById('milestone1');
+  const ms2 = document.getElementById('milestone2');
+  const ms3 = document.getElementById('milestone3');
+
+  if (!display) return;
+
+  const mins = Math.floor(speechTimer.secondsElapsed / 60);
+  const secs = speechTimer.secondsElapsed % 60;
+  const timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  display.textContent = `${timeStr} / 01:00`;
+
+  display.classList.remove('warning', 'danger');
+  if (speechTimer.secondsElapsed >= 60) {
+    display.classList.add('danger');
+  } else if (speechTimer.secondsElapsed >= 45) {
+    display.classList.add('warning');
+  }
+
+  if (btn) {
+    if (speechTimer.isRunning) {
+      btn.className = 'timer-btn timer-btn-pause';
+      btn.innerHTML = '⏸ 일시정지';
+    } else {
+      btn.className = 'timer-btn timer-btn-start';
+      btn.innerHTML = speechTimer.secondsElapsed > 0 ? '▶ 계속' : '▶ 시작';
+    }
+  }
+
+  if (bar) {
+    const pct = Math.min(100, (speechTimer.secondsElapsed / speechTimer.totalLimit) * 100);
+    bar.style.width = `${pct}%`;
+  }
+
+  // Milestones highlight
+  if (ms1 && ms2 && ms3) {
+    ms1.classList.toggle('active', speechTimer.secondsElapsed < 15);
+    ms2.classList.toggle('active', speechTimer.secondsElapsed >= 15 && speechTimer.secondsElapsed < 45);
+    ms3.classList.toggle('active', speechTimer.secondsElapsed >= 45);
+  }
+}
+
+function getSpeechCharAnalysis(rawText) {
+  if (!rawText) return { totalChars: 0, noSpaceChars: 0, estSeconds: 0, status: 'short', statusText: '내용 없음' };
+  // Remove tags like [P - 핵심주장], [S], etc.
+  const cleaned = rawText.replace(/\[[^\]]+\]/g, '').replace(/[\r\n\t]+/g, ' ').trim();
+  const totalChars = cleaned.length;
+  const noSpaceChars = cleaned.replace(/\s+/g, '').length;
+  // Korean speech pace: ~6.8 syllables/sec (without spaces)
+  const estSeconds = Math.round(noSpaceChars / 6.8);
+  let status = 'optimal';
+  let statusText = `약 ${estSeconds}초 (이상적인 1분 분량)`;
+  if (noSpaceChars < 280) {
+    status = 'short';
+    statusText = `약 ${estSeconds}초 (다소 짧음, 근거 보강 권장)`;
+  } else if (noSpaceChars > 450) {
+    status = 'long';
+    statusText = `약 ${estSeconds}초 (60초 초과 위험, 핵심 압축 권장)`;
+  }
+  return { totalChars, noSpaceChars, estSeconds, status, statusText };
+}
+
+function updateCharCounterLive(rawText) {
+  const countBadge = document.getElementById('charCountTotal');
+  const timeEstimate = document.getElementById('charTimeEstimate');
+  if (!countBadge || !timeEstimate) return;
+  const analysis = getSpeechCharAnalysis(rawText);
+  countBadge.textContent = `${analysis.noSpaceChars}자`;
+  timeEstimate.className = `char-time-estimate ${analysis.status}`;
+  timeEstimate.textContent = analysis.statusText;
+}
+
 function selectProject(pIdx) {
   if (wasJustDragging) return;
   if (pIdx < 0 || pIdx >= projectsData.length) return;
+  resetSpeechTimer();
   currentProjIndex = pIdx;
   if (activeQuestionIndex[pIdx] === undefined) activeQuestionIndex[pIdx] = 0;
   renderSidebar();
@@ -5018,11 +5498,15 @@ function renderCurrentProject() {
   // Category Dropdown
   const catDropdown = document.getElementById('categorySelectDropdown');
   if (catDropdown) {
-    catDropdown.innerHTML = categoriesData.map((c, i) => `
-      <option value="${c.id}" ${proj.category === c.id ? 'selected' : ''}>
-        ${c.icon} ${i + 1}. ${c.name}
-      </option>
-    `).join('') + `<option value="__NEW_CATEGORY__">➕ 새 분류 만들기...</option>`;
+    catDropdown.innerHTML = categoriesData.map((c) => {
+      const isIntro = (c.id === 'intro');
+      const numDisp = isIntro ? '0' : String(categoriesData.filter(x => x.id !== 'intro').indexOf(c) + 1);
+      return `
+        <option value="${c.id}" ${proj.category === c.id ? 'selected' : ''}>
+          ${c.icon} ${numDisp}. ${c.name}
+        </option>
+      `;
+    }).join('') + `<option value="__NEW_CATEGORY__">➕ 새 분류 만들기...</option>`;
   }
 
   // Top Bar inputs
@@ -5320,6 +5804,55 @@ function renderKeywordBlock(q, qIdx, fw) {
 function renderSingleQuestionCard(q, qIdx, totalCount) {
   const fw = q.framework || 'starc';
   const text = getFrameworkPlainText(q, fw);
+  const currentProj = projectsData[currentProjIndex];
+  const isIntro = (currentProj && currentProj.category === 'intro');
+  const analysis = getSpeechCharAnalysis(text);
+
+  let timerWidgetHtml = '';
+  if (isIntro) {
+    timerWidgetHtml = `
+      <div class="speech-timer-widget" id="speechTimerWidget">
+        <div class="timer-header-row">
+          <div class="timer-title-wrap">
+            <span class="timer-badge">⏱️ 1분 스피치 실전 타이머</span>
+            <span class="timer-clock-display" id="timerClockDisplay">00:00 / 01:00</span>
+          </div>
+          <div class="timer-ctrl-btns">
+            <button type="button" class="timer-btn timer-btn-start" id="timerToggleBtn" onclick="toggleSpeechTimer()">▶ 시작</button>
+            <button type="button" class="timer-btn timer-btn-reset" onclick="resetSpeechTimer()">↺ 리셋</button>
+          </div>
+        </div>
+        <div class="timer-progress-wrap">
+          <div class="timer-progress-bar" id="timerProgressBar"></div>
+        </div>
+        <div class="timer-milestones-row">
+          <div class="timer-milestone active" id="milestone1">
+            <span class="timer-ms-time">0 ~ 15초</span>
+            <span class="timer-ms-label">1. 두괄식 비유/지원동기</span>
+          </div>
+          <div class="timer-milestone" id="milestone2">
+            <span class="timer-ms-time">15 ~ 45초</span>
+            <span class="timer-ms-label">2. 양대 무기 (수율·설비 / 현장 AX)</span>
+          </div>
+          <div class="timer-milestone" id="milestone3">
+            <span class="timer-ms-time">45 ~ 60초</span>
+            <span class="timer-ms-label">3. 입사 후 기여 포부</span>
+          </div>
+        </div>
+        <div class="char-counter-bar" id="charCounterBar">
+          <div>
+            <span>구술 분량: </span>
+            <span class="char-count-badge" id="charCountTotal">${analysis.noSpaceChars}자</span>
+            <span style="font-size:11px; color:#64748b;">(공백포함 ${analysis.totalChars}자)</span>
+          </div>
+          <div>
+            <span>예상 구술 소요시간: </span>
+            <span class="char-time-estimate ${analysis.status}" id="charTimeEstimate">${analysis.statusText}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   const headerLabels = {
     starc: '💼 STAR-C 전체 구술 답변 (줄글)',
@@ -5385,13 +5918,15 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
         <!-- 2. 프레임별 키워드 영역 (CORE / PREP / STAR-C / FREE) -->
         ${renderKeywordBlock(q, qIdx, fw)}
 
+        ${timerWidgetHtml}
+
         <!-- 3. 전체 구술 답변 줄글 영역 -->
         <div class="plain-answer-wrap">
           <div class="plain-answer-header-label">
             <span>${headerLabels[fw] || '💬 전체 구술 답변 (줄글)'}</span>
             <span class="star-kw-sub-hint">${subHints[fw] || subHints.starc}</span>
           </div>
-          <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText)">${escapeHtml(text)}</div>
+          <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText); updateCharCounterLive(this.innerText);">${escapeHtml(text)}</div>
         </div>
 
         <!-- Bottom Navigation Controls -->
@@ -5428,6 +5963,7 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
 function goToQuestion(targetIdx) {
   const proj = projectsData[currentProjIndex];
   if (!proj || !proj.questions || targetIdx < 0 || targetIdx >= proj.questions.length) return;
+  resetSpeechTimer();
   activeQuestionIndex[currentProjIndex] = targetIdx;
   renderSidebar();
   renderQuestionStepper(proj);
