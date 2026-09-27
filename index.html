@@ -4183,6 +4183,44 @@ body.theme-skhynix .nav-q-type {
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3) !important;
 }
 
+  
+/* Native Placeholder Styling: subtle, readable, disappears the instant user types */
+::placeholder {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+}
+::-webkit-input-placeholder {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+}
+::-moz-placeholder {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+}
+:-ms-input-placeholder {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+  opacity: 1 !important;
+  font-weight: 400 !important;
+}
+.unified-full-box {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+  resize: vertical !important;
+}
+.tail-q-textarea {
+  font-family: inherit !important;
+  box-sizing: border-box !important;
+  resize: vertical !important;
+}
+
   </style>
 </head>
 <body>
@@ -5462,7 +5500,7 @@ function stripFrameworkTags(text) {
 
 function convertPlainTextToFramework(text, oldFw, newFw, q) {
   if (!text || !text.trim()) {
-    return getDefaultTemplateForFramework(newFw);
+    return '';
   }
 
   if (newFw === 'free') {
@@ -5486,29 +5524,29 @@ function convertPlainTextToFramework(text, oldFw, newFw, q) {
   const summary = (q && q.summary) ? q.summary : '';
 
   if (newFw === 'core') {
-    const cPart = t || summary || (q && q.core_c_kw) || '핵심 기술·공식·알고리즘의 개념 정의를 입력하세요.';
-    const oPart = s || (q && q.core_o_kw) || '기존 방식의 한계 및 기술 도입 배경을 입력하세요.';
-    const rPart = a || (q && q.core_r_kw) || '구체적인 작동 메커니즘, 파라미터 제어 및 수학적 원리를 입력하세요.';
+    const cPart = t || summary || (q && q.core_c_kw) || '';
+    const oPart = s || (q && q.core_o_kw) || '';
+    const rPart = a || (q && q.core_r_kw) || '';
     const eItems = [r, c].filter(Boolean);
-    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.core_e_kw) || '도입 후 성능 개선, 노이즈 제거, 정확도 및 수율 향상 효과를 입력하세요.');
+    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.core_e_kw) || '');
     return `[C - 개념정의]\n${cPart}\n\n[O - 도입배경]\n${oPart}\n\n[R - 작동원리]\n${rPart}\n\n[E - 적용효과]\n${ePart}`;
   }
 
   if (newFw === 'prep') {
-    const p1Part = p1 || summary || t || (q && q.prep_p1_kw) || '질문에 대한 두괄식 결론 및 핵심 주장을 입력하세요.';
-    const rPart = s || (q && q.prep_r_kw) || '그렇게 판단한 공학적·현장 중심의 이유와 논거를 입력하세요.';
+    const p1Part = p1 || summary || t || (q && q.prep_p1_kw) || '';
+    const rPart = s || (q && q.prep_r_kw) || '';
     const eItems = [a, r].filter(Boolean);
-    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.prep_e_kw) || '주장을 뒷받침하는 실제 사례와 데이터 검증 내용을 입력하세요.');
-    const p2Part = p2 || c || (q && q.prep_p2_kw) || '최종 결론을 재확인하고 향후 직무에서의 적용 방안을 입력하세요.';
+    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.prep_e_kw) || '');
+    const p2Part = p2 || c || (q && q.prep_p2_kw) || '';
     return `[P - 핵심주장]\n${p1Part}\n\n[R - 이유/논거]\n${rPart}\n\n[E - 구체사례]\n${ePart}\n\n[P - 재강조/포부]\n${p2Part}`;
   }
 
   if (newFw === 'starc') {
-    const sPart = s || (q && q.s_kw) || '당시 문제 상황 및 배경을 입력하세요.';
-    const tPart = t || summary || (q && q.t_kw) || '달성하고자 했던 핵심 목표와 역할을 입력하세요.';
-    const aPart = a || (q && q.a_kw) || '문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘을 입력하세요.';
-    const rPart = r || (q && q.r_kw) || '정량적 성과 및 직무 기여점을 입력하세요.';
-    const cPart = c || p2 || (q && q.c_kw) || '입사 후 직무에서의 기여 방안을 입력하세요.';
+    const sPart = s || (q && q.s_kw) || '';
+    const tPart = t || summary || (q && q.t_kw) || '';
+    const aPart = a || (q && q.a_kw) || '';
+    const rPart = r || (q && q.r_kw) || '';
+    const cPart = c || p2 || (q && q.c_kw) || '';
     return `[S] ${sPart}\n\n[T] ${tPart}\n\n[A] ${aPart}\n\n[R] ${rPart}\n\n[C] ${cPart}`;
   }
 
@@ -5556,11 +5594,8 @@ function getFrameworkPlainText(q, fw) {
     return q.plain_text;
   }
 
-  // 3. Fallback
-  const def = getDefaultTemplateForFramework(fw);
-  q[slotKey] = def;
-  q.plain_text = def;
-  return def;
+  // 3. Fallback: return empty string so placeholder is cleanly displayed without forcing user to delete dummy text
+  return '';
 }
 
 function ensurePlainText(q) {
@@ -5972,6 +6007,85 @@ function loadProjectsData() {
     projectsData = JSON.parse(JSON.stringify(defaultList));
   }
 
+
+// ================= DUMMY GUIDE TEXTS SANITIZER =================
+function sanitizeDummyGuideTexts(projects) {
+  if (!Array.isArray(projects)) return;
+  const dummyKeywords = [
+    '문제 상황 핵심 키워드', '달성 목표 핵심 키워드', '공학 조치 핵심 키워드',
+    '정량 성과 핵심 키워드', '직무 기여 핵심 키워드', '핵심 연상 키워드 입력',
+    '당시 배경 핵심 키워드', '목표 핵심 키워드', '핵심 방어 키워드', '핵심 방어 키워드 입력'
+  ];
+
+  projects.forEach(proj => {
+    if (!proj || !proj.questions) return;
+    proj.questions.forEach(q => {
+      // 1. Tail questions cleanup
+      if (q.tail_questions && Array.isArray(q.tail_questions)) {
+        q.tail_questions.forEach(tq => {
+          if (tq.answer && (
+            tq.answer.includes('면접관의 꼬리질문에 즉시 대응할') ||
+            tq.answer.includes('30초 컷 방어 답변을 입력하세요')
+          )) {
+            tq.answer = '';
+          }
+          if (tq.keyword && dummyKeywords.includes(tq.keyword.trim())) {
+            tq.keyword = '';
+          }
+          if (tq.question && tq.question.includes('예상 꼬리질문을 입력하세요')) {
+            tq.question = '';
+          }
+        });
+      }
+
+      // 2. Question title & Summary cleanup
+      if (q.question && q.question.includes('새 질문에 대한 내용을 입력하세요')) {
+        q.question = '';
+      }
+      if (q.summary && (
+        q.summary.includes('두괄식 핵심 요약 한 문장을 입력하세요') ||
+        q.summary.includes('두괄식 요약 한 문장을 입력하세요') ||
+        q.summary.trim() === '두괄식 요약 한 문장을 입력하세요'
+      )) {
+        q.summary = '';
+      }
+
+      // 3. Keyword cleanup
+      const kwFields = [
+        's_kw', 't_kw', 'a_kw', 'r_kw', 'c_kw', 'plain_kw',
+        'core_c_kw', 'core_o_kw', 'core_r_kw', 'core_e_kw',
+        'prep_p1_kw', 'prep_r_kw', 'prep_e_kw', 'prep_p2_kw'
+      ];
+      kwFields.forEach(k => {
+        if (q[k] && dummyKeywords.includes(q[k].trim())) {
+          q[k] = '';
+        }
+      });
+
+      // 4. Plain text dummy cleanup
+      if (q.plain_text && (
+        q.plain_text.includes('당시 문제 상황 및 배경을 입력하세요') ||
+        q.plain_text.includes('핵심 기술·공식·알고리즘의 개념 정의를 입력하세요') ||
+        q.plain_text.includes('두괄식 결론 및 핵심 주장을 입력하세요') ||
+        q.plain_text.includes('자유롭게 줄글로 작성하세요')
+      )) {
+        q.plain_text = '';
+      }
+      ['starc', 'core', 'prep', 'free'].forEach(fw => {
+        const k = 'plain_text_' + fw;
+        if (q[k] && (
+          q[k].includes('당시 문제 상황 및 배경을 입력하세요') ||
+          q[k].includes('핵심 기술·공식·알고리즘의 개념 정의를 입력하세요') ||
+          q[k].includes('두괄식 결론 및 핵심 주장을 입력하세요') ||
+          q[k].includes('자유롭게 줄글로 작성하세요')
+        )) {
+          q[k] = '';
+        }
+      });
+    });
+  });
+}
+
   // Ensure all projects and questions have tail_questions initialized & seeded
   projectsData.forEach((proj) => {
     if (!proj.questions) proj.questions = [];
@@ -5979,6 +6093,9 @@ function loadProjectsData() {
       seedDefaultTailQuestions(proj, q);
     });
   });
+
+  // Purge any dummy placeholder strings so input boxes are clean and native placeholders show properly
+  sanitizeDummyGuideTexts(projectsData);
 
   // Initialize active question index
   projectsData.forEach((_, idx) => {
@@ -7087,8 +7204,10 @@ function renderQuestions(proj) {
   });
 
   container.innerHTML = html;
-  // Auto-resize summary textareas so full text is visible at a glance
+  // Auto-resize summary & speech textareas so full text is visible at a glance
   container.querySelectorAll('.summary-lead-input').forEach(autoResizeTextarea);
+  container.querySelectorAll('.unified-full-box').forEach(autoResizeTextarea);
+  container.querySelectorAll('.tail-q-textarea').forEach(autoResizeTextarea);
 }
 
 function autoResizeTextarea(el) {
@@ -7304,6 +7423,13 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
     free: '형식에 얽매이지 않고 면접관에게 말할 구술 스크립트를 자유롭게 작성'
   };
 
+  const fwPlaceholders = {
+    starc: '면접관에게 구술할 답변을 STAR-C 구조로 작성하세요... (입력 시 안내문구 자동 사라짐)\n\n[S] 당시 문제 상황 및 현장 배경\n[T] 본인이 달성하고자 했던 핵심 목표와 과제\n[A] 문제 해결을 위해 적용한 구체적 공학 액션 및 메커니즘\n[R] 정량적 성과 지표 (수율 %, 시간, 원가 절감 등)\n[C] 입사 후 직무에서의 기여 방안 및 포부',
+    core: '면접관에게 설명할 기술 답변을 CORE 구조로 작성하세요... (입력 시 안내문구 자동 사라짐)\n\n[C] 핵심 기술·공식·알고리즘의 개념 정의\n[O] 기존 방식의 한계 및 신규 기술 도입 배경\n[R] 작동 메커니즘, 파라미터 제어 및 수학적/물리적 원리\n[E] 도입 후 성능 개선, 노이즈 제거, 정밀도 및 수율 향상 효과',
+    prep: '면접관을 논리적으로 설득할 답변을 PREP 구조로 작성하세요... (입력 시 안내문구 자동 사라짐)\n\n[P] 질문에 대한 두괄식 결론 및 핵심 주장\n[R] 그렇게 판단한 공학적·현장 중심의 명확한 이유와 논거\n[E] 주장을 뒷받침하는 실제 검증 데이터 및 구체적 적용 사례\n[P] 최종 결론 재확인 및 향후 직무에서의 적용 방안',
+    free: '형식에 얽매이지 않고 면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요...'
+  };
+
   return `
     <div class="question-card frame-card-${fw}" id="q-card-${qIdx}">
       <!-- Question Card Header -->
@@ -7362,7 +7488,10 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
             <span>${headerLabels[fw] || '💬 전체 구술 답변 (줄글)'}</span>
             <span class="star-kw-sub-hint">${subHints[fw] || subHints.starc}</span>
           </div>
-          <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText); updateCharCounterLive(this.innerText);">${escapeHtml(text)}</div>
+          <textarea class="step-full-box unified-full-box"
+                    rows="6"
+                    placeholder="${escapeHtml(fwPlaceholders[fw] || fwPlaceholders.starc)}"
+                    oninput="updateQField(${qIdx}, 'plain_text', this.value); updateCharCounterLive(this.value); autoResizeTextarea(this);">${escapeHtml(text || '')}</textarea>
         </div>
 
 
@@ -7537,7 +7666,7 @@ function renderTailQuestionItem(qIdx, tq, tIdx) {
           <div class="tail-q-drawer-meta">
             <span class="tail-q-script-title">💬 30초 압박 방어 구술 스크립트 (2~3문장 팩트 중심)</span>
             <span class="tail-q-char-badge ${analysis.status}" id="tailCharBadge_${qIdx}_${tIdx}">
-              ${analysis.noSpaceChars}자 · ${analysis.statusText}
+              ${analysis.noSpaceChars === 0 ? '0자 · 30초 컷 권장 (100~150자)' : `${analysis.noSpaceChars}자 · ${analysis.statusText}`}
             </span>
           </div>
           <textarea class="tail-q-textarea"
@@ -7558,9 +7687,9 @@ function addTailQuestion(qIdx) {
   const nextNum = q.tail_questions.length + 1;
   const newTq = {
     id: 'tq_' + Date.now(),
-    question: `Q${qIdx + 1}-${nextNum}. 예상 꼬리질문을 입력하세요`,
-    keyword: '핵심 방어 키워드',
-    answer: '면접관의 꼬리질문에 즉시 대응할 2~3문장의 30초 컷 방어 답변을 입력하세요.',
+    question: '',
+    keyword: '',
+    answer: '',
     is_expanded: true
   };
   q.tail_questions.push(newTq);
@@ -7615,28 +7744,25 @@ function addQuestionToCurrentProject() {
   const config = getActiveCompanyConfig();
   const nextQNum = proj.questions.length + 1;
   const newQ = {
-    question: `Q${nextQNum}. 새 질문에 대한 내용을 입력하세요`,
+    question: '',
     framework: "starc",
     core_c_kw: "", core_o_kw: "", core_r_kw: "", core_e_kw: "",
     prep_p1_kw: "", prep_r_kw: "", prep_e_kw: "", prep_p2_kw: "",
-    summary: "두괄식 핵심 요약 한 문장을 입력하세요",
+    summary: "",
     use_star: false,
-    plain_kw: "핵심 연상 키워드 입력",
-    plain_text: `[S] 당시 문제 상황 및 배경을 입력하세요.
-
-[T] 달성하고자 했던 핵심 목표와 역할을 입력하세요.
-
-[A] 문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘을 입력하세요.
-
-[R] 정량적 성과 및 직무 기여점을 입력하세요.\n\n[C] 입사 후 직무에서의 기여 방안을 입력하세요.`,
-    s_kw: "문제 상황 핵심 키워드",
-    s: "당시 구체적 문제 상황",
-    t_kw: "달성 목표 핵심 키워드",
-    t: "달성해야 했던 목표와 역할",
-    a_kw: "공학 조치 핵심 키워드",
-    a: "문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘",
-    r_kw: "정량 성과 핵심 키워드",
-    r: `정량적 결과 및 ${config.shortName} 직무 기여점`
+    plain_kw: "",
+    plain_text: "",
+    s_kw: "",
+    s: "",
+    t_kw: "",
+    t: "",
+    a_kw: "",
+    a: "",
+    r_kw: "",
+    r: "",
+    c_kw: "",
+    c: "",
+    tail_questions: []
   };
 
   proj.questions.push(newQ);
@@ -7692,25 +7818,22 @@ function addNewItem(category = 'project') {
     tags: (cat.id === 'career') ? ["양산 운영", "품질 관리", "수율 개선"] : ["신규 공법", "공정 데이터", "알고리즘"],
     questions: [
       {
-        question: "Q1. 이 경험은 구체적으로 무엇을 한 것인가요?",
-        summary: "두괄식 요약 한 문장을 입력하세요",
+        question: "",
+        summary: "",
         use_star: false,
-        plain_kw: "핵심 연상 키워드 입력",
-        plain_text: `[S] 당시 문제 상황 및 배경을 입력하세요.
-
-[T] 달성하고자 했던 핵심 목표와 역할을 입력하세요.
-
-[A] 문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘을 입력하세요.
-
-[R] 정량적 성과 및 직무 기여점을 입력하세요.\n\n[C] 입사 후 직무에서의 기여 방안을 입력하세요.`,
-        s_kw: "당시 배경 핵심 키워드",
-        s: "[Situation] 당시 어떤 상황과 배경에서 문제가 발생했나요?",
-        t_kw: "목표 핵심 키워드",
-        t: "[Task] 본인이 맡았던 핵심 목표와 역할은 무엇이었나요?",
-        a_kw: "공학 조치 핵심 키워드",
-        a: "[Action] 문제를 해결하기 위해 어떤 물리적/수학적/공학적 행동과 메커니즘을 적용했나요?",
-        r_kw: "정량 성과 핵심 키워드",
-        r: `[Result] 정량적 성과(수율, Loss, 시간 등)와 ${config.name} 기여점은 무엇인가요?`
+        plain_kw: "",
+        plain_text: "",
+        s_kw: "",
+        s: "",
+        t_kw: "",
+        t: "",
+        a_kw: "",
+        a: "",
+        r_kw: "",
+        r: "",
+        c_kw: "",
+        c: "",
+        tail_questions: []
       }
     ]
   };
