@@ -3214,6 +3214,25 @@ const DEFAULT_PROJECTS_HYUNDAI = [
         "prep_r_kw": "딥러닝학습한계",
         "prep_e_kw": "12시간룰개발",
         "prep_p2_kw": "실용엔지니어링"
+      },
+      {
+        "question": "Q4. 비전 선별 시 적용한 1×7 수직 Bridge Kernel의 작동 원리와 효과는 무엇인가요?",
+        "summary": "점선처럼 끊겨 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 실선으로 연결함으로써, 단순 노이즈와 분리하고 미검률 0%를 달성한 필터링 기법입니다.",
+        "framework": "core",
+        "core_c_kw": "수직다리연결·실선화",
+        "core_o_kw": "초미세버·점선착각미검",
+        "core_r_kw": "세로탐색·7px브릿지",
+        "core_e_kw": "미검률0%·장당5ms",
+        "s_kw": "점선착각미검",
+        "t_kw": "결함연속성복원",
+        "a_kw": "1x7수직브릿지",
+        "r_kw": "미검률0%",
+        "c_kw": "선제알고리즘",
+        "prep_p1_kw": "수직다리필터링",
+        "prep_r_kw": "점선노이즈오인극복",
+        "prep_e_kw": "7px연결·미검0%",
+        "prep_p2_kw": "미검률0%사수",
+        "plain_text": "[C - 개념정의]\n1×7 수직 Bridge Kernel은 점선처럼 끊겨서 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 하나의 실선으로 이어주는 필터링 기법입니다.\n\n[O - 도입배경]\n실오라기 Burr는 두께가 너무 얇아서 카메라로 찍으면 선이 중간중간 뚝뚝 끊긴 점선처럼 보입니다. 그러다 보니 컴퓨터가 이를 불량이 아니라 단순 먼지 노이즈로 착각해서 지나치는 미검 문제가 있었습니다.\n\n[R - 작동원리]\n이를 해결하기 위해 결함이 세로 방향으로 길게 뻗는다는 도메인 특성을 활용했습니다. 가로 방향 노이즈는 보지 않고 오직 세로 방향만 탐색하도록 1×7 수직 커널을 설계했고, 세로 7픽셀 이내로 끊어진 점들이 있으면 그 사이에 다리를 놓아 하나의 긴 선으로 연결해 컴퓨터가 확실한 결함으로 인식하게 만들었습니다.\n\n[E - 적용효과]\n그 결과 주변 노이즈로 인한 오검출 없이 결함의 연속성만 정확히 살려내어 미검률 0%를 달성했고, 장당 5ms의 빠른 연산 속도로 100만 장 검사를 72시간 내에 성공시킬 수 있었습니다."
       }
     ]
   },
@@ -3480,6 +3499,25 @@ const DEFAULT_PROJECTS_SKHYNIX = [
         "prep_r_kw": "딥러닝학습한계",
         "prep_e_kw": "12시간룰개발",
         "prep_p2_kw": "실용엔지니어링"
+      },
+      {
+        "question": "Q4. 비전 선별 시 적용한 1×7 수직 Bridge Kernel의 작동 원리와 효과는 무엇인가요?",
+        "summary": "점선처럼 끊겨 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 실선으로 연결함으로써, 단순 노이즈와 분리하고 미검률 0%를 달성한 필터링 기법입니다.",
+        "framework": "core",
+        "core_c_kw": "수직다리연결·실선화",
+        "core_o_kw": "초미세버·점선착각미검",
+        "core_r_kw": "세로탐색·7px브릿지",
+        "core_e_kw": "미검률0%·장당5ms",
+        "s_kw": "점선착각미검",
+        "t_kw": "결함연속성복원",
+        "a_kw": "1x7수직브릿지",
+        "r_kw": "미검률0%",
+        "c_kw": "선제알고리즘",
+        "prep_p1_kw": "수직다리필터링",
+        "prep_r_kw": "점선노이즈오인극복",
+        "prep_e_kw": "7px연결·미검0%",
+        "prep_p2_kw": "미검률0%사수",
+        "plain_text": "[C - 개념정의]\n1×7 수직 Bridge Kernel은 점선처럼 끊겨서 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 하나의 실선으로 이어주는 필터링 기법입니다.\n\n[O - 도입배경]\n실오라기 Burr는 두께가 너무 얇아서 카메라로 찍으면 선이 중간중간 뚝뚝 끊긴 점선처럼 보입니다. 그러다 보니 컴퓨터가 이를 불량이 아니라 단순 먼지 노이즈로 착각해서 지나치는 미검 문제가 있었습니다.\n\n[R - 작동원리]\n이를 해결하기 위해 결함이 세로 방향으로 길게 뻗는다는 도메인 특성을 활용했습니다. 가로 방향 노이즈는 보지 않고 오직 세로 방향만 탐색하도록 1×7 수직 커널을 설계했고, 세로 7픽셀 이내로 끊어진 점들이 있으면 그 사이에 다리를 놓아 하나의 긴 선으로 연결해 컴퓨터가 확실한 결함으로 인식하게 만들었습니다.\n\n[E - 적용효과]\n그 결과 주변 노이즈로 인한 오검출 없이 결함의 연속성만 정확히 살려내어 미검률 0%를 달성했고, 장당 5ms의 빠른 연산 속도로 100만 장 검사를 72시간 내에 성공시킬 수 있었습니다."
       }
     ]
   },
@@ -4026,6 +4064,40 @@ function loadProjectsData() {
               q.plain_text_core = q.plain_text;
             }
           });
+
+          // Ensure Vision sorting project has Q4 Bridge Kernel question
+          if (proj.title && (proj.title.includes('비전') || proj.title.includes('100만'))) {
+            let bridgeQ = proj.questions.find(q => q.question && (q.question.includes('Bridge Kernel') || q.question.includes('브릿지') || q.question.includes('1×7') || q.question.includes('1x7')));
+            const bridgeScript = "[C - 개념정의]\n1×7 수직 Bridge Kernel은 점선처럼 끊겨서 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 하나의 실선으로 이어주는 필터링 기법입니다.\n\n[O - 도입배경]\n실오라기 Burr는 두께가 너무 얇아서 카메라로 찍으면 선이 중간중간 뚝뚝 끊긴 점선처럼 보입니다. 그러다 보니 컴퓨터가 이를 불량이 아니라 단순 먼지 노이즈로 착각해서 지나치는 미검 문제가 있었습니다.\n\n[R - 작동원리]\n이를 해결하기 위해 결함이 세로 방향으로 길게 뻗는다는 도메인 특성을 활용했습니다. 가로 방향 노이즈는 보지 않고 오직 세로 방향만 탐색하도록 1×7 수직 커널을 설계했고, 세로 7픽셀 이내로 끊어진 점들이 있으면 그 사이에 다리를 놓아 하나의 긴 선으로 연결해 컴퓨터가 확실한 결함으로 인식하게 만들었습니다.\n\n[E - 적용효과]\n그 결과 주변 노이즈로 인한 오검출 없이 결함의 연속성만 정확히 살려내어 미검률 0%를 달성했고, 장당 5ms의 빠른 연산 속도로 100만 장 검사를 72시간 내에 성공시킬 수 있었습니다.";
+            if (!bridgeQ) {
+              bridgeQ = {
+                question: "Q4. 비전 선별 시 적용한 1×7 수직 Bridge Kernel의 작동 원리와 효과는 무엇인가요?",
+                summary: "점선처럼 끊겨 찍힌 미세 결함에 수직으로 다리(Bridge)를 놓아 실선으로 연결함으로써, 단순 노이즈와 분리하고 미검률 0%를 달성한 필터링 기법입니다.",
+                framework: "core",
+                core_c_kw: "수직다리연결·실선화",
+                core_o_kw: "초미세버·점선착각미검",
+                core_r_kw: "세로탐색·7px브릿지",
+                core_e_kw: "미검률0%·장당5ms",
+                s_kw: "점선착각미검",
+                t_kw: "결함연속성복원",
+                a_kw: "1x7수직브릿지",
+                r_kw: "미검률0%",
+                c_kw: "선제알고리즘",
+                prep_p1_kw: "수직다리필터링",
+                prep_r_kw: "점선노이즈오인극복",
+                prep_e_kw: "7px연결·미검0%",
+                prep_p2_kw: "미검률0%사수",
+                plain_text: bridgeScript,
+                plain_text_core: bridgeScript
+              };
+              proj.questions.push(bridgeQ);
+              resequenceQuestions(proj);
+            } else {
+              bridgeQ.framework = "core";
+              bridgeQ.plain_text = bridgeScript;
+              bridgeQ.plain_text_core = bridgeScript;
+            }
+          }
         });
       } else {
         projectsData = JSON.parse(JSON.stringify(defaultList));
