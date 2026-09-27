@@ -621,33 +621,54 @@
       padding: 10px 14px;
       margin-bottom: 18px;
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 12px;
+      align-items: flex-start;
     }
     .summary-lead-badge {
       background: linear-gradient(135deg, #0072ce 0%, #00458a 100%);
       color: #ffffff;
       font-size: 11px;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 4px;
       white-space: nowrap;
       border: 1px solid rgba(0, 229, 255, 0.35);
       flex-shrink: 0;
+      margin-top: 2px;
     }
     .summary-lead-input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 600;
       color: #f0fdf4;
-      line-height: 1.5;
+      line-height: 1.6;
+      font-family: inherit;
+      resize: none;
+      overflow-y: hidden;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      field-sizing: content;
+      min-height: 26px;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
     }
     .summary-lead-input::placeholder {
       color: #64748b;
       font-style: italic;
+    }
+    body.theme-skhynix .summary-lead-box {
+      background: linear-gradient(135deg, rgba(235, 16, 36, 0.12) 0%, rgba(30, 12, 16, 0.5) 100%);
+      border-color: rgba(255, 122, 0, 0.3);
+      border-left-color: #ff7a00;
+    }
+    body.theme-skhynix .summary-lead-badge {
+      background: linear-gradient(135deg, #eb1024 0%, #b30012 100%);
+      border-color: rgba(255, 122, 0, 0.4);
     }
 
     /* ================= STEP ANSWER ROWS (STAR) ================= */
@@ -2436,6 +2457,11 @@ window.addEventListener('DOMContentLoaded', () => {
       prevQuestion();
     }
   });
+
+  // Window resize: auto-resize summary textareas
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.summary-lead-input').forEach(autoResizeTextarea);
+  });
 });
 
 // ================= DATA PERSISTENCE & MIGRATION =================
@@ -3192,6 +3218,14 @@ function renderQuestions(proj) {
   });
 
   container.innerHTML = html;
+  // Auto-resize summary textareas so full text is visible at a glance
+  container.querySelectorAll('.summary-lead-input').forEach(autoResizeTextarea);
+}
+
+function autoResizeTextarea(el) {
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(26, el.scrollHeight) + 'px';
 }
 
 function renderSingleQuestionCard(q, qIdx, totalCount) {
@@ -3213,7 +3247,10 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
         <!-- 1. 두괄식 한문장 요약 -->
         <div class="summary-lead-box">
           <div class="summary-lead-badge">⚡ 두괄식 요약</div>
-          <input type="text" class="summary-lead-input" value="${escapeHtml(q.summary || '')}" placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요" oninput="updateQField(${qIdx}, 'summary', this.value)">
+          <textarea class="summary-lead-input"
+                    rows="1"
+                    placeholder="질문에 대한 두괄식 핵심 요약 한 문장을 입력하세요"
+                    oninput="updateQField(${qIdx}, 'summary', this.value); autoResizeTextarea(this);">${escapeHtml(q.summary || '')}</textarea>
         </div>
 
         <!-- 2. STAR 한줄 핵심 키워드 영역 (S, T, A, R 4줄) -->
