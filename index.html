@@ -3786,6 +3786,136 @@ function saveCategoriesData() {
   } catch (e) {}
 }
 
+// ================= FRAMEWORK TEXT HELPERS & DYNAMIC CONVERSION =================
+function getDefaultTemplateForFramework(fw) {
+  if (fw === 'core') {
+    return `[C - 개념정의]\n핵심 기술·공식·알고리즘의 개념 정의를 입력하세요.\n\n[O - 도입배경]\n기존 방식의 한계 및 기술 도입 배경을 입력하세요.\n\n[R - 작동원리]\n구체적인 작동 메커니즘, 파라미터 제어 및 수학적 원리를 입력하세요.\n\n[E - 적용효과]\n도입 후 성능 개선, 노이즈 제거, 정확도 및 수율 향상 효과를 입력하세요.`;
+  }
+  if (fw === 'prep') {
+    return `[P - 핵심주장]\n질문에 대한 두괄식 결론 및 핵심 주장을 입력하세요.\n\n[R - 이유/논거]\n그렇게 판단한 공학적·현장 중심의 이유와 논거를 입력하세요.\n\n[E - 구체사례]\n주장을 뒷받침하는 실제 사례와 데이터 검증 내용을 입력하세요.\n\n[P - 재강조/포부]\n최종 결론을 재확인하고 향후 직무에서의 적용 방안을 입력하세요.`;
+  }
+  if (fw === 'free') {
+    return `면접관에게 구술할 답변 내용을 자유롭게 줄글로 작성하세요.`;
+  }
+  // Default: STAR-C
+  return `[S] 당시 문제 상황 및 배경을 입력하세요.\n\n[T] 달성하고자 했던 핵심 목표와 역할을 입력하세요.\n\n[A] 문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘을 입력하세요.\n\n[R] 정량적 성과 및 직무 기여점을 입력하세요.\n\n[C] 입사 후 직무에서의 기여 방안을 입력하세요.`;
+}
+
+function getSectionText(text, pattern) {
+  if (!text) return '';
+  const re = new RegExp('\\[(?:' + pattern + ')[^\\]]*\\]([\\s\\S]*?)(?=(?:\\n\\s*\\[[A-Za-z0-9가-힣])|$)', 'i');
+  const m = text.match(re);
+  return m ? m[1].trim() : '';
+}
+
+function stripFrameworkTags(text) {
+  if (!text) return '';
+  return text.replace(/\[(?:S|T|A|R|C|O|P|E|개념정의|개념|도입배경|배경|작동원리|원리|적용효과|효과|핵심주장|주장|이유\/논거|이유논거|이유|논거|구체사례|근거사례|사례|근거|재강조\/포부|재강조·포부|재강조|포부|상황|목표|행동|성과|기여|동적\s*임계치[^\]]*|가중[^\/]*\/[^\)]*\))(?:\s*[-–:][^\]]*)?\]\s*/gi, '').trim();
+}
+
+function convertPlainTextToFramework(text, oldFw, newFw, q) {
+  if (!text || !text.trim()) {
+    return getDefaultTemplateForFramework(newFw);
+  }
+
+  if (newFw === 'free') {
+    const stripped = stripFrameworkTags(text);
+    return stripped ? stripped : getDefaultTemplateForFramework('free');
+  }
+
+  const s = getSectionText(text, 'S\\b|상황') || getSectionText(text, 'O\\b|도입배경|배경') || getSectionText(text, 'R\\b.*이유|이유|논거');
+  const t = getSectionText(text, 'T\\b|목표|과제') || getSectionText(text, 'C\\b.*개념|개념정의|개념') || getSectionText(text, 'P\\b.*주장|핵심주장|주장|P1');
+  let a = getSectionText(text, 'A\\b|행동|조치|액션') || getSectionText(text, 'R\\b.*작동|작동원리|원리') || getSectionText(text, 'E\\b.*구체|근거|사례|구체사례');
+  let r = getSectionText(text, 'R\\b.*성과|성과|결과') || getSectionText(text, 'E\\b.*적용|적용효과|효과');
+  let c = getSectionText(text, 'C\\b.*기여|기여') || getSectionText(text, 'P\\b.*재강조|재강조|포부|P2');
+
+  const p1 = getSectionText(text, 'P\\b.*주장|핵심주장|주장|P1');
+  const p2 = getSectionText(text, 'P\\b.*재강조|재강조|포부|P2');
+
+  if (!r) r = getSectionText(text, 'R\\b');
+  if (!a) a = getSectionText(text, 'A\\b');
+  if (!c && p2) c = p2;
+
+  const summary = (q && q.summary) ? q.summary : '';
+
+  if (newFw === 'core') {
+    const cPart = t || summary || (q && q.core_c_kw) || '핵심 기술·공식·알고리즘의 개념 정의를 입력하세요.';
+    const oPart = s || (q && q.core_o_kw) || '기존 방식의 한계 및 기술 도입 배경을 입력하세요.';
+    const rPart = a || (q && q.core_r_kw) || '구체적인 작동 메커니즘, 파라미터 제어 및 수학적 원리를 입력하세요.';
+    const eItems = [r, c].filter(Boolean);
+    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.core_e_kw) || '도입 후 성능 개선, 노이즈 제거, 정확도 및 수율 향상 효과를 입력하세요.');
+    return `[C - 개념정의]\n${cPart}\n\n[O - 도입배경]\n${oPart}\n\n[R - 작동원리]\n${rPart}\n\n[E - 적용효과]\n${ePart}`;
+  }
+
+  if (newFw === 'prep') {
+    const p1Part = p1 || summary || t || (q && q.prep_p1_kw) || '질문에 대한 두괄식 결론 및 핵심 주장을 입력하세요.';
+    const rPart = s || (q && q.prep_r_kw) || '그렇게 판단한 공학적·현장 중심의 이유와 논거를 입력하세요.';
+    const eItems = [a, r].filter(Boolean);
+    const ePart = eItems.length > 0 ? eItems.join('\n\n') : ((q && q.prep_e_kw) || '주장을 뒷받침하는 실제 사례와 데이터 검증 내용을 입력하세요.');
+    const p2Part = p2 || c || (q && q.prep_p2_kw) || '최종 결론을 재확인하고 향후 직무에서의 적용 방안을 입력하세요.';
+    return `[P - 핵심주장]\n${p1Part}\n\n[R - 이유/논거]\n${rPart}\n\n[E - 구체사례]\n${ePart}\n\n[P - 재강조/포부]\n${p2Part}`;
+  }
+
+  if (newFw === 'starc') {
+    const sPart = s || (q && q.s_kw) || '당시 문제 상황 및 배경을 입력하세요.';
+    const tPart = t || summary || (q && q.t_kw) || '달성하고자 했던 핵심 목표와 역할을 입력하세요.';
+    const aPart = a || (q && q.a_kw) || '문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘을 입력하세요.';
+    const rPart = r || (q && q.r_kw) || '정량적 성과 및 직무 기여점을 입력하세요.';
+    const cPart = c || p2 || (q && q.c_kw) || '입사 후 직무에서의 기여 방안을 입력하세요.';
+    return `[S] ${sPart}\n\n[T] ${tPart}\n\n[A] ${aPart}\n\n[R] ${rPart}\n\n[C] ${cPart}`;
+  }
+
+  return text;
+}
+
+function getFrameworkPlainText(q, fw) {
+  if (!q) return '';
+  fw = fw || q.framework || 'starc';
+  const slotKey = 'plain_text_' + fw;
+
+  // 1. If explicit cache slot exists and non-empty, use it
+  if (q[slotKey] && q[slotKey].trim().length > 0) {
+    return q[slotKey];
+  }
+
+  // 2. If q.plain_text exists
+  if (q.plain_text && q.plain_text.trim().length > 0) {
+    // If current framework is core, but text still has [S] or [T] and lacks [C
+    if (fw === 'core' && (/\[S\]/i.test(q.plain_text) || /\[T\]/i.test(q.plain_text)) && !/\[C\b/i.test(q.plain_text)) {
+      const converted = convertPlainTextToFramework(q.plain_text, 'starc', 'core', q);
+      q[slotKey] = converted;
+      q.plain_text = converted;
+      return converted;
+    }
+
+    // If current framework is prep, but text still has [S] or [T] and lacks [P
+    if (fw === 'prep' && (/\[S\]/i.test(q.plain_text) || /\[T\]/i.test(q.plain_text)) && !/\[P\b/i.test(q.plain_text)) {
+      const converted = convertPlainTextToFramework(q.plain_text, 'starc', 'prep', q);
+      q[slotKey] = converted;
+      q.plain_text = converted;
+      return converted;
+    }
+
+    // If current framework is free, but text still has bracket tags
+    if (fw === 'free' && /\[(?:S|T|A|R|C|P|O|E|개념|주장)[\s\S]*?\]/i.test(q.plain_text)) {
+      const converted = convertPlainTextToFramework(q.plain_text, q.framework || 'starc', 'free', q);
+      q[slotKey] = converted;
+      q.plain_text = converted;
+      return converted;
+    }
+
+    // Otherwise it already matches or is user's authentic custom text
+    q[slotKey] = q.plain_text;
+    return q.plain_text;
+  }
+
+  // 3. Fallback
+  const def = getDefaultTemplateForFramework(fw);
+  q[slotKey] = def;
+  q.plain_text = def;
+  return def;
+}
+
 function ensurePlainText(q) {
   if (q.plain_text && q.plain_text.trim().length > 0) return q.plain_text;
   const parts = [];
@@ -3797,7 +3927,7 @@ function ensurePlainText(q) {
   if (q.p1) parts.push(`[결론] ${q.p1}`);
   if (q.e) parts.push(`[사례] ${q.e}`);
   if (q.p2) parts.push(`[기여] ${q.p2}`);
-  const res = parts.join('\n\n');
+  const res = parts.length > 0 ? parts.join('\n\n') : getDefaultTemplateForFramework(q.framework || 'starc');
   q.plain_text = res;
   return res;
 }
@@ -3871,23 +4001,29 @@ function loadProjectsData() {
             if (q.use_star === undefined) q.use_star = false; // Default clean plain text
             if (!q.plain_text) ensurePlainText(q);
             if (!q.plain_kw) ensurePlainKeywords(q);
+            // Initialize framework plain text and slots
+            const curFw = q.framework || 'starc';
+            getFrameworkPlainText(q, curFw);
             // Seamlessly update Web Gauge EMA/Dynamic question to user's authentic written text
-            if (q.question && (q.question.includes('EMA') || q.question.includes('Dynamic')) && q.plain_text && q.plain_text.includes('[C-개념정의]')) {
-              q.summary = "고정 공차의 오검출을 방지하기 위한 동적 임계치(Dynamic Threshold)와 응답 지연(Lag)을 최소화하기 위한 지수이동평균(EMA) 필터링 로직입니다.";
-              q.core_c_kw = "동적임계치·EMA";
-              q.core_o_kw = "고정공차과검·SMA지연";
-              q.core_r_kw = "kσ동적트리거·최근가중치";
-              q.core_e_kw = "검출딜레이최소화·오검방지";
-              q.s_kw = "로딩량변동";
-              q.t_kw = "오검방지및지연최소화";
-              q.a_kw = "동적임계치·EMA적용";
-              q.r_kw = "검출딜레이최소화";
-              q.c_kw = "알고리즘최적화";
-              q.prep_p1_kw = "동적기준필터링";
-              q.prep_r_kw = "고정공차한계극복";
-              q.prep_e_kw = "kσ동적트리거·최근가중치";
-              q.prep_p2_kw = "검출딜레이최소화";
-              q.plain_text = "[동적 임계치 (Dynamic / Adaptive Threshold) 적용]\n고정된 스펙(USL/LSL)으로 잡은 것이 아니라, 움직이는 기준선에 맞춰 유동적으로 불량을 판정했습니다.\n로딩량 전체가 레시피나 구간에 따라 변동할 수 있기 때문에, 고정 공차(Absolute limit)를 적용하면 오검출(과검)이 발생합니다. 이를 방지하기 위해 이동평균선 대비 kσ(표준편차) 또는 ΔX% 이상의 편차가 발생할 때만 트리거되는 동적 임계치(Dynamic Threshold) 로직을 적용했습니다.\n\n[가중/지수이동평균 (EMA) 필터링]\n단순 이동평균(SMA)은 급격한 결함 발생 시 응답 지연(Lag)이 생기므로, 최근 데이터에 가중치를 두는 지수이동평균(EMA) 필터링을 조합하여 검출 딜레이를 최소화했습니다. 윈도우 크기(Window Size)를 다양하게 테스트하여 노이즈 제거와 신호 지연 방지를 최적화했습니다.";
+            if (q.question && (q.question.includes('EMA') || q.question.includes('Dynamic'))) {
+              if (q.plain_text && q.plain_text.includes('[C-개념정의]')) {
+                q.summary = "고정 공차의 오검출을 방지하기 위한 동적 임계치(Dynamic Threshold)와 응답 지연(Lag)을 최소화하기 위한 지수이동평균(EMA) 필터링 로직입니다.";
+                q.core_c_kw = "동적임계치·EMA";
+                q.core_o_kw = "고정공차과검·SMA지연";
+                q.core_r_kw = "kσ동적트리거·최근가중치";
+                q.core_e_kw = "검출딜레이최소화·오검방지";
+                q.s_kw = "로딩량변동";
+                q.t_kw = "오검방지및지연최소화";
+                q.a_kw = "동적임계치·EMA적용";
+                q.r_kw = "검출딜레이최소화";
+                q.c_kw = "알고리즘최적화";
+                q.prep_p1_kw = "동적기준필터링";
+                q.prep_r_kw = "고정공차한계극복";
+                q.prep_e_kw = "kσ동적트리거·최근가중치";
+                q.prep_p2_kw = "검출딜레이최소화";
+                q.plain_text = "[동적 임계치 (Dynamic / Adaptive Threshold) 적용]\n고정된 스펙(USL/LSL)으로 잡은 것이 아니라, 움직이는 기준선에 맞춰 유동적으로 불량을 판정했습니다.\n로딩량 전체가 레시피나 구간에 따라 변동할 수 있기 때문에, 고정 공차(Absolute limit)를 적용하면 오검출(과검)이 발생합니다. 이를 방지하기 위해 이동평균선 대비 kσ(표준편차) 또는 ΔX% 이상의 편차가 발생할 때만 트리거되는 동적 임계치(Dynamic Threshold) 로직을 적용했습니다.\n\n[가중/지수이동평균 (EMA) 필터링]\n단순 이동평균(SMA)은 급격한 결함 발생 시 응답 지연(Lag)이 생기므로, 최근 데이터에 가중치를 두는 지수이동평균(EMA) 필터링을 조합하여 검출 딜레이를 최소화했습니다. 윈도우 크기(Window Size)를 다양하게 테스트하여 노이즈 제거와 신호 지연 방지를 최적화했습니다.";
+              }
+              q.plain_text_core = q.plain_text;
             }
           });
         });
@@ -4906,7 +5042,23 @@ function switchQFramework(qIdx, framework) {
   const oldFramework = q.framework || 'starc';
   if (oldFramework === framework) return;
 
+  // 1. Save current text into the slot for oldFramework
+  const curText = (q.plain_text !== undefined && q.plain_text !== null) ? q.plain_text : ensurePlainText(q);
+  q['plain_text_' + oldFramework] = curText;
+
+  // 2. Set new framework
   q.framework = framework;
+
+  // 3. Get or generate text for new framework
+  const nextSlotKey = 'plain_text_' + framework;
+  if (q[nextSlotKey] && q[nextSlotKey].trim().length > 0) {
+    q.plain_text = q[nextSlotKey];
+  } else {
+    const converted = convertPlainTextToFramework(curText, oldFramework, framework, q);
+    q[nextSlotKey] = converted;
+    q.plain_text = converted;
+  }
+
   saveProjectsData();
   renderQuestionStepper(proj);
   renderQuestions(proj);
@@ -5025,15 +5177,20 @@ function renderKeywordBlock(q, qIdx, fw) {
 
 function renderSingleQuestionCard(q, qIdx, totalCount) {
   const fw = q.framework || 'starc';
-  const text = (q.plain_text !== undefined && q.plain_text !== null && q.plain_text.trim() !== '')
-    ? q.plain_text
-    : ensurePlainText(q);
+  const text = getFrameworkPlainText(q, fw);
+
+  const headerLabels = {
+    starc: '💼 STAR-C 전체 구술 답변 (줄글)',
+    core: '⚙️ CORE 기술 프레임 전체 구술 답변 (줄글)',
+    prep: '💡 PREP 주장·논리 전체 구술 답변 (줄글)',
+    free: '📝 FREE 자유 줄글 답변'
+  };
 
   const subHints = {
-    starc: 'STAR-C 키워드를 바탕으로 면접관에게 말할 완성형 구술 스크립트',
-    core: 'CORE 키워드를 바탕으로 개념·배경·원리·효과를 명쾌하게 설명하는 기술 스크립트',
-    prep: 'PREP 키워드를 바탕으로 두괄식 결론과 논리적 근거를 설명하는 설득 스크립트',
-    free: '면접관에게 말할 구술 스크립트를 자유롭게 작성'
+    starc: 'STAR-C 키워드를 바탕으로 [S] [T] [A] [R] [C] 완성형 구술 스크립트',
+    core: 'CORE 키워드를 바탕으로 [C-개념] [O-배경] [R-원리] [E-효과] 기술 스크립트',
+    prep: 'PREP 키워드를 바탕으로 [P-주장] [R-이유] [E-사례] [P-재강조] 설득 스크립트',
+    free: '형식에 얽매이지 않고 면접관에게 말할 구술 스크립트를 자유롭게 작성'
   };
 
   return `
@@ -5089,7 +5246,7 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
         <!-- 3. 전체 구술 답변 줄글 영역 -->
         <div class="plain-answer-wrap">
           <div class="plain-answer-header-label">
-            <span>💬 전체 구술 답변 (줄글)</span>
+            <span>${headerLabels[fw] || '💬 전체 구술 답변 (줄글)'}</span>
             <span class="star-kw-sub-hint">${subHints[fw] || subHints.starc}</span>
           </div>
           <div class="step-full-box unified-full-box" contenteditable="true" placeholder="면접관에게 말할 전체 구술 답변을 편하게 줄글로 작성하세요..." oninput="updateQField(${qIdx}, 'plain_text', this.innerText)">${escapeHtml(text)}</div>
@@ -5175,7 +5332,12 @@ function prevQuestion() {
 function updateQField(qIdx, field, val) {
   const proj = projectsData[currentProjIndex];
   if (!proj || !proj.questions || !proj.questions[qIdx]) return;
-  proj.questions[qIdx][field] = val;
+  const q = proj.questions[qIdx];
+  q[field] = val;
+  if (field === 'plain_text') {
+    const fw = q.framework || 'starc';
+    q['plain_text_' + fw] = val;
+  }
   triggerAutoSave();
 
   if (field === 'question') {
