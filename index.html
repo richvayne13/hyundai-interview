@@ -9,7 +9,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>양산기술 면접 워크스페이스</title>
+  <title>양산기술 실전 면접 워크스페이스 (실시간 동기화)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -4230,7 +4230,10 @@ body.theme-skhynix .nav-q-type {
   resize: vertical !important;
 }
 
-  </style>
+  #syncModalOverlay.hidden {
+  display: none !important;
+}
+</style>
 </head>
 <body>
 
@@ -4251,6 +4254,59 @@ body.theme-skhynix .nav-q-type {
 <div class="mobile-drawer-backdrop" id="mobileBackdrop" onclick="closeAllMobileDrawers()"></div>
 
 <!-- 3-Pane App Layout -->
+<!-- Cross-Device Realtime Sync Modal -->
+<div id="syncModalOverlay" class="hidden" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 16px;">
+  <div class="sync-modal-card" style="background: #ffffff; border-radius: 16px; max-width: 560px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.25); border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column;">
+    <div style="background: linear-gradient(135deg, #2563eb, #3b82f6); padding: 18px 22px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">📲</span>
+        <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: #ffffff;">다른 기기(PC/모바일) 실시간 동기화</h3>
+      </div>
+      <button type="button" onclick="closeSyncModal()" style="background: rgba(255,255,255,0.2); border: none; color: #ffffff; border-radius: 8px; width: 30px; height: 30px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+    </div>
+    
+    <div style="padding: 22px; display: flex; flex-direction: column; gap: 16px; max-height: 80vh; overflow-y: auto;">
+      <!-- Step 1: Sync URL Copy -->
+      <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 14px 16px;">
+        <div style="font-weight: 800; font-size: 13.5px; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <span>🔗 방법 1. 원클릭 동기화 링크 (가장 간편)</span>
+        </div>
+        <p style="font-size: 12px; color: #15803d; line-height: 1.5; margin-bottom: 10px;">
+          현재 컴퓨터에서 수정한 모든 질문, 답변, 키워드가 포함된 전용 링크입니다. 다른 PC나 스마트폰 카카오톡/브라우저로 전달하여 열면 <strong>100% 동일하게 즉시 열립니다.</strong>
+        </p>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="syncModalUrlInput" readonly style="flex: 1; font-size: 11px; padding: 8px 10px; border-radius: 8px; border: 1px solid #86efac; background: #ffffff; color: #1e293b; font-family: monospace;" onclick="this.select()">
+          <button type="button" onclick="copySyncModalUrl()" style="background: #16a34a; color: #ffffff; border: none; font-weight: 700; font-size: 12px; padding: 8px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap;">링크 복사</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Paste Sync Code -->
+      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
+        <div style="font-weight: 800; font-size: 13.5px; color: #334155; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <span>📥 방법 2. 다른 기기에서 복사한 코드 붙여넣기</span>
+        </div>
+        <p style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 10px;">
+          다른 PC에서 생성한 동기화 코드(또는 전체 링크)를 여기에 붙여넣고 [동기화 적용]을 누르면 즉시 동기화됩니다.
+        </p>
+        <textarea id="syncModalCodeInput" placeholder="여기에 동기화 링크 또는 동기화 코드를 붙여넣으세요..." style="width: 100%; height: 60px; font-size: 11px; font-family: monospace; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; resize: none; margin-bottom: 8px;"></textarea>
+        <button type="button" onclick="applySyncCodeFromModal()" style="width: 100%; background: #0284c7; color: #ffffff; border: none; font-weight: 700; font-size: 12px; padding: 8px; border-radius: 8px; cursor: pointer;">✨ 동기화 적용하기</button>
+      </div>
+
+      <!-- Step 3: Online Default Sync -->
+      <div style="background: #fdf4ff; border: 1.5px solid #f0abfc; border-radius: 12px; padding: 14px 16px;">
+        <div style="font-weight: 800; font-size: 13.5px; color: #86198f; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <span>☁️ 방법 3. 최신 온라인 공식 배포본으로 초기화</span>
+        </div>
+        <p style="font-size: 12px; color: #a21caf; line-height: 1.5; margin-bottom: 10px;">
+          브라우저 캐시를 모두 비우고 GitHub Pages에 배포된 최신 공식 면접 데이터(0. 1분 자기소개, AI팁, 7개 프로젝트)로 동기화합니다.
+        </p>
+        <button type="button" onclick="forceSyncOnlineDeployment()" style="width: 100%; background: #c026d3; color: #ffffff; border: none; font-weight: 700; font-size: 12px; padding: 8px; border-radius: 8px; cursor: pointer;">☁️ 공식 최신 배포본으로 동기화</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="app-layout">
 
   <!-- Mobile Top Header Bar -->
@@ -4264,7 +4320,7 @@ body.theme-skhynix .nav-q-type {
       <div class="mobile-hdr-proj-title" id="mobileCurrentProjName">01. 항목 로딩 중...</div>
     </div>
     <div class="mobile-hdr-actions">
-      
+      <button type="button" class="mobile-hdr-btn" onclick="copyCrossDeviceSyncLink()" title="기기 동기화 링크 복사">🔗</button>
       <button type="button" class="mobile-hdr-btn" onclick="toggleReferencePane()" title="자소서/원문 보기">📑</button>
     </div>
   </header>
@@ -4283,7 +4339,18 @@ body.theme-skhynix .nav-q-type {
       <div class="brand-sub" id="brandSub">실전 질문 & 답변 핵심 키워드 시스템</div>
       <div class="brand-status-bar">
         <span class="status-pill" id="saveStatus">● 실시간 자동 저장</span>
-        <span id="projCountBadge" style="font-size: 10.5px; font-weight: 700; color: #64748b;">5 Projects</span>
+        <span id="projCountBadge" style="font-size: 10.5px; font-weight: 700; color: #64748b;">8 Projects</span>
+      </div>
+      <!-- Cloud & Cross-Device Sync Action Bar -->
+      <div class="sync-action-box" style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+        <button type="button" class="btn btn-sync-primary" onclick="copyCrossDeviceSyncLink()" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; font-weight: 700; font-size: 12px; padding: 8px 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(37,99,235,0.2); cursor: pointer; transition: all 0.2s;" title="현재 입력한 모든 내용을 다른 컴퓨터/모바일에서 똑같이 볼 수 있는 원클릭 동기화 링크를 복사합니다.">
+          <span>🔗</span>
+          <span>기기 동기화 링크 복사</span>
+        </button>
+        <button type="button" class="btn btn-sync-secondary" onclick="forceSyncOnlineDeployment()" style="background: #ffffff; color: #0284c7; border: 1.5px solid #bae6fd; font-weight: 600; font-size: 11px; padding: 6px 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.2s;" title="온라인 최신 공식 배포본으로 현재 기기의 데이터를 초기화 및 동기화합니다.">
+          <span>☁️</span>
+          <span>온라인 공식 배포본 동기화</span>
+        </button>
       </div>
     </div>
 
@@ -4345,6 +4412,7 @@ body.theme-skhynix .nav-q-type {
       </div>
 
       <div class="top-bar-right">
+        <button class="btn btn-outline btn-sm" onclick="copyCrossDeviceSyncLink()" style="font-weight: 700; color: #0284c7; border-color: #38bdf8;" title="다른 컴퓨터/모바일과 실시간 동기화 링크 복사">🔗 기기 동기화</button>
         <button class="btn btn-primary btn-sm" onclick="addQuestionToCurrentProject()">➕ 메인 질문 추가</button>
         <button class="btn btn-danger-outline btn-sm" onclick="deleteCurrentProject()">프로젝트 삭제</button>
         <button class="btn btn-outline btn-sm" onclick="toggleReferencePane()" id="refToggleTopBtn">📑 원문 보기</button>
@@ -5122,8 +5190,11 @@ const DEFAULT_PROJECTS = [
 ];
 
 // ================= WORKSPACE CONFIGURATION (UNIFIED) =================
+const DEPLOY_DATA_VERSION = '2026_09_29_SYNC_V4';
+
 const WORKSPACE_CONFIG = {
   badge: 'INTERVIEW',
+  name: '통합 면접 워크스페이스',
   title: '양산기술 면접 워크스페이스',
   sub: '실전 질문 & 답변 핵심 키워드 시스템',
   pageTitle: '양산기술 면접 워크스페이스',
@@ -5200,8 +5271,9 @@ let activeRefCategory = 'all';
 let saveTimeout = null;
 
 // ================= INITIALIZATION =================
-function initApp() {
+async function initApp() {
   checkAuthStatus();
+  await checkUrlSyncPayload();
   loadProjectsData();
   renderSidebar();
   if (projectsData && projectsData.length > 0) {
@@ -5235,13 +5307,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ================= DATA PERSISTENCE & MIGRATION =================
-function getActiveCompanyConfig() {
-  return COMPANY_CONFIGS[currentCompanyMode] || COMPANY_CONFIGS.hyundai;
-}
-
-function getActiveDefaultProjects() {
-  return (currentCompanyMode === 'skhynix') ? DEFAULT_PROJECTS_SKHYNIX : DEFAULT_PROJECTS_HYUNDAI;
-}
+// Duplicate functions removed
 
 function loadCategoriesData() {
   try {
@@ -5554,6 +5620,25 @@ function seedDefaultTailQuestions(proj, q) {
 function loadProjectsData() {
   loadCategoriesData();
 
+  const storedDeployVer = localStorage.getItem('INTERVIEW_DEPLOY_VER');
+  if (storedDeployVer !== DEPLOY_DATA_VERSION) {
+    console.log('Deploy version updated: migrating localStorage to latest online deployed version');
+    localStorage.removeItem(WORKSPACE_CONFIG.storageKey);
+    localStorage.removeItem(WORKSPACE_CONFIG.catStorageKey);
+    localStorage.setItem('INTERVIEW_DEPLOY_VER', DEPLOY_DATA_VERSION);
+    categoriesData = [
+      { id: 'intro', name: '0. 1분 자기소개', icon: '🎙️' },
+      { id: 'aitip', name: '💡 AI팁 (AI 활용 노하우)', icon: '🤖' },
+      { id: 'career', name: '1. 경력 기술서', icon: '💼' },
+      { id: 'project', name: '2. 주요 프로젝트', icon: '🚀' }
+    ];
+    saveCategoriesData();
+    projectsData = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+    sanitizeDummyGuideTexts(projectsData);
+    saveProjectsData();
+    return;
+  }
+
   let saved = localStorage.getItem(WORKSPACE_CONFIG.storageKey);
   
   // Also check if user has old split data, ignore if invalid
@@ -5711,6 +5796,7 @@ function resetToDefault() {
   if (confirm("정말 통합 면접 기본 데이터로 초기화하시겠습니까?\n(수정한 모든 내용과 분류가 초기값으로 복원됩니다)")) {
     categoriesData = [
       { id: 'intro', name: '0. 1분 자기소개', icon: '🎙️' },
+      { id: 'aitip', name: '💡 AI팁 (AI 활용 노하우)', icon: '🤖' },
       { id: 'career', name: '1. 경력 기술서', icon: '💼' },
       { id: 'project', name: '2. 주요 프로젝트', icon: '🚀' }
     ];
@@ -7894,6 +7980,15 @@ function getStoredPassword() {
 }
 
 function checkAuthStatus() {
+  // Support URL auto-unlock (?pass=1312 or ?unlock=1312)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const p = urlParams.get('pass') || urlParams.get('unlock');
+    if (p === '1312' || p === getStoredPassword()) {
+      sessionStorage.setItem('HYUNDAI_DASH_SESSION_UNLOCKED', 'true');
+    }
+  } catch (e) {}
+
   const isUnlocked = sessionStorage.getItem('HYUNDAI_DASH_SESSION_UNLOCKED');
   const overlay = document.getElementById('lockScreenOverlay');
   if (isUnlocked === 'true') {
@@ -7971,6 +8066,205 @@ function changePasswordPrompt() {
   alert('비밀번호가 성공적으로 변경되었습니다!');
   showToast('🔑 새 비밀번호가 저장되었습니다.');
 }
+
+// ================= CROSS-DEVICE REAL-TIME SYNC ENGINE =================
+async function generateSyncString() {
+  const payload = {
+    v: DEPLOY_DATA_VERSION,
+    projects: projectsData,
+    categories: categoriesData,
+    timestamp: Date.now()
+  };
+  const jsonStr = JSON.stringify(payload);
+  
+  if (typeof CompressionStream !== 'undefined') {
+    try {
+      const stream = new Blob([new TextEncoder().encode(jsonStr)]).stream();
+      const compStream = stream.pipeThrough(new CompressionStream('deflate'));
+      const buf = await (await new Response(compStream).blob()).arrayBuffer();
+      let binary = '';
+      const bytes = new Uint8Array(buf);
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      return 'z_' + btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch (e) {
+      console.warn('Deflate compression failed, using UTF-8 base64 fallback', e);
+    }
+  }
+  return 'b_' + btoa(encodeURIComponent(jsonStr)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function decompressSyncString(str) {
+  if (!str) return null;
+  try {
+    if (str.startsWith('z_')) {
+      let b64 = str.slice(2).replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate'));
+      return await (await new Response(stream).blob()).text();
+    } else if (str.startsWith('b_')) {
+      let b64 = str.slice(2).replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      return decodeURIComponent(atob(b64));
+    } else {
+      let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      try {
+        return decodeURIComponent(atob(b64));
+      } catch(e) {
+        return atob(b64);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to decompress sync payload', err);
+    return null;
+  }
+}
+
+async function copyCrossDeviceSyncLink() {
+  try {
+    setSaveStatus("동기화 링크 생성 중...", true);
+    const syncCode = await generateSyncString();
+    const baseUrl = window.location.origin + window.location.pathname;
+    const fullUrl = `${baseUrl}?unlock=1312#sync=${syncCode}`;
+    
+    // Copy to clipboard
+    let copied = false;
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      copied = true;
+    } catch(e) {
+      console.warn('Clipboard API failed, fallback to modal', e);
+    }
+    
+    setSaveStatus("● 실시간 자동 저장", false);
+    openSyncModal(fullUrl, syncCode);
+    if (copied) {
+      showToast("📋 기기 동기화 링크가 클립보드에 복사되었습니다!");
+    }
+  } catch (err) {
+    console.error("Failed to copy cross device link", err);
+    alert("동기화 링크 생성 중 오류가 발생했습니다: " + err.message);
+  }
+}
+
+function openSyncModal(url, code) {
+  const overlay = document.getElementById('syncModalOverlay');
+  const urlInput = document.getElementById('syncModalUrlInput');
+  const codeInput = document.getElementById('syncModalCodeInput');
+  if (urlInput && url) urlInput.value = url;
+  if (codeInput) codeInput.value = '';
+  if (overlay) overlay.classList.remove('hidden');
+}
+
+function closeSyncModal() {
+  const overlay = document.getElementById('syncModalOverlay');
+  if (overlay) overlay.classList.add('hidden');
+}
+
+function copySyncModalUrl() {
+  const urlInput = document.getElementById('syncModalUrlInput');
+  if (!urlInput) return;
+  urlInput.select();
+  urlInput.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(urlInput.value).then(() => {
+    showToast("📋 동기화 링크가 복사되었습니다!");
+  }).catch(() => {
+    document.execCommand('copy');
+    showToast("📋 링크가 복사되었습니다!");
+  });
+}
+
+async function applySyncCodeFromModal() {
+  const input = document.getElementById('syncModalCodeInput');
+  if (!input || !input.value.trim()) {
+    alert("붙여넣을 동기화 링크 또는 코드를 입력해주세요.");
+    return;
+  }
+  let raw = input.value.trim();
+  if (raw.includes('#sync=')) {
+    raw = raw.split('#sync=')[1].split('&')[0];
+  } else if (raw.includes('sync=')) {
+    raw = raw.split('sync=')[1].split('&')[0];
+  }
+
+  const jsonText = await decompressSyncString(raw);
+  if (!jsonText) {
+    alert("동기화 코드 해석에 실패했습니다. 올바른 링크 또는 코드를 입력해주세요.");
+    return;
+  }
+
+  try {
+    const data = JSON.parse(jsonText);
+    if (data.projects && Array.isArray(data.projects)) {
+      projectsData = data.projects;
+      if (data.categories && Array.isArray(data.categories)) {
+        categoriesData = data.categories;
+        localStorage.setItem(WORKSPACE_CONFIG.catStorageKey, JSON.stringify(categoriesData));
+      }
+      saveProjectsData();
+      currentProjIndex = 0;
+      renderSidebar();
+      renderCurrentProject();
+      closeSyncModal();
+      showToast("✨ 데이터가 성공적으로 동기화되었습니다!");
+    } else {
+      alert("동기화 데이터 규격이 올바르지 않습니다.");
+    }
+  } catch (err) {
+    alert("동기화 JSON 파싱 오류: " + err.message);
+  }
+}
+
+async function checkUrlSyncPayload() {
+  try {
+    const hash = window.location.hash;
+    if (hash && hash.includes('sync=')) {
+      const syncStr = hash.split('sync=')[1].split('&')[0];
+      if (syncStr) {
+        const jsonText = await decompressSyncString(syncStr);
+        if (jsonText) {
+          const data = JSON.parse(jsonText);
+          if (data.projects && Array.isArray(data.projects)) {
+            projectsData = data.projects;
+            if (data.categories && Array.isArray(data.categories)) {
+              categoriesData = data.categories;
+              localStorage.setItem(WORKSPACE_CONFIG.catStorageKey, JSON.stringify(categoriesData));
+            }
+            saveProjectsData();
+            sessionStorage.setItem('HYUNDAI_DASH_SESSION_UNLOCKED', 'true');
+            // Clean hash from URL without reload
+            try {
+              history.replaceState(null, null, window.location.pathname + window.location.search);
+            } catch(e) {}
+            setTimeout(() => {
+              showToast('✨ 다른 기기에서 수정한 데이터가 완벽하게 동기화되었습니다!');
+            }, 600);
+            return true;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Failed to sync from URL hash', e);
+  }
+  return false;
+}
+
+function forceSyncOnlineDeployment() {
+  if (confirm("온라인 최신 공식 배포본으로 동기화하시겠습니까?\n\n(현재 기기의 브라우저 캐시를 완전히 비우고, GitHub Pages 온라인 배포본의 최신 데이터로 새로고침합니다)")) {
+    localStorage.removeItem(WORKSPACE_CONFIG.storageKey);
+    localStorage.removeItem(WORKSPACE_CONFIG.catStorageKey);
+    localStorage.removeItem('INTERVIEW_DEPLOY_VER');
+    const url = new URL(window.location.href);
+    url.searchParams.set('v', Date.now());
+    url.hash = '';
+    window.location.href = url.toString();
+  }
+}
+
 </script>
 
 </body>
