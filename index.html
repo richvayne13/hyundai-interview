@@ -3062,11 +3062,11 @@
     }
     .tail-q-item.is-expanded {
       background: rgba(15, 23, 42, 0.95);
-      border-color: rgba(56, 189, 248, 0.45);
+      border: 2.5px solid rgba(56, 189, 248, 0.55);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
     body.theme-skhynix .tail-q-item.is-expanded {
-      border-color: rgba(255, 122, 0, 0.45);
+      border: 2.5px solid #ea0029;
     }
 
     /* Summary Bar */
@@ -3640,6 +3640,10 @@ body.theme-skhynix .view-toggle-btn.active {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   border-radius: 14px !important;
 }
+body.theme-skhynix .question-card {
+  border: 2.5px solid #e11d48 !important;
+  box-shadow: 0 4px 20px rgba(225, 29, 72, 0.1), 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+}
 .q-card-header {
   background: #f8fafc !important;
   border-bottom: 1px solid #e2e8f0 !important;
@@ -3705,7 +3709,7 @@ body.theme-skhynix .q-badge-num {
 }
 body.theme-skhynix .summary-lead-box {
   background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%) !important;
-  border: 1.5px solid #fecdd3 !important;
+  border: 2.5px solid #fda4af !important;
 }
 .summary-lead-badge {
   background: linear-gradient(135deg, #0284c7, #0369a1) !important;
@@ -3862,25 +3866,30 @@ body.theme-skhynix .tail-q-badge {
   background: #e2e8f0 !important;
   color: #334155 !important;
 }
-.tail-q-item, body.theme-skhynix .tail-q-item {
+.tail-q-item {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+body.theme-skhynix .tail-q-item {
+  background: #ffffff !important;
+  border: 2.5px solid #fda4af !important;
+  box-shadow: 0 1px 3px rgba(225, 29, 72, 0.06) !important;
 }
 .tail-q-item:hover {
   border-color: #93c5fd !important;
 }
 body.theme-skhynix .tail-q-item:hover {
-  border-color: #fca5a5 !important;
+  border-color: #e11d48 !important;
 }
 .tail-q-item.is-expanded {
   background: #ffffff !important;
-  border-color: #0284c7 !important;
+  border: 2.5px solid #0284c7 !important;
   box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12) !important;
 }
 body.theme-skhynix .tail-q-item.is-expanded {
-  border-color: #e11d48 !important;
-  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.12) !important;
+  border: 2.5px solid #e11d48 !important;
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.16) !important;
 }
 .tail-q-num-pill {
   background: #e0f2fe !important;
@@ -4599,6 +4608,10 @@ body.theme-skhynix .nav-q-type {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 14px;
+}
+#mmCardQA {
+  border: 2.5px solid #e11d48 !important;
+  background: rgba(225, 29, 72, 0.07) !important;
 }
 
 .mm-card-hdr {
