@@ -4224,6 +4224,436 @@ body.theme-skhynix .nav-q-type {
   #syncModalOverlay.hidden {
   display: none !important;
 }
+
+/* ==========================================================================
+   INTERACTIVE MINDMAP OVERLAY & TOGGLE STYLES
+   ========================================================================== */
+.mindmap-quick-toggle-bar {
+  margin-bottom: 10px;
+}
+
+.btn-mindmap-mode-toggle {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(0, 114, 206, 0.28));
+  border: 1.5px solid rgba(0, 229, 255, 0.5);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 229, 255, 0.18);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-mindmap-mode-toggle:hover {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.3), rgba(0, 114, 206, 0.45));
+  border-color: #00e5ff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.3);
+}
+
+.btn-mindmap-mode-toggle .badge-view {
+  background: #00e5ff;
+  color: #070d19;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.5px;
+}
+
+/* Fullscreen Mindmap Overlay */
+.mindmap-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background: #070d19;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  color: #f8fafc;
+}
+
+.mindmap-header {
+  height: 64px;
+  background: rgba(11, 23, 42, 0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.mindmap-hdr-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-mindmap-back {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-mindmap-back:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #00e5ff;
+  color: #00e5ff;
+}
+
+.mindmap-title {
+  font-size: 16px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mindmap-company-badge {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mindmap-hdr-center {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.mindmap-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 5px 11px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.mindmap-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.mindmap-filter-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: #00e5ff;
+  color: #00e5ff;
+}
+
+.mindmap-hdr-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mindmap-search-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  width: 200px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.mindmap-search-input:focus {
+  width: 260px;
+  border-color: #00e5ff;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.mindmap-btn-action {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  padding: 6px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mindmap-btn-action:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Mindmap Body / Canvas */
+.mindmap-body {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.mindmap-canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  background: radial-gradient(circle at 50% 50%, #0f1c31 0%, #070d19 100%);
+}
+
+.mindmap-canvas-container:active {
+  cursor: grabbing;
+}
+
+.mindmap-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Floating Zoom Controls */
+.mindmap-floating-ctrls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+.mindmap-ctrl-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(15, 28, 49, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.mindmap-ctrl-btn:hover {
+  background: rgba(0, 229, 255, 0.2);
+  border-color: #00e5ff;
+  transform: scale(1.05);
+}
+
+.mindmap-zoom-label {
+  font-size: 10.5px;
+  text-align: center;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* SVG Elements */
+.mm-link {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 2px;
+  transition: stroke 0.25s, stroke-width 0.25s;
+}
+
+.mm-node {
+  cursor: pointer;
+}
+
+.mm-node-rect {
+  rx: 8px;
+  ry: 8px;
+  stroke-width: 1.5px;
+  transition: all 0.2s ease;
+}
+
+.mm-node:hover .mm-node-rect {
+  filter: drop-shadow(0 0 12px currentColor);
+  transform: scale(1.02);
+}
+
+.mm-node.active .mm-node-rect {
+  stroke-width: 2.5px !important;
+  filter: drop-shadow(0 0 16px currentColor) !important;
+}
+
+.mm-node-text {
+  font-size: 12.5px;
+  font-weight: 600;
+  fill: #f8fafc;
+  pointer-events: none;
+}
+
+.mm-node-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+/* Right Detail Drawer */
+.mindmap-drawer {
+  width: 480px;
+  background: rgba(11, 23, 42, 0.96);
+  backdrop-filter: blur(18px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.45);
+  transform: translateX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.mindmap-drawer.collapsed {
+  transform: translateX(100%);
+}
+
+.mm-drawer-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mm-drawer-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.mm-drawer-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.35;
+}
+
+.mm-drawer-close {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.mm-drawer-close:hover {
+  color: #ffffff;
+}
+
+.mm-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mm-drawer-body::-webkit-scrollbar {
+  width: 6px;
+}
+.mm-drawer-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.mm-info-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.mm-card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mm-card-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.mm-card-copy {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #64748b;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mm-card-copy:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mm-card-content {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #cbd5e1;
+  user-select: text;
+  white-space: pre-line;
+}
+
+.mm-card-content b {
+  color: #ffffff;
+}
+
+.mm-quote-box {
+  border-left: 3px solid #00e5ff;
+  background: rgba(0, 229, 255, 0.05);
+  padding: 10px 12px;
+  border-radius: 0 6px 6px 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #e2e8f0;
+  user-select: text;
+  white-space: pre-line;
+}
+
 </style>
 </head>
 <body>
@@ -4321,6 +4751,17 @@ body.theme-skhynix .nav-q-type {
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button type="button" class="mobile-sidebar-close-btn" onclick="closeAllMobileDrawers()" title="사이드바 닫기">✕</button>
+            <!-- Top-Left Mindmap Mode Toggle -->
+      <div class="mindmap-quick-toggle-bar">
+        <button type="button" class="btn-mindmap-mode-toggle" id="btnMindmapModeToggle" onclick="toggleMindmapMode()" title="마인드맵 모드 전환">
+          <span style="display: flex; align-items: center; gap: 7px;">
+            <span style="font-size: 15px;">🗺️</span>
+            <span>마인드맵 모드</span>
+          </span>
+          <span class="badge-view" id="mindmapModeBadge">VIEW</span>
+        </button>
+      </div>
+
       <!-- Company Mode Toggle (Segmented Control) -->
       <div class="company-toggle-container">
         <button class="company-toggle-btn active mode-hyundai" id="modeBtnHyundai" onclick="switchCompanyMode('hyundai')">
@@ -9369,7 +9810,1016 @@ function forceSyncOnlineDeployment() {
   }
 }
 
+
+// ==========================================================================
+// INTERACTIVE MINDMAP ENGINE: STAR-C & ENGINEERING DEEP DIVE
+// ==========================================================================
+let mindmapActive = false;
+let mindmapData = null;
+let mmTransform = { x: 80, y: 350, scale: 0.95 };
+let mmIsDragging = false;
+let mmDragStart = { x: 0, y: 0 };
+let mmSelectedNodeId = 'mm_root';
+let mmCurrentFilter = 'all';
+
+// Top-Left Toggle Function
+function toggleMindmapMode(forceOpen) {
+  if (typeof forceOpen === 'boolean') {
+    mindmapActive = forceOpen;
+  } else {
+    mindmapActive = !mindmapActive;
+  }
+
+  const overlay = document.getElementById('mindmapOverlay');
+  const badge = document.getElementById('mindmapModeBadge');
+  if (overlay) {
+    overlay.style.display = mindmapActive ? 'flex' : 'none';
+  }
+  if (badge) {
+    badge.textContent = mindmapActive ? 'ON' : 'VIEW';
+    badge.style.background = mindmapActive ? '#10b981' : '#00e5ff';
+  }
+
+  if (mindmapActive) {
+    initAndRenderMindmap();
+  }
+}
+
+// Generate the Comprehensive Hierarchical Mindmap Data
+function generateFullMindmapTree() {
+  const isSkh = (typeof currentCompanyMode !== 'undefined') ? (currentCompanyMode === 'skhynix') : true;
+  const projects = (typeof projectsData !== 'undefined' && projectsData && projectsData.length > 0)
+                    ? projectsData
+                    : (isSkh ? (typeof DEFAULT_PROJECTS_SKHYNIX !== 'undefined' ? DEFAULT_PROJECTS_SKHYNIX : []) : (typeof DEFAULT_PROJECTS_HYUNDAI !== 'undefined' ? DEFAULT_PROJECTS_HYUNDAI : []));
+
+  const rootName = isSkh ? "SK하이닉스 양산기술 마스터 마인드맵" : "현대자동차 배터리 전극 생산운영 마스터 마인드맵";
+
+  const root = {
+    id: "mm_root",
+    name: rootName,
+    badge: isSkh ? "SK HYNIX" : "HYUNDAI",
+    category: "root",
+    desc: "현장 전극/코터 4년 경력 기반 양산기술·수율개선·AX엔지니어링 무기체계 총망라",
+    detail: {
+      concept: "본 마인드맵은 각 프로젝트의 [설명 - STAR-C 구조 - 핵심 공학 이론 - 면접관 꼬리질문]을 서브 브랜치 단위로 극도로 세분화하여, 면접 질문 인입 시 1초 만에 최적의 논리와 키워드를 인출할 수 있도록 설계되었습니다.",
+      principle: "노드를 클릭하면 우측 서랍 패널에 해당 세부 항목의 전문 엔지니어링 내용과 면접 실전 스피치, 모범 방어 답변이 실시간으로 표시됩니다.",
+      script: "'저는 양산 현장 트러블슈팅부터 기구 메커니즘 전동화, 인라인 신호처리 알고리즘 독자 개발, 사내 폐쇄망 업무 자동화(AX)까지 전 영역을 직접 설계하고 수율을 개선해 온 양산기술 엔지니어입니다.'",
+      qa: "<b>Q. 배터리 코터 경험이 반도체 장비 직무에 어떻게 도움 되나요?</b><br>A. '초정밀 ㎛/㎚ 단위 위치 제어, 센서 노이즈 속 약신호(Weak signal) 포착, 기계적 백래시 극복, 그리고 폐쇄망 공정 모니터링 자동화라는 엔지니어링의 본질은 동일합니다.'",
+      msg: "상단 필터 버튼이나 검색창을 활용해 원하는 프로젝트의 세부 조치(Action)나 공학 이론을 즉시 찾아보세요!"
+    },
+    children: []
+  };
+
+  // Iterate over all projects
+  projects.forEach((proj, pIdx) => {
+    const pId = proj.id || `P_${pIdx}`;
+    const pTitle = proj.title || `프로젝트 ${pIdx+1}`;
+    const pCat = proj.category || 'project';
+    const qList = proj.questions || [];
+
+    const projNode = {
+      id: `mm_p_${pId}`,
+      code: pId,
+      name: pTitle,
+      badge: proj.tags && proj.tags[0] ? proj.tags[0] : "PROJECT",
+      category: pId,
+      desc: proj.tags ? proj.tags.join(" | ") : "",
+      detail: {
+        concept: `${pTitle} 프로젝트의 종합 분석 트리입니다. 하위 브랜치를 통해 [1분 설명], [STAR-C 상세 구조], [세부 공학 원리], [꼬리질문 & 모범답변]을 체계적으로 확인할 수 있습니다.`
+      },
+      children: []
+    };
+
+    // 1. Branch: 📌 설명 & 1분 요약
+    const summaryList = [];
+    qList.forEach(q => {
+      if (q.summary && q.summary.trim()) summaryList.push(q.summary.trim());
+    });
+    const mainSummary = summaryList.length > 0 ? summaryList[0] : (proj.tags ? proj.tags.join(" • ") : pTitle);
+
+    const descBranch = {
+      id: `mm_desc_${pId}`,
+      name: "📌 1분 요약 & 스피치",
+      badge: "SUMMARY",
+      category: pId,
+      desc: mainSummary,
+      detail: {
+        concept: mainSummary,
+        script: qList[0] && qList[0].plain_text_free ? qList[0].plain_text_free : (qList[0] && qList[0].plain_text ? qList[0].plain_text : mainSummary)
+      },
+      children: [
+        {
+          id: `mm_desc_sum_${pId}`,
+          name: `핵심: ${mainSummary.length > 25 ? mainSummary.substring(0, 24) + '...' : mainSummary}`,
+          badge: "CORE SUMMARY",
+          category: pId,
+          desc: mainSummary,
+          detail: { concept: mainSummary }
+        }
+      ]
+    };
+    projNode.children.push(descBranch);
+
+    // 2. Branch: 🎯 STAR-C 구조 (Extremely Detailed Sub-branches)
+    let hasStarc = false;
+    let starcQuestion = null;
+    qList.forEach(q => {
+      if (!starcQuestion && (q.framework === 'starc' || (q.plain_text_starc && q.plain_text_starc.includes('[S]')))) {
+        starcQuestion = q;
+      }
+    });
+
+    if (starcQuestion || qList.length > 0) {
+      const q = starcQuestion || qList[0];
+      const starcText = q.plain_text_starc || q.plain_text || "";
+
+      // Parse S, T, A, R, C
+      const sMatch = starcText.match(/\[S\]\s*([\s\S]*?)(?=\[T\]|$)/);
+      const tMatch = starcText.match(/\[T\]\s*([\s\S]*?)(?=\[A\]|$)/);
+      const aMatch = starcText.match(/\[A\]\s*([\s\S]*?)(?=\[R\]|$)/);
+      const rMatch = starcText.match(/\[R\]\s*([\s\S]*?)(?=\[C\]|$)/);
+      const cMatch = starcText.match(/\[C\]\s*([\s\S]*?)(?=$)/);
+
+      const sText = sMatch ? sMatch[1].trim() : (q.s || "당시 문제 상황 및 발생 배경");
+      const tText = tMatch ? tMatch[1].trim() : (q.t || "해결해야 했던 핵심 과제와 목표");
+      const aText = aMatch ? aMatch[1].trim() : (q.a || "문제를 해결하기 위해 적용한 공학적 액션 및 메커니즘");
+      const rText = rMatch ? rMatch[1].trim() : (q.r || "정량적 수율/Loss 개선 결과 및 성과");
+      const cText = cMatch ? cMatch[1].trim() : (q.c || "SK하이닉스 반도체 직무 기여점 및 적용 방안");
+
+      const starcBranch = {
+        id: `mm_starc_${pId}`,
+        name: "🎯 STAR-C 세부 구조",
+        badge: "STAR-C",
+        category: pId,
+        desc: "상황(S) - 목표(T) - 조치(A) - 결과(R) - 기여(C) 5단계 분류",
+        detail: {
+          concept: `[S] ${sText}\n\n[T] ${tText}\n\n[A] ${aText}\n\n[R] ${rText}\n\n[C] ${cText}`
+        },
+        children: []
+      };
+
+      // [S] Situation
+      const sSubList = sText.split('\n').filter(x => x.trim().length > 0);
+      starcBranch.children.push({
+        id: `mm_starc_s_${pId}`,
+        name: "[S] 상황 (Situation)",
+        badge: "SITUATION",
+        category: pId,
+        desc: sText,
+        detail: { concept: sText },
+        children: sSubList.map((st, sIdx) => ({
+          id: `mm_s_${pId}_${sIdx}`,
+          name: st.length > 28 ? st.substring(0, 27) + '...' : st,
+          badge: `S-${sIdx+1}`,
+          category: pId,
+          desc: st,
+          detail: { concept: st }
+        }))
+      });
+
+      // [T] Task
+      const tSubList = tText.split('\n').filter(x => x.trim().length > 0);
+      starcBranch.children.push({
+        id: `mm_starc_t_${pId}`,
+        name: "[T] 과제/목표 (Task)",
+        badge: "TASK",
+        category: pId,
+        desc: tText,
+        detail: { concept: tText },
+        children: tSubList.map((tt, tIdx) => ({
+          id: `mm_t_${pId}_${tIdx}`,
+          name: tt.length > 28 ? tt.substring(0, 27) + '...' : tt,
+          badge: `T-${tIdx+1}`,
+          category: pId,
+          desc: tt,
+          detail: { concept: tt }
+        }))
+      });
+
+      // [A] Action (Heavily subdivided!)
+      const aSubList = aText.split('\n').filter(x => x.trim().length > 0);
+      starcBranch.children.push({
+        id: `mm_starc_a_${pId}`,
+        name: "[A] 조치/행동 (Action)",
+        badge: "ACTION",
+        category: pId,
+        desc: aText,
+        detail: { concept: aText },
+        children: aSubList.map((at, aIdx) => ({
+          id: `mm_a_${pId}_${aIdx}`,
+          name: at.length > 28 ? at.substring(0, 27) + '...' : at,
+          badge: `A-${aIdx+1}`,
+          category: pId,
+          desc: at,
+          detail: { concept: at }
+        }))
+      });
+
+      // [R] Result
+      const rSubList = rText.split('\n').filter(x => x.trim().length > 0);
+      starcBranch.children.push({
+        id: `mm_starc_r_${pId}`,
+        name: "[R] 성과/결과 (Result)",
+        badge: "RESULT",
+        category: pId,
+        desc: rText,
+        detail: { concept: rText },
+        children: rSubList.map((rt, rIdx) => ({
+          id: `mm_r_${pId}_${rIdx}`,
+          name: rt.length > 28 ? rt.substring(0, 27) + '...' : rt,
+          badge: `R-${rIdx+1}`,
+          category: pId,
+          desc: rt,
+          detail: { concept: rt }
+        }))
+      });
+
+      // [C] Contribution
+      const cSubList = cText.split('\n').filter(x => x.trim().length > 0);
+      starcBranch.children.push({
+        id: `mm_starc_c_${pId}`,
+        name: "[C] 기여/적용 (Contribution)",
+        badge: "CONTRIBUTION",
+        category: pId,
+        desc: cText,
+        detail: { concept: cText },
+        children: cSubList.map((ct, cIdx) => ({
+          id: `mm_c_${pId}_${cIdx}`,
+          name: ct.length > 28 ? ct.substring(0, 27) + '...' : ct,
+          badge: `C-${cIdx+1}`,
+          category: pId,
+          desc: ct,
+          detail: { concept: ct }
+        }))
+      });
+
+      projNode.children.push(starcBranch);
+    }
+
+    // 3. Branch: ⚙️ 핵심 공학 이론 & 메커니즘
+    const theoryBranch = {
+      id: `mm_theory_${pId}`,
+      name: "⚙️ 세부 공학 이론 & 메커니즘",
+      badge: "THEORY",
+      category: pId,
+      desc: "수학적 모델링, 물리적 동작 메커니즘 및 딥러닝/기존 방식 대비 차별성",
+      children: []
+    };
+
+    if (pId === 'P1') { // 비전 선별로직
+      theoryBranch.children.push(
+        {
+          id: `mm_th_p1_1`,
+          name: "1×7 수직 Bridge Kernel 작동 원리",
+          badge: "KERNEL",
+          category: pId,
+          desc: "세로 절단 결함 타겟팅 & 가로 노이즈 격리",
+          detail: {
+            concept: "가로 1픽셀, 세로 7픽셀의 수직 막대형 커널 [1,1,1,1,1,1,1]ᵀ을 적용하여, 결함의 주행 방향인 세로 방향 갭만 선택적으로 다리(Bridge)를 놓아 연결.",
+            principle: "일반 3×3 커널을 쓰면 가로 방향의 표면 거칠기나 배경 잡음까지 사방으로 뭉쳐져 거대한 과검 덩어리가 됨. 1×7 수직 커널은 가로 노이즈를 완벽히 배제함."
+          }
+        },
+        {
+          id: `mm_th_p1_2`,
+          name: "수직 모폴로지 닫힘(Closing) 연산",
+          badge: "CLOSING",
+          category: pId,
+          desc: "A • B = (A ⊕ B) ⊖ B (팽창 ➔ 침식)",
+          detail: {
+            concept: "1단계 팽창(Dilation)으로 살을 찌워 끊어진 틈(Gap)을 연결하고, 2단계 침식(Erosion)으로 살을 깎아 원래의 얇은 두께로 복구함.",
+            principle: "형상 왜곡 없이 구멍(Gap)만 닫아버림으로써 컴퓨터가 단발성 먼지가 아닌 '선 형태의 라인 결함'으로 인식하도록 만듦."
+          }
+        },
+        {
+          id: `mm_th_p1_3`,
+          name: "이원화 Valley 알고리즘",
+          badge: "VALLEY",
+          category: pId,
+          desc: "1D 프로파일 국소 음영 낙차 + Lot 배경 밝기 추종",
+          detail: {
+            concept: "Burr 음영으로 푹 꺼지는 1차원 프로파일 Local Minima 검출. 절대 밝기가 아닌 [Lot 평균 배경 밝기] 대비 [-Δ 밝기 낙차]를 보는 2단계 동적 임계치."
+          }
+        },
+        {
+          id: `mm_th_p1_4`,
+          name: "고전 CV vs 딥러닝 채택 명분",
+          badge: "WHY NOT AI",
+          category: pId,
+          desc: "장당 5ms 초고속 + 0.5% 불균형 데이터 + 미검 0% 통제",
+          detail: {
+            concept: "72시간 긴급 납기 조건에서 0.5% 불량 데이터 라벨링/학습 불가. 딥러닝 블랙박스 대비 100% 설명 가능한 수학적 규칙으로 미검률 0%를 통제함."
+          }
+        },
+        {
+          id: `mm_th_p1_5`,
+          name: "전극-절연면 2차 미분 (Zero-Crossing)",
+          badge: "LoG EDGE",
+          category: pId,
+          desc: "완만한 S자 블러 경계 ➔ 2차 미분 영교차점 검출",
+          detail: {
+            concept: "슬러리 번짐으로 뭉툭해진 1차 미분(피크) 한계를 극복하고, 2차 미분값이 0을 관통하는 변곡점(Zero-Crossing)을 찾아 조명 변동에 불변하는 서브픽셀 경계를 검출함."
+          }
+        }
+      );
+    } else if (pId === 'P3') { // 웹게이지 미세라인
+      theoryBranch.children.push(
+        {
+          id: `mm_th_p3_1`,
+          name: "동적 베이스라인 & 지수이동평균(EMA)",
+          badge: "EMA LPF",
+          category: pId,
+          desc: "y[n] = α*x[n] + (1-α)*y[n-1] (위상 지연 단축)",
+          detail: {
+            concept: "단순 이동평균(SMA)의 위상 지연((N-1)/2)을 해결하기 위해 최신 데이터에 가중치를 두는 1차 IIR 필터 EMA 적용. 실시간 인라인 에지 연산에 최적화."
+          }
+        },
+        {
+          id: `mm_th_p3_2`,
+          name: "잔차 분석 (Residual Analysis)",
+          badge: "RESIDUAL",
+          category: pId,
+          desc: "Residual r(t) = Raw Data y(t) - Baseline B(t)",
+          detail: {
+            concept: "공정 전체의 거시적 두께 흐름을 제거하고, 푹 꺼지는 국부 골짜기(Local Dip)만 0 주변에서 분리해내는 차분 신호 처리."
+          }
+        },
+        {
+          id: `mm_th_p3_3`,
+          name: "동적 임계치 (Adaptive Threshold)",
+          badge: "k*SIGMA",
+          category: pId,
+          desc: "T_lower(t) = Baseline(t) - k*σ(t)",
+          detail: {
+            concept: "고정 공차(USL/LSL)를 쓰면 Drift로 과검이 나므로, 실시간 산포(3σ)를 반영하는 동적 밴드를 설계하여 99.73% 신뢰수준 확보."
+          }
+        },
+        {
+          id: `mm_th_p3_4`,
+          name: "과검 방지: MD 연속성 & 형상 필터",
+          badge: "FILTERS",
+          category: pId,
+          desc: "MD 3스캔 연속 + 폭/깊이 종횡비(Aspect Ratio) 필터",
+          detail: {
+            concept: "단발성 센서 노이즈는 1회로 끝나지만 라인 불량은 주행 방향으로 지속됨. 동일 TD 좌표에서 연속 3회 유지 시에만 최종 알람을 트리거함."
+          }
+        }
+      );
+    } else if (pId === 'P2') { // 미세조정장치
+      theoryBranch.children.push(
+        {
+          id: `mm_th_p2_1`,
+          name: "100:1 웜기어의 자체 락킹(Self-locking)",
+          badge: "SELF-LOCK",
+          category: pId,
+          desc: "슬러리 유압 역구동 방지 & 미세 이송",
+          detail: {
+            concept: "나사 리드각 원리로 모터는 기어를 돌릴 수 있으나, 슬러리 압력이 심을 밀어도 기어가 거꾸로 돌지 않음. 360도 모터 회전 시 기어는 3.6도만 돌아 1㎛ 단위 이송 가능."
+          }
+        },
+        {
+          id: `mm_th_p2_2`,
+          name: "LVDT 센서 풀 클로즈드 루프",
+          badge: "FULL CLOSED",
+          category: pId,
+          desc: "기어 백래시 오차를 무시하고 심 끝단 실제 변위 직접 계측",
+          detail: {
+            concept: "모터 엔코더는 축 회전수만 읽어 백래시 유격 구간에서 헛돌지만, LVDT는 심 몸체에 직접 닿아 실제 물리적 이동량만 PLC에 피드백함."
+          }
+        },
+        {
+          id: `mm_th_p2_3`,
+          name: "PLC 2단 감속 & 불감대(Dead-band) 로직",
+          badge: "STABILITY",
+          category: pId,
+          desc: "고속 접근 ➔ 저속 안착 & ±2㎛ 모터 떨림 헌팅 방지",
+          detail: {
+            concept: "기구 관성으로 목표값을 훅 지나치는 오버슈트를 막는 2단 속도 제어와, 센서 미세 노이즈로 모터가 덜덜거리는 헌팅을 방지하는 불감대 구간 설계."
+          }
+        },
+        {
+          id: `mm_th_p2_4`,
+          name: "롤투롤 주름: 사선주름 vs 일자주름",
+          badge: "WRINKLES",
+          category: pId,
+          desc: "사선주름 = 롤 얼라인먼트 / 일자주름 = 과도한 텐션",
+          detail: {
+            concept: "1. 사선주름: 롤 평행도 비틀림으로 인한 전단 응력(Shear stress) 발생. 얼라인먼트 재조정 필요.\n2. 일자주름: 과도한 MD 장력으로 인한 폭방향 수축(푸아송 효과) or 코팅부-무지부 장력 불균형."
+          }
+        }
+      );
+    } else if (pId === 'P4' || pId === 'CA10') { // AI / RPA
+      theoryBranch.children.push(
+        {
+          id: `mm_th_p4_1`,
+          name: "rules.md 가드레일 & 작업 공간 격리",
+          badge: "GUARDRAIL",
+          category: pId,
+          desc: "context(원천) / tool(도구) / result(결과물) 엄격 분리",
+          detail: {
+            concept: "AI 에이전트의 환각(Hallucination)을 원천 차단하기 위해 시스템 규칙(rules.md)을 고정하고, 원천 데이터와 실행 코드를 파일시스템 레벨에서 격리함."
+          }
+        },
+        {
+          id: `mm_th_p4_2`,
+          name: "본·기·함·구 4단계 점진적 빌드업",
+          badge: "BUILD-UP",
+          category: pId,
+          desc: "본(PRD/본질) ➔ 기(1개 검증) ➔ 함(단위 함수) ➔ 구(대시보드)",
+          detail: {
+            concept: "복잡한 코드를 한 번에 짜서 발생하는 오류를 막기 위해, 단계별 분할 정복(Divide & Conquer)으로 버그 발생률을 제로화하는 코딩 아키텍처."
+          }
+        },
+        {
+          id: `mm_th_p4_3`,
+          name: "CoT 예측 유도 프롬프트 & 로그 피드백",
+          badge: "PREDICTIVE",
+          category: pId,
+          desc: "잠재적 센서 결측치 사전 예측 + Traceback 에러 역주입",
+          detail: {
+            concept: "코드 작성 전 공정 변수와 예외 상황을 AI가 먼저 추론하게 하고, 디버깅 시 터미널 에러 로그 원문을 context에 피드백하여 즉시 해결함."
+          }
+        },
+        {
+          id: `mm_th_p4_4`,
+          name: "폐쇄망 템플릿 매칭 GUI 자동화",
+          badge: "OPENCV RPA",
+          category: pId,
+          desc: "DB/API 미지원 레거시 IoT 시스템 화면 좌표 밀림 극복",
+          detail: {
+            concept: "절대 좌표 대신 버튼 이미지 템플릿 매칭과 타임아웃 예외 처리를 적용하여 팝업이나 해상도 변화에도 멈추지 않는 견고한 자동화 구현."
+          }
+        }
+      );
+    } else if (pId === 'CA7' || pId === 'CA8' || pId === 'career') { // 기계/PLC
+      theoryBranch.children.push(
+        {
+          id: `mm_th_ca7_1`,
+          name: "미쓰비시 MELSEC Q & GX Works2 래더",
+          badge: "PLC LADDER",
+          category: pId,
+          desc: "X/Y 접점 & M 비트 인터락 실시간 모니터링",
+          detail: {
+            concept: "후공정 패키징 장비, 물류 EFEM, 칠러/스크러버 및 챔버 안전 인터락의 표준 제어 프로그램. 에러 발생 시 래더를 추적하여 다운타임을 최소화함."
+          }
+        },
+        {
+          id: `mm_th_ca7_2`,
+          name: "비기계 전공자의 기계 요소 정복",
+          badge: "MECHANICS",
+          category: pId,
+          desc: "체결 토크, 미세 유격(Clearance), 롤 얼라인먼트",
+          detail: {
+            concept: "마이크로 단위 품질 산포의 근본 원인이 기계적 정밀도에 있음을 깨닫고, 볼트 체결 토크 균일화와 베어링 런아웃, 롤 수평도를 제어해 문제를 해결함."
+          }
+        }
+      );
+    }
+
+    if (theoryBranch.children.length > 0) {
+      projNode.children.push(theoryBranch);
+    }
+
+    // 4. Branch: 💥 예상 꼬리질문 & 모범 답변
+    const allTailQuestions = [];
+    qList.forEach(q => {
+      if (q.tail_questions && q.tail_questions.length > 0) {
+        q.tail_questions.forEach(tq => allTailQuestions.push(tq));
+      }
+    });
+
+    if (allTailQuestions.length > 0) {
+      const qaBranch = {
+        id: `mm_qa_${pId}`,
+        name: `💥 꼬리질문 & 모범 답변 (${allTailQuestions.length}건)`,
+        badge: "Q&A DEFENSE",
+        category: pId,
+        desc: "면접관이 송곳 질문을 던졌을 때의 100점 모범 방어 논리",
+        children: allTailQuestions.map((tq, qIdx) => ({
+          id: `mm_tq_${pId}_${qIdx}`,
+          name: `Q. ${tq.question.length > 25 ? tq.question.substring(0, 24) + '...' : tq.question}`,
+          badge: `Q${qIdx+1}`,
+          category: pId,
+          desc: tq.question,
+          detail: {
+            concept: `<b>질문:</b> ${tq.question}\n\n<b>핵심 키워드:</b> ${tq.keyword || '-'}\n\n<b>모범 답변:</b> ${tq.answer || '-'}`
+          }
+        }))
+      };
+      projNode.children.push(qaBranch);
+    }
+
+    root.children.push(projNode);
+  });
+
+  return root;
+}
+
+// Tree Layout Calculator (Multi-level Horizontal Tree)
+function layoutMindmapTree(root) {
+  const levelX = [0, 360, 780, 1220, 1660, 2100];
+  const nodeHeight = 54;
+  const vGap = 16;
+  let currentY = 0;
+
+  function setDepth(node, depth = 0) {
+    node.depth = depth;
+    if (typeof node._collapsed === 'undefined') {
+      node._collapsed = depth >= 2; // Collapse after level 2 initially
+    }
+    if (node.children) {
+      node.children.forEach(c => setDepth(c, depth + 1));
+    }
+  }
+  setDepth(root, 0);
+
+  function layoutNode(node) {
+    node.width = node.depth === 0 ? 320 : (node.depth === 1 ? 280 : (node.depth === 2 ? 250 : 230));
+    node.height = nodeHeight;
+    node.x = levelX[node.depth] || (node.depth * 400);
+
+    if (!node.children || node.children.length === 0 || node._collapsed) {
+      node.y = currentY;
+      currentY += nodeHeight + vGap;
+    } else {
+      let firstY = null;
+      let lastY = null;
+      node.children.forEach((child, idx) => {
+        layoutNode(child);
+        if (idx === 0) firstY = child.y;
+        if (idx === node.children.length - 1) lastY = child.y;
+      });
+      node.y = (firstY + lastY) / 2;
+    }
+  }
+
+  currentY = 0;
+  layoutNode(root);
+}
+
+// Palette for Category Styling
+const mmPalette = {
+  root: { fill: 'rgba(30, 41, 59, 0.95)', border: '#00e5ff', text: '#f8fafc', badge: '#0891b2' },
+  P1: { fill: 'rgba(6, 78, 59, 0.88)', border: '#10b981', text: '#10b981', badge: '#059669' },
+  P3: { fill: 'rgba(6, 78, 99, 0.88)', border: '#00f2fe', text: '#00f2fe', badge: '#0891b2' },
+  P2: { fill: 'rgba(120, 53, 15, 0.88)', border: '#f6d365', text: '#f6d365', badge: '#d97706' },
+  P4: { fill: 'rgba(88, 28, 135, 0.88)', border: '#a855f7', text: '#c084fc', badge: '#7e22ce' },
+  I1: { fill: 'rgba(136, 19, 55, 0.88)', border: '#f43f5e', text: '#fb7185', badge: '#be123c' },
+  career: { fill: 'rgba(30, 58, 138, 0.88)', border: '#3b82f6', text: '#60a5fa', badge: '#2563eb' },
+  aitip: { fill: 'rgba(76, 29, 149, 0.88)', border: '#8b5cf6', text: '#a78bfa', badge: '#6d28d9' },
+  default: { fill: 'rgba(15, 23, 42, 0.88)', border: '#64748b', text: '#94a3b8', badge: '#475569' }
+};
+
+// Render SVG Elements
+function renderMindmapTree() {
+  if (!mindmapData) return;
+  layoutMindmapTree(mindmapData);
+
+  const linksLayer = document.getElementById('mmLinksLayer');
+  const nodesLayer = document.getElementById('mmNodesLayer');
+  if (!linksLayer || !nodesLayer) return;
+
+  const visibleNodes = [];
+  const visibleLinks = [];
+
+  function traverse(node, parent = null) {
+    if (mmCurrentFilter !== 'all' && node.category !== 'root' && node.category !== mmCurrentFilter && node.code !== mmCurrentFilter) {
+      return;
+    }
+
+    visibleNodes.push(node);
+    if (parent) {
+      visibleLinks.push({ source: parent, target: node });
+    }
+
+    if (node.children && !node._collapsed) {
+      node.children.forEach(c => traverse(c, node));
+    }
+  }
+  traverse(mindmapData);
+
+  // Render Links
+  linksLayer.innerHTML = '';
+  visibleLinks.forEach(link => {
+    const x0 = link.source.x + link.source.width;
+    const y0 = link.source.y + link.source.height / 2;
+    const x1 = link.target.x;
+    const y1 = link.target.y + link.target.height / 2;
+
+    const pathData = `M ${x0} ${y0} C ${x0 + 70} ${y0}, ${x1 - 70} ${y1}, ${x1} ${y1}`;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathData);
+    path.setAttribute('class', 'mm-link');
+    linksLayer.appendChild(path);
+  });
+
+  // Render Nodes
+  nodesLayer.innerHTML = '';
+  visibleNodes.forEach(node => {
+    const pal = mmPalette[node.category] || mmPalette[node.code] || mmPalette.default;
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', `mm-node ${node.id === mmSelectedNodeId ? 'active' : ''}`);
+    g.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+
+    // Box
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('class', 'mm-node-rect');
+    rect.setAttribute('width', node.width);
+    rect.setAttribute('height', node.height);
+    rect.setAttribute('fill', pal.fill);
+    rect.setAttribute('stroke', pal.border);
+    rect.style.color = pal.border;
+
+    // Badge
+    const badgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    const badgeBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    badgeBg.setAttribute('x', 12);
+    badgeBg.setAttribute('y', 9);
+    badgeBg.setAttribute('width', (node.badge || 'INFO').length * 7 + 8);
+    badgeBg.setAttribute('height', 15);
+    badgeBg.setAttribute('rx', 4);
+    badgeBg.setAttribute('fill', pal.badge);
+
+    const badgeTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    badgeTxt.setAttribute('class', 'mm-node-badge');
+    badgeTxt.setAttribute('x', 16);
+    badgeTxt.setAttribute('y', 20.5);
+    badgeTxt.setAttribute('fill', '#ffffff');
+    badgeTxt.textContent = node.badge || 'INFO';
+
+    badgeG.appendChild(badgeBg);
+    badgeG.appendChild(badgeTxt);
+
+    // Text Label
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('class', 'mm-node-text');
+    txt.setAttribute('x', 12);
+    txt.setAttribute('y', 41);
+    let label = node.name;
+    if (label.length > 22) label = label.substring(0, 21) + '...';
+    txt.textContent = label;
+
+    g.appendChild(rect);
+    g.appendChild(badgeG);
+    g.appendChild(txt);
+
+    // Toggle button for nodes with children
+    if (node.children && node.children.length > 0) {
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', node.width);
+      circle.setAttribute('cy', node.height / 2);
+      circle.setAttribute('r', 9);
+      circle.setAttribute('fill', pal.border);
+
+      const indTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      indTxt.setAttribute('x', node.width - 3.5);
+      indTxt.setAttribute('y', node.height / 2 + 3.5);
+      indTxt.setAttribute('fill', '#070d19');
+      indTxt.setAttribute('font-size', '11px');
+      indTxt.setAttribute('font-weight', '900');
+      indTxt.textContent = node._collapsed ? '+' : '−';
+
+      g.appendChild(circle);
+      g.appendChild(indTxt);
+    }
+
+    // Click handler
+    g.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (node.children && node.children.length > 0) {
+        node._collapsed = !node._collapsed;
+      }
+      selectMindmapNode(node);
+      renderMindmapTree();
+    });
+
+    nodesLayer.appendChild(g);
+  });
+
+  updateMindmapTransform();
+}
+
+// Select Node & Populate Detail Drawer
+function selectMindmapNode(node) {
+  mmSelectedNodeId = node.id;
+  const drawer = document.getElementById('mindmapDrawer');
+  if (drawer) drawer.classList.remove('collapsed');
+
+  const pal = mmPalette[node.category] || mmPalette[node.code] || mmPalette.default;
+  const tag = document.getElementById('mmDrawerTag');
+  if (tag) {
+    tag.textContent = node.badge || 'INFO';
+    tag.style.background = pal.border;
+    tag.style.color = '#070d19';
+  }
+
+  const title = document.getElementById('mmDrawerTitle');
+  if (title) title.textContent = node.name;
+
+  const detail = node.detail || {};
+  const concept = document.getElementById('mmDrawerConcept');
+  if (concept) {
+    concept.innerHTML = (detail.concept || node.desc || '세부 정보가 없습니다.').replace(/\n/g, '<br>');
+  }
+
+  // Principle / Detail
+  const pCard = document.getElementById('mmCardDetail');
+  const pContent = document.getElementById('mmDrawerDetail');
+  if (detail.principle) {
+    pCard.style.display = 'block';
+    pContent.innerHTML = detail.principle.replace(/\n/g, '<br>');
+  } else {
+    pCard.style.display = 'none';
+  }
+
+  // Script
+  const sCard = document.getElementById('mmCardScript');
+  const sContent = document.getElementById('mmDrawerScript');
+  if (detail.script) {
+    sCard.style.display = 'block';
+    sContent.innerHTML = detail.script.replace(/\n/g, '<br>');
+  } else {
+    sCard.style.display = 'none';
+  }
+
+  // QA
+  const qCard = document.getElementById('mmCardQA');
+  const qContent = document.getElementById('mmDrawerQA');
+  if (detail.qa) {
+    qCard.style.display = 'block';
+    qContent.innerHTML = detail.qa.replace(/\n/g, '<br>');
+  } else {
+    qCard.style.display = 'none';
+  }
+
+  // MSG
+  const mCard = document.getElementById('mmCardMSG');
+  const mContent = document.getElementById('mmDrawerMSG');
+  if (detail.msg) {
+    mCard.style.display = 'block';
+    mContent.innerHTML = detail.msg.replace(/\n/g, '<br>');
+  } else {
+    mCard.style.display = 'none';
+  }
+}
+
+// Transform Engine
+function updateMindmapTransform() {
+  const vp = document.getElementById('mmViewportGroup');
+  const lbl = document.getElementById('mmZoomLabel');
+  if (vp) {
+    vp.setAttribute('transform', `translate(${mmTransform.x}, ${mmTransform.y}) scale(${mmTransform.scale})`);
+  }
+  if (lbl) {
+    lbl.textContent = `${Math.round(mmTransform.scale * 100)}%`;
+  }
+}
+
+function zoomMindmapIn() {
+  mmTransform.scale = Math.min(mmTransform.scale * 1.2, 3.0);
+  updateMindmapTransform();
+}
+
+function zoomMindmapOut() {
+  mmTransform.scale = Math.max(mmTransform.scale * 0.8, 0.3);
+  updateMindmapTransform();
+}
+
+function resetMindmapView() {
+  mmTransform = { x: 80, y: window.innerHeight / 2 - 40, scale: 0.95 };
+  updateMindmapTransform();
+}
+
+function toggleMindmapDrawer(open) {
+  const drawer = document.getElementById('mindmapDrawer');
+  if (drawer) {
+    if (open) drawer.classList.remove('collapsed');
+    else drawer.classList.add('collapsed');
+  }
+}
+
+// Expand / Collapse All
+function expandAllMindmapNodes() {
+  if (!mindmapData) return;
+  function exp(n) {
+    n._collapsed = false;
+    if (n.children) n.children.forEach(exp);
+  }
+  exp(mindmapData);
+  renderMindmapTree();
+}
+
+function collapseAllMindmapNodes() {
+  if (!mindmapData) return;
+  function col(n) {
+    if (n.depth > 0) n._collapsed = true;
+    if (n.children) n.children.forEach(col);
+  }
+  col(mindmapData);
+  renderMindmapTree();
+}
+
+// Filter Category
+function filterMindmapCategory(cat) {
+  mmCurrentFilter = cat;
+  document.querySelectorAll('.mindmap-filter-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  renderMindmapTree();
+  resetMindmapView();
+}
+
+// Live Search
+function handleMindmapSearch(query) {
+  if (!query.trim() || !mindmapData) return;
+  const term = query.toLowerCase();
+
+  function searchNode(node) {
+    let match = (node.name && node.name.toLowerCase().includes(term)) ||
+                (node.desc && node.desc.toLowerCase().includes(term)) ||
+                (node.detail && node.detail.concept && node.detail.concept.toLowerCase().includes(term));
+    let childMatch = false;
+
+    if (node.children) {
+      node.children.forEach(c => {
+        if (searchNode(c)) childMatch = true;
+      });
+    }
+
+    if (childMatch || match) {
+      node._collapsed = false;
+      return true;
+    }
+    return false;
+  }
+
+  searchNode(mindmapData);
+  renderMindmapTree();
+}
+
+// Copy Text
+function copyMindmapText(elemId) {
+  const elem = document.getElementById(elemId);
+  if (!elem) return;
+  const text = elem.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('클립보드에 복사되었습니다!');
+  });
+}
+
+// Canvas Drag & Wheel Bindings
+function bindMindmapEvents() {
+  const container = document.getElementById('mindmapCanvasContainer');
+  if (!container) return;
+
+  container.addEventListener('mousedown', (e) => {
+    mmIsDragging = true;
+    mmDragStart = { x: e.clientX - mmTransform.x, y: e.clientY - mmTransform.y };
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!mmIsDragging) return;
+    mmTransform.x = e.clientX - mmDragStart.x;
+    mmTransform.y = e.clientY - mmDragStart.y;
+    updateMindmapTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    mmIsDragging = false;
+  });
+
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+    const newScale = Math.min(Math.max(mmTransform.scale * zoomFactor, 0.3), 3.0);
+
+    const rect = container.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    mmTransform.x = mouseX - (mouseX - mmTransform.x) * (newScale / mmTransform.scale);
+    mmTransform.y = mouseY - (mouseY - mmTransform.y) * (newScale / mmTransform.scale);
+    mmTransform.scale = newScale;
+    updateMindmapTransform();
+  });
+}
+
+// Initialize Mindmap
+function initAndRenderMindmap() {
+  mindmapData = generateFullMindmapTree();
+  bindMindmapEvents();
+  selectMindmapNode(mindmapData);
+  renderMindmapTree();
+  resetMindmapView();
+}
+
 </script>
+
+
+<!-- ==========================================================================
+     INTERACTIVE MINDMAP FULLSCREEN MODAL OVERLAY
+     ========================================================================== -->
+<div id="mindmapOverlay" class="mindmap-overlay" style="display: none;">
+  <div class="mindmap-header">
+    <div class="mindmap-hdr-left">
+      <button type="button" class="btn-mindmap-back" onclick="toggleMindmapMode(false)">
+        <span>←</span>
+        <span>워크스페이스로 복귀</span>
+      </button>
+      <div class="mindmap-title">전극·설비 엔지니어 마스터 마인드맵</div>
+      <span class="mindmap-company-badge" id="mmCompanyBadge" style="background: rgba(0, 229, 255, 0.2); color: #00e5ff; border: 1px solid #00e5ff;">SK하이닉스 양산기술</span>
+    </div>
+
+    <div class="mindmap-hdr-center" id="mmCategoryFilters">
+      <button type="button" class="mindmap-filter-btn active" onclick="filterMindmapCategory('all')">전체 보기</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('P1')">👁️ 비전 선별로직</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('P3')">📊 웹게이지 미세라인</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('P2')">⚙️ 미세조정장치</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('P4')">🤖 인라인 IPQC 자동화</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('I1')">🎙️ 1분 소개 & 지원동기</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('career')">🏭 현장 생산운영</button>
+      <button type="button" class="mindmap-filter-btn" onclick="filterMindmapCategory('aitip')">💡 AI 팁 & AX</button>
+    </div>
+
+    <div class="mindmap-hdr-right">
+      <input type="text" id="mmSearchInput" class="mindmap-search-input" placeholder="키워드 검색 (Bridge, LVDT, 웜기어...)" oninput="handleMindmapSearch(this.value)">
+      <button type="button" class="mindmap-btn-action" onclick="expandAllMindmapNodes()">전체 펼치기</button>
+      <button type="button" class="mindmap-btn-action" onclick="collapseAllMindmapNodes()">전체 접기</button>
+      <button type="button" class="mindmap-btn-action" onclick="resetMindmapView()">중앙 정렬</button>
+    </div>
+  </div>
+
+  <div class="mindmap-body">
+    <div id="mindmapCanvasContainer" class="mindmap-canvas-container">
+      <svg id="mindmapSvg" class="mindmap-svg">
+        <g id="mmViewportGroup">
+          <g id="mmLinksLayer"></g>
+          <g id="mmNodesLayer"></g>
+        </g>
+      </svg>
+
+      <div class="mindmap-floating-ctrls">
+        <button type="button" class="mindmap-ctrl-btn" onclick="zoomMindmapIn()" title="확대">+</button>
+        <button type="button" class="mindmap-ctrl-btn" onclick="zoomMindmapOut()" title="축소">-</button>
+        <button type="button" class="mindmap-ctrl-btn" onclick="resetMindmapView()" title="원위치">⌂</button>
+        <div class="mindmap-zoom-label" id="mmZoomLabel">100%</div>
+      </div>
+    </div>
+
+    <!-- Right Sliding Detail Drawer -->
+    <div class="mindmap-drawer" id="mindmapDrawer">
+      <div class="mm-drawer-header">
+        <div>
+          <span class="mm-drawer-tag" id="mmDrawerTag">MASTER</span>
+          <h2 class="mm-drawer-title" id="mmDrawerTitle">노드를 클릭하세요</h2>
+        </div>
+        <button type="button" class="mm-drawer-close" onclick="toggleMindmapDrawer(false)" title="닫기">✕</button>
+      </div>
+
+      <div class="mm-drawer-body" id="mmDrawerBody">
+        <div class="mm-info-card">
+          <div class="mm-card-hdr">
+            <span class="mm-card-title">📌 핵심 요약 & 개념 (Summary)</span>
+            <button type="button" class="mm-card-copy" onclick="copyMindmapText('mmDrawerConcept')">복사</button>
+          </div>
+          <div class="mm-card-content" id="mmDrawerConcept">
+            마인드맵의 세부 노드를 클릭하면 [설명], [STAR-C 상세 분류], [핵심 공학 원리], [꼬리질문 & 모범 답변]이 여기에 즉시 표시됩니다.
+          </div>
+        </div>
+
+        <div class="mm-info-card" id="mmCardDetail">
+          <div class="mm-card-hdr">
+            <span class="mm-card-title">⚙️ 세부 공학 내용 & 메커니즘 (Detail)</span>
+            <button type="button" class="mm-card-copy" onclick="copyMindmapText('mmDrawerDetail')">복사</button>
+          </div>
+          <div class="mm-card-content" id="mmDrawerDetail">-</div>
+        </div>
+
+        <div class="mm-info-card" id="mmCardScript">
+          <div class="mm-card-hdr">
+            <span class="mm-card-title">🎤 면접 1분 실전 스피치 (Spoken Script)</span>
+            <button type="button" class="mm-card-copy" onclick="copyMindmapText('mmDrawerScript')">복사</button>
+          </div>
+          <div class="mm-quote-box" id="mmDrawerScript">-</div>
+        </div>
+
+        <div class="mm-info-card" id="mmCardQA">
+          <div class="mm-card-hdr">
+            <span class="mm-card-title">💥 면접관 송곳 꼬리질문 & 100점 방어 답변 (Q&A Defense)</span>
+            <button type="button" class="mm-card-copy" onclick="copyMindmapText('mmDrawerQA')">복사</button>
+          </div>
+          <div class="mm-card-content" id="mmDrawerQA">-</div>
+        </div>
+
+        <div class="mm-info-card" id="mmCardMSG">
+          <div class="mm-card-hdr">
+            <span class="mm-card-title">🧂 추천 엔지니어링 MSG & 주의사항 (Do's & Don'ts)</span>
+            <button type="button" class="mm-card-copy" onclick="copyMindmapText('mmDrawerMSG')">복사</button>
+          </div>
+          <div class="mm-card-content" id="mmDrawerMSG">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
