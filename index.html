@@ -8653,53 +8653,6 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
   const text = getFrameworkPlainText(q, fw);
   const currentProj = projectsData[currentProjIndex];
   const isIntro = (currentProj && currentProj.category === 'intro');
-  const analysis = getSpeechCharAnalysis(text);
-
-  let timerWidgetHtml = '';
-  if (isIntro) {
-    timerWidgetHtml = `
-      <div class="speech-timer-widget" id="speechTimerWidget">
-        <div class="timer-header-row">
-          <div class="timer-title-wrap">
-            <span class="timer-badge">⏱️ 1분 스피치 실전 타이머</span>
-            <span class="timer-clock-display" id="timerClockDisplay">00:00 / 01:00</span>
-          </div>
-          <div class="timer-ctrl-btns">
-            <button type="button" class="timer-btn timer-btn-start" id="timerToggleBtn" onclick="toggleSpeechTimer()">▶ 시작</button>
-            <button type="button" class="timer-btn timer-btn-reset" onclick="resetSpeechTimer()">↺ 리셋</button>
-          </div>
-        </div>
-        <div class="timer-progress-wrap">
-          <div class="timer-progress-bar" id="timerProgressBar"></div>
-        </div>
-        <div class="timer-milestones-row">
-          <div class="timer-milestone active" id="milestone1">
-            <span class="timer-ms-time">0 ~ 15초</span>
-            <span class="timer-ms-label">1. 두괄식 비유/지원동기</span>
-          </div>
-          <div class="timer-milestone" id="milestone2">
-            <span class="timer-ms-time">15 ~ 45초</span>
-            <span class="timer-ms-label">2. 양대 무기 (수율·설비 / 현장 AX)</span>
-          </div>
-          <div class="timer-milestone" id="milestone3">
-            <span class="timer-ms-time">45 ~ 60초</span>
-            <span class="timer-ms-label">3. 입사 후 기여 포부</span>
-          </div>
-        </div>
-        <div class="char-counter-bar" id="charCounterBar">
-          <div>
-            <span>구술 분량: </span>
-            <span class="char-count-badge" id="charCountTotal">${analysis.noSpaceChars}자</span>
-            <span style="font-size:11px; color:#64748b;">(공백포함 ${analysis.totalChars}자)</span>
-          </div>
-          <div>
-            <span>예상 구술 소요시간: </span>
-            <span class="char-time-estimate ${analysis.status}" id="charTimeEstimate">${analysis.statusText}</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }
 
   const headerLabels = {
     starc: '💼 STAR-C 전체 구술 답변 (줄글)',
@@ -8771,8 +8724,6 @@ function renderSingleQuestionCard(q, qIdx, totalCount) {
 
         <!-- 2. 프레임별 키워드 영역 (CORE / PREP / STAR-C / FREE) -->
         ${renderKeywordBlock(q, qIdx, fw)}
-
-        ${timerWidgetHtml}
 
         <!-- 3. 전체 구술 답변 줄글 영역 -->
         <div class="plain-answer-wrap">
