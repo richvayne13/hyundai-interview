@@ -4754,6 +4754,7 @@ body.theme-skhynix .nav-q-type {
       <div class="mobile-hdr-proj-title" id="mobileCurrentProjName">01. 항목 로딩 중...</div>
     </div>
     <div class="mobile-hdr-actions">
+      <button type="button" class="mobile-hdr-btn" onclick="manualSaveWithFeedback()" title="현재 내용 즉시 저장" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700;">💾</button>
       <button type="button" class="mobile-hdr-btn" onclick="copyCrossDeviceSyncLink()" title="기기 동기화 링크 복사">🔗</button>
       <button type="button" class="mobile-hdr-btn" onclick="toggleCompanyModeMobile()" title="현대/SK 전환">🔄</button>
       <button type="button" class="mobile-hdr-btn" onclick="toggleReferencePane()" title="자소서/원문 보기">📑</button>
@@ -4764,12 +4765,16 @@ body.theme-skhynix .nav-q-type {
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button type="button" class="mobile-sidebar-close-btn" onclick="closeAllMobileDrawers()" title="사이드바 닫기">✕</button>
-            <!-- Top-Left Mindmap Mode Toggle -->
-      <div class="mindmap-quick-toggle-bar">
-        <button type="button" class="btn-mindmap-mode-toggle" id="btnMindmapModeToggle" onclick="toggleMindmapMode()" title="마인드맵 모드 전환">
-          <span style="display: flex; align-items: center; gap: 7px;">
-            <span style="font-size: 15px;">🗺️</span>
-            <span>마인드맵 모드</span>
+      <!-- Top-Left Action Bar: Save Button & Mindmap Toggle -->
+      <div class="top-action-bar" style="display: flex; gap: 8px; margin-bottom: 10px;">
+        <button type="button" class="btn-top-save" id="btnTopSave" onclick="manualSaveWithFeedback()" style="flex: 1.1; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; font-weight: 800; font-size: 13px; padding: 9px 10px; border-radius: 9px; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); cursor: pointer; transition: all 0.2s;" title="현재 작성한 모든 내용을 즉시 브라우저에 저장합니다.">
+          <span id="btnTopSaveIcon" style="font-size: 14px;">💾</span>
+          <span id="btnTopSaveText">저장하기</span>
+        </button>
+        <button type="button" class="btn-mindmap-mode-toggle" id="btnMindmapModeToggle" onclick="toggleMindmapMode()" title="마인드맵 모드 전환" style="flex: 1;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 14px;">🗺️</span>
+            <span>마인드맵</span>
           </span>
           <span class="badge-view" id="mindmapModeBadge">VIEW</span>
         </button>
@@ -4793,7 +4798,7 @@ body.theme-skhynix .nav-q-type {
       <div class="brand-title" id="brandTitle">전극 생산운영 면접 노트</div>
       <div class="brand-sub" id="brandSub">핵심 키워드 & 압박 검증 시스템</div>
       <div class="brand-status-bar">
-        <span class="status-pill" id="saveStatus">● 실시간 자동 저장</span>
+        <span class="status-pill" id="saveStatus" onclick="manualSaveWithFeedback()" title="클릭하여 지금 즉시 저장" style="cursor: pointer;">● 실시간 자동 저장</span>
         <span id="projCountBadge" style="font-size: 10.5px; font-weight: 700; color: #64748b;">7 Projects</span>
       </div>
       <!-- Cloud & Cross-Device Sync Action Bar -->
@@ -7406,6 +7411,33 @@ function sanitizeDummyGuideTexts(projects) {
   projectsData.forEach((_, idx) => {
     if (activeQuestionIndex[idx] === undefined) activeQuestionIndex[idx] = 0;
   });
+}
+
+function manualSaveWithFeedback() {
+  if (document.activeElement && typeof document.activeElement.blur === 'function') {
+    document.activeElement.blur();
+  }
+  saveProjectsData();
+  saveCategoriesData();
+
+  const btn = document.getElementById('btnTopSave');
+  const icon = document.getElementById('btnTopSaveIcon');
+  const text = document.getElementById('btnTopSaveText');
+  if (btn && text) {
+    const originalText = text.textContent;
+    const originalBg = btn.style.background;
+    btn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+    text.textContent = '저장 완료!';
+    if (icon) icon.textContent = '✓';
+    setTimeout(() => {
+      btn.style.background = originalBg;
+      text.textContent = originalText;
+      if (icon) icon.textContent = '💾';
+    }, 1500);
+  }
+
+  setSaveStatus("● 저장 완료 (안전 보관됨)", false);
+  showToast("💾 모든 변경사항이 브라우저에 안전하게 저장되었습니다!");
 }
 
 function saveProjectsData() {
