@@ -4667,7 +4667,291 @@ body.theme-skhynix .nav-q-type {
   white-space: pre-line;
 }
 
-</style>
+
+    /* ================= MENU NO-SCROLL SELECTORS (SIDEBAR & WORKSPACE) ================= */
+    .sidebar-quick-nav-wrap {
+      background: #08111e;
+      border: 1px solid #1a2f4c;
+      border-radius: 10px;
+      padding: 10px 10px 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    body.theme-skhynix .sidebar-quick-nav-wrap {
+      background: #14070a;
+      border-color: #38141d;
+    }
+
+    .sidebar-quick-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+    body.theme-skhynix .sidebar-quick-title {
+      color: #ff9838;
+    }
+
+    .sidebar-jump-select {
+      width: 100%;
+      background: #0d1a2d;
+      border: 1.5px solid #203c66;
+      color: #ffffff;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      margin-bottom: 8px;
+    }
+    .sidebar-jump-select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+    body.theme-skhynix .sidebar-jump-select {
+      background: #1d0910;
+      border-color: #4a1926;
+      color: #ffe4e8;
+    }
+    body.theme-skhynix .sidebar-jump-select:focus {
+      border-color: #ff7a00;
+      box-shadow: 0 0 10px rgba(255, 122, 0, 0.3);
+    }
+
+    .sidebar-cat-chips-strip {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .sidebar-cat-chips-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sb-cat-chip {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: #112035;
+      color: #94a3b8;
+      border: 1px solid #1e3557;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .sb-cat-chip:hover {
+      background: #172c4a;
+      color: white;
+    }
+    .sb-cat-chip.active {
+      background: #0072ce;
+      color: white;
+      border-color: var(--accent-cyan);
+    }
+    body.theme-skhynix .sb-cat-chip.active {
+      background: linear-gradient(135deg, #eb1024 0%, #b30012 100%);
+      border-color: #ff7a00;
+    }
+
+    /* Category Accordion Header Collapse Arrow */
+    .cat-collapse-arrow {
+      font-size: 9px;
+      color: #64748b;
+      margin-right: 4px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .sidebar-category-section.is-collapsed .cat-collapse-arrow {
+      transform: rotate(-90deg);
+    }
+    .sidebar-category-section.is-collapsed .sidebar-proj-list {
+      display: none !important;
+    }
+
+    /* Workspace Top Project Selector Bar */
+    .workspace-project-selector-bar {
+      background: #0d1a2d;
+      border-bottom: 1px solid var(--card-border);
+      padding: 10px 24px 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(8px);
+    }
+    body.theme-skhynix .workspace-project-selector-bar {
+      background: #15080c;
+      border-bottom-color: #38141d;
+    }
+
+    .ws-sel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ws-sel-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .ws-sel-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    body.theme-skhynix .ws-sel-label {
+      color: #ff9838;
+    }
+
+    .workspace-jump-select {
+      flex: 1;
+      max-width: 520px;
+      background: #070e1a;
+      border: 1.5px solid #203c66;
+      color: #ffffff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .workspace-jump-select:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    }
+    body.theme-skhynix .workspace-jump-select {
+      background: #1f0a12;
+      border-color: #4a1926;
+      color: #ffe4e8;
+    }
+    body.theme-skhynix .workspace-jump-select:focus {
+      border-color: #ff7a00;
+      box-shadow: 0 0 10px rgba(255, 122, 0, 0.3);
+    }
+
+    .ws-sel-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ws-step {
+      background: #13243d;
+      color: #94a3b8;
+      border: 1px solid #1e3557;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .btn-ws-step:hover:not(:disabled) {
+      background: #1b3459;
+      color: white;
+      border-color: var(--accent-cyan);
+    }
+    .btn-ws-step:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    body.theme-skhynix .btn-ws-step {
+      background: #200b12;
+      border-color: #3e1520;
+      color: #f87171;
+    }
+    body.theme-skhynix .btn-ws-step:hover:not(:disabled) {
+      background: #31111c;
+      color: white;
+      border-color: #ff7a00;
+    }
+
+    .workspace-proj-tabs-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+    .workspace-proj-tabs-strip::-webkit-scrollbar {
+      height: 4px;
+    }
+    .workspace-proj-tabs-strip::-webkit-scrollbar-thumb {
+      background: #1c3252;
+      border-radius: 2px;
+    }
+
+    .ws-proj-tab {
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #101e33;
+      color: #94a3b8;
+      border: 1px solid #1a2f4c;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      flex-shrink: 0;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .ws-proj-tab:hover {
+      background: #172a45;
+      color: white;
+    }
+    .ws-proj-tab.active {
+      background: rgba(0, 114, 206, 0.3);
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      font-weight: 800;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+    }
+    body.theme-skhynix .ws-proj-tab {
+      background: #1c0a11;
+      border-color: #38141e;
+      color: #fca5a5;
+    }
+    body.theme-skhynix .ws-proj-tab:hover {
+      background: #2a0f19;
+      color: white;
+    }
+    body.theme-skhynix .ws-proj-tab.active {
+      background: rgba(235, 16, 36, 0.25);
+      color: #ff9838;
+      border-color: #ff7a00;
+      box-shadow: 0 0 10px rgba(255, 122, 0, 0.25);
+    }
+
+  </style>
 </head>
 <body>
 
@@ -4820,6 +5104,19 @@ body.theme-skhynix .nav-q-type {
         <button class="btn btn-outline btn-xs" style="padding: 2px 7px; font-size: 10.5px;" onclick="addNewCategoryPrompt()" title="새로운 분류 카테고리 추가">+ 분류 추가</button>
       </div>
 
+            <!-- Sidebar Quick Jump & Category Filter (No-Scroll Menu) -->
+      <div class="sidebar-quick-nav-wrap" id="sidebarQuickNavWrap">
+        <div class="sidebar-quick-title">
+          <span>⚡ 항목 선택 바로가기</span>
+          <span style="font-size: 10px; color: #64748b;" id="sbQuickCountBadge"></span>
+        </div>
+        <select class="sidebar-jump-select" id="sidebarQuickJumpSelect" onchange="handleProjectJumpSelect(this.value)" title="스크롤 없이 원하는 항목을 바로 선택하여 봅니다">
+          <!-- Populated dynamically in renderSidebar -->
+        </select>
+        <div class="sidebar-cat-chips-strip" id="sidebarCatChipsStrip">
+          <!-- Populated dynamically in renderSidebar -->
+        </div>
+      </div>
       <div id="sidebarCategoriesContainer">
         <!-- Dynamically rendered for each category -->
       </div>
@@ -4872,6 +5169,27 @@ body.theme-skhynix .nav-q-type {
         <button class="btn btn-primary btn-sm" onclick="addQuestionToCurrentProject()">➕ 메인 질문 추가</button>
         <button class="btn btn-danger-outline btn-sm" onclick="deleteCurrentProject()">프로젝트 삭제</button>
         <button class="btn btn-outline btn-sm" onclick="toggleReferencePane()" id="refToggleTopBtn">📑 원문 보기</button>
+      </div>
+    </div>
+
+    
+    <!-- Workspace Project Selector & Horizontal Tabs Bar (No-Scroll Menu) -->
+    <div class="workspace-project-selector-bar" id="workspaceProjectSelectorBar">
+      <div class="ws-sel-header">
+        <div class="ws-sel-left">
+          <span class="ws-sel-label">📌 항목 선택:</span>
+          <select class="workspace-jump-select" id="workspaceJumpSelect" onchange="handleProjectJumpSelect(this.value)" title="스크롤 없이 항목을 선택하여 즉시 확인합니다">
+            <!-- Populated dynamically in renderCurrentProject -->
+          </select>
+        </div>
+        <div class="ws-sel-right">
+          <button type="button" class="btn-ws-step" id="prevProjectWsBtn" onclick="stepProject(-1)" title="이전 항목 (Alt+←)">◀ 이전 항목</button>
+          <button type="button" class="btn-ws-step" id="nextProjectWsBtn" onclick="stepProject(1)" title="다음 항목 (Alt+→)">다음 항목 ▶</button>
+        </div>
+      </div>
+      <!-- Horizontal Project Tabs Strip -->
+      <div class="workspace-proj-tabs-strip" id="workspaceProjTabsStrip">
+        <!-- Populated dynamically in renderCurrentProject -->
       </div>
     </div>
 
@@ -4935,6 +5253,21 @@ body.theme-skhynix .nav-q-type {
       <button class="ref-cat-chip" data-cat="career" onclick="filterRefCategory('career')">💼 경력</button>
       <button class="ref-cat-chip" data-cat="project" onclick="filterRefCategory('project')">🚀 프로젝트</button>
       <button class="ref-cat-chip" data-cat="essay" onclick="filterRefCategory('essay')">✍️ 자기소개서</button>
+    </div>
+
+    
+    <!-- Reference Section Jump Dropdown (No-Scroll Menu) -->
+    <div class="ref-jump-dropdown-wrap" style="padding: 8px 16px; background: #0c182b; border-bottom: 1px solid var(--card-border);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <span style="font-size:11px; font-weight:700; color:#38bdf8;">📑 단락 바로가기:</span>
+        <div style="display:flex; gap:3px;">
+          <button class="btn btn-outline btn-xs" style="padding:1px 6px; font-size:10px;" onclick="stepRefDocChunk(-1)">◀</button>
+          <button class="btn btn-outline btn-xs" style="padding:1px 6px; font-size:10px;" onclick="stepRefDocChunk(1)">▶</button>
+        </div>
+      </div>
+      <select class="ref-jump-select" id="refJumpSelect" onchange="handleRefJumpSelect(this.value)" style="width:100%; background:#060d19; border:1px solid #1e3557; color:#38bdf8; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:600; outline:none; cursor:pointer;">
+        <!-- Populated dynamically in renderReferenceDoc -->
+      </select>
     </div>
 
     <!-- Reference Content List -->
@@ -8087,6 +8420,39 @@ function renderSidebar() {
   const countBadge = document.getElementById('projCountBadge');
   if (countBadge) countBadge.textContent = `${projectsData.length} 항목`;
 
+  // 1. Populate Sidebar Quick Jump Dropdown
+  const sbJumpSelect = document.getElementById('sidebarQuickJumpSelect');
+  if (sbJumpSelect) {
+    let optHtml = '';
+    categoriesData.forEach(cat => {
+      const catItems = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
+      if (catItems.length > 0) {
+        optHtml += `<optgroup label="${cat.icon || '📁'} ${cat.name}">`;
+        catItems.forEach(it => {
+          const isSel = (it.originalIndex === currentProjIndex);
+          const shortT = it.title.length > 25 ? it.title.substring(0, 25) + '..' : it.title;
+          optHtml += `<option value="${it.originalIndex}" ${isSel ? 'selected' : ''}>[${it.code}] ${escapeHtml(shortT)} (${it.questions ? it.questions.length : 0}Q)</option>`;
+        });
+        optHtml += `</optgroup>`;
+      }
+    });
+    sbJumpSelect.innerHTML = optHtml;
+  }
+
+  // 2. Populate Sidebar Category Filter Chips
+  const sbCatChips = document.getElementById('sidebarCatChipsStrip');
+  const sbCountBadge = document.getElementById('sbQuickCountBadge');
+  if (sbCountBadge) sbCountBadge.textContent = `${currentProjIndex + 1} / ${projectsData.length}`;
+  if (sbCatChips) {
+    let chipsHtml = `<button type="button" class="sb-cat-chip ${activeSidebarCategoryFilter === 'all' ? 'active' : ''}" onclick="filterSidebarCategory('all')">전체</button>`;
+    categoriesData.forEach(cat => {
+      const isAct = (activeSidebarCategoryFilter === cat.id);
+      const catCount = projectsData.filter(p => p.category === cat.id).length;
+      chipsHtml += `<button type="button" class="sb-cat-chip ${isAct ? 'active' : ''}" onclick="filterSidebarCategory('${cat.id}')">${cat.icon || ''} ${escapeHtml(cat.name)} (${catCount})</button>`;
+    });
+    sbCatChips.innerHTML = chipsHtml;
+  }
+
   function renderItemHtml(item, itemIdxInCat) {
     const isActive = (item.originalIndex === currentProjIndex);
     const qCount = item.questions ? item.questions.length : 0;
@@ -8161,13 +8527,15 @@ function renderSidebar() {
 
   let html = '';
   categoriesData.forEach((cat, catIdx) => {
+    if (activeSidebarCategoryFilter !== 'all' && cat.id !== activeSidebarCategoryFilter) return;
+    const isCollapsed = Boolean(collapsedCategoryMap[cat.id]);
     const items = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
     const isEditing = (editingCategoryId === cat.id);
     const isIntroCat = (cat.id === 'intro');
     const catNumDisplay = isIntroCat ? '0' : String(categoriesData.filter(c => c.id !== 'intro').indexOf(cat) + 1);
 
     html += `
-      <div class="sidebar-category-section"
+      <div class="sidebar-category-section ${isCollapsed ? 'is-collapsed' : ''}"
            data-cat-id="${cat.id}"
            data-cat-idx="${catIdx}"
            ondragover="handleCatDragOver(event, ${catIdx}, '${cat.id}')"
@@ -8205,6 +8573,7 @@ function renderSidebar() {
           ` : `
             <div class="sidebar-cat-title" onclick="startEditCategory('${cat.id}', event)" title="클릭하여 분류 소제목 수정 (예: 신규인성외)">
               <span class="cat-drag-handle" title="드래그하여 분류 순서 변경" onmousedown="event.stopPropagation()">⠿</span>
+              <span class="cat-collapse-arrow" onclick="toggleCategoryCollapse('${cat.id}', event)" title="접기/펼치기">▼</span>
               <span class="cat-num-pill">${catNumDisplay}</span>
               <span class="cat-title-text-wrap">
                 <span class="cat-icon-text">${cat.icon || '📁'}</span>
@@ -8384,6 +8753,51 @@ function renderCurrentProject() {
   if (!activeQuestionIndex[currentProjIndex]) activeQuestionIndex[currentProjIndex] = 0;
 
   // Category Dropdown
+  
+  // Update Workspace Project Jump Dropdown & Tabs Strip
+  const wsJumpSelect = document.getElementById('workspaceJumpSelect');
+  if (wsJumpSelect) {
+    let wsOptHtml = '';
+    categoriesData.forEach(cat => {
+      const catItems = projectsData.map((p, idx) => ({ ...p, originalIndex: idx })).filter(p => p.category === cat.id);
+      if (catItems.length > 0) {
+        wsOptHtml += `<optgroup label="${cat.icon || '📁'} ${cat.name}">`;
+        catItems.forEach(it => {
+          const isSel = (it.originalIndex === currentProjIndex);
+          const shortT = it.title.length > 40 ? it.title.substring(0, 40) + '...' : it.title;
+          wsOptHtml += `<option value="${it.originalIndex}" ${isSel ? 'selected' : ''}>[${it.code}] ${escapeHtml(shortT)} (${it.questions ? it.questions.length : 0}Q)</option>`;
+        });
+        wsOptHtml += `</optgroup>`;
+      }
+    });
+    wsJumpSelect.innerHTML = wsOptHtml;
+  }
+
+  const prevWsBtn = document.getElementById('prevProjectWsBtn');
+  const nextWsBtn = document.getElementById('nextProjectWsBtn');
+  if (prevWsBtn) prevWsBtn.disabled = (currentProjIndex === 0);
+  if (nextWsBtn) nextWsBtn.disabled = (currentProjIndex === projectsData.length - 1);
+
+  const wsTabsStrip = document.getElementById('workspaceProjTabsStrip');
+  if (wsTabsStrip) {
+    let tabsHtml = '';
+    projectsData.forEach((p, idx) => {
+      const isSel = (idx === currentProjIndex);
+      const shortT = p.title.length > 15 ? p.title.substring(0, 15) + '..' : p.title;
+      tabsHtml += `
+        <div class="ws-proj-tab ${isSel ? 'active' : ''}" onclick="selectProject(${idx})" title="${escapeHtml(p.title)}">
+          <strong>${p.code}</strong> ${escapeHtml(shortT)}
+        </div>
+      `;
+    });
+    wsTabsStrip.innerHTML = tabsHtml;
+    // Auto-scroll active tab into view
+    setTimeout(() => {
+      const actTab = wsTabsStrip.querySelector('.ws-proj-tab.active');
+      if (actTab) actTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }, 50);
+  }
+
   const catDropdown = document.getElementById('categorySelectDropdown');
   if (catDropdown) {
     catDropdown.innerHTML = categoriesData.map((c) => {
@@ -9330,6 +9744,20 @@ function renderReferenceDoc(searchKeyword = '') {
   const chunks = CONTEXT_DOCS[activeDocKey] || [];
   container.innerHTML = '';
 
+  // Populate Reference Jump Dropdown
+  const refJump = document.getElementById('refJumpSelect');
+  if (refJump) {
+    let refOpts = `<option value="all">📜 [전체 단락 연속 보기] (총 ${chunks.length}개)</option>`;
+    chunks.forEach((chunk, idx) => {
+      const cat = getChunkCategory(chunk.tag);
+      if (activeRefCategory !== 'all' && activeRefCategory !== cat) return;
+      const shortTag = chunk.tag.length > 28 ? chunk.tag.substring(0, 28) + '...' : chunk.tag;
+      refOpts += `<option value="${idx}">[${idx + 1}] ${getCategoryIcon(cat)} ${escapeHtml(shortTag)}</option>`;
+    });
+    refJump.innerHTML = refOpts;
+  }
+
+
   let matchCount = 0;
   const kw = searchKeyword.trim().toLowerCase();
 
@@ -9350,6 +9778,7 @@ function renderReferenceDoc(searchKeyword = '') {
 
     const card = document.createElement('div');
     card.className = `doc-chunk-card cat-${cat}`;
+    card.id = `ref-chunk-${idx}`;
     const catBadgeText = `${getCategoryIcon(cat)} ${escapeHtml(chunk.tag)}`;
     card.innerHTML = `
       <div class="chunk-header">
